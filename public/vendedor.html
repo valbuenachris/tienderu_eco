@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendedor Dashboard | Tienderu Control</title>
+    
+    <link rel="icon" type="image/png" href="https://tienderu.com/uploads/ico.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="vendedor.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <header class="mobile-header">
+        <div class="mobile-logo">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Logo Ecosistema">
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+    
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleMenu()"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Logo Tienderu">
+        </div>
+
+        <div class="admin-profile">
+            <img src="https://tienderu.com/uploads/ico.png" id="admin-avatar">
+            <div class="admin-info">
+                <p id="profile-name">Cargando...</p>
+                <span>AGENTE COMERCIAL</span>
+            </div>
+        </div>
+        
+        <nav>
+            <div class="nav-item active" id="b-home" onclick="tab('home')"><i class="fas fa-chart-pie"></i> Analítica</div>
+            <div class="nav-item" id="b-list" onclick="tab('list')"><i class="fas fa-store"></i> Gestionar POS</div>
+            <div class="nav-item" id="b-create" onclick="tab('create')"><i class="fas fa-rocket"></i> Desplegar Nuevo</div>
+        </nav>
+        
+        <div class="nav-item logout" onclick="logout()"><i class="fas fa-power-off"></i> Salir</div>
+    </aside>
+
+    <main class="main">
+        
+        <div id="home" class="section active">
+            <h1 style="margin-bottom: 30px; font-weight: 800;">Estado de Red</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card card-activo"><span>ACTIVOS</span><p id="count-activos">0</p></div>
+                <div class="stat-card card-mora"><span>EN MORA</span><p id="count-mora">0</p></div>
+                <div class="stat-card card-suspendido"><span>SUSPENDIDOS</span><p id="count-suspendidos">0</p></div>
+                <div class="stat-card card-total"><span>TOTAL RED</span><p id="count-total">0</p></div>
+                <div class="stat-card card-performance"><span>EFECTIVIDAD</span><p id="perc-efectividad">0%</p></div>
+            </div>
+
+            <div class="comisiones-container">
+                <span>Comisiones Mes de Febrero</span>
+                <p id="comision-actual">$ 0</p>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Historial de Comisiones</h3>
+                    <div class="chart-container"><canvas id="comisionesChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3 style="text-align: center;">Meta del Mes</h3>
+                    <div class="chart-container"><canvas id="efectividadChart"></canvas></div>
+                    <div class="meta-label-container">
+                        <span id="label-efectividad">0%</span>
+                        <p>CONVERSIÓN TOTAL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="list" class="section">
+            <h1 style="margin-bottom: 30px; font-weight: 800;">Control de Comercios</h1>
+            <div class="content-card" style="padding: 10px;"> <div class="table-container">
+                    <table id="tabla-comercios">
+                        <thead>
+                            <tr>
+                                <th>Comercio</th>
+                                <th>Teléfono</th>
+                                <th>Sede</th>
+                                <th>Corte</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="create" class="section">
+            <h1 style="margin-bottom: 30px; font-weight: 800;">Desplegar Nuevo Punto</h1>
+            <div class="content-card" style="max-width: 800px; margin: 0 auto;">
+                <form onsubmit="event.preventDefault(); handleCreate();">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre del Comercio</label>
+                            <input type="text" id="new-name" class="form-control" placeholder="Ej: Tienda La 80" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Sede / Ciudad</label>
+                            <input type="text" id="new-sede" class="form-control" placeholder="Ej: Villavicencio" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Teléfono de Contacto</label>
+                            <input type="tel" id="new-phone" class="form-control" placeholder="310 000 0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico (Admin)</label>
+                            <input type="email" id="new-email" class="form-control" placeholder="admin@comercio.com" required>
+                        </div>
+                    </div>
+        
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Contraseña de Acceso</label>
+                            <input type="password" id="new-pass" class="form-control" placeholder="********" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Contraseña</label>
+                            <input type="password" id="new-pass-conf" class="form-control" placeholder="********" required>
+                        </div>
+                    </div>
+        
+                    <div class="form-group" style="margin-top: 10px;">
+                        <label>Subdominio (URL de la Tienda)</label>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                            <input type="text" id="new-subdomain" class="form-control" placeholder="nombretienda" required style="flex: 1;">
+                            <span style="font-weight: 700; color: #64748b;">.tienderu.com</span>
+                        </div>
+                        <small style="color: #94a3b8; display: block; margin-top: 8px;">
+                            Este será el enlace público para que los clientes visiten la tienda.
+                        </small>
+                    </div>
+        
+                    <button type="submit" class="btn-primary" style="margin-top: 20px;">
+                        <i class="fas fa-rocket" style="margin-right: 10px;"></i> DESPLEGAR PUNTO DE VENTA
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+    <script src="vendedor.js"></script>
+</body>
+</html>

@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienderu | Ecosistema Digital Inteligente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+    <div id="loader-overlay">
+        <div class="spinner"></div>
+        <div id="loader-text" style="color: var(--primary); font-weight: 800;">INICIANDO INSTANCIA...</div>
+    </div>
+
+    <div id="navbar-placeholder"></div>
+    
+    <div id="loginModal" class="modal-overlay" onclick="closeLoginModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Bienvenido de nuevo</h3>
+                <p>Ingresa a tu ecosistema inteligente</p>
+            </div>
+            <form id="loginFormModal">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="ml-user" placeholder="Usuario" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="ml-pass" placeholder="Contraseña" required>
+                </div>
+                <button type="submit" class="btn-reg-main">INICIAR SESIÓN</button>
+                <button type="button" class="btn-close-modal" onclick="closeLoginModal()">CANCELAR</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <header class="hero-section">
+            <h1>Ecosistema <span>Inteligente</span></h1>
+            <p>Infraestructura dedicada con IA para potenciar ventas y automatizar operaciones en tiempo real.</p>
+        </header>
+
+        <style>
+            /* Estilos integrados para asegurar que se vea acorde al diseño premium */
+            .services-grid {
+                display: grid;
+                gap: 20px;
+                padding: 20px 0;
+            }
+        
+            .service-card {
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 24px;
+                padding: 35px 25px;
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                position: relative;
+                overflow: hidden;
+            }
+        
+            .service-card:hover {
+                transform: translateY(-10px);
+                background: rgba(255, 255, 255, 0.06);
+                border-color: rgba(255, 255, 255, 0.2);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            }
+        
+            .icon-wrap {
+                width: 50px;
+                height: 50px;
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+                margin-bottom: 20px;
+                color: #fff; /* Por defecto blanco, las clases c-X lo cambian */
+                transition: 0.3s;
+            }
+        
+            .service-card:hover .icon-wrap {
+                transform: scale(1.1) rotate(5deg);
+            }
+        
+            .service-card h3 {
+                font-size: 20px;
+                font-weight: 800;
+                margin-bottom: 12px;
+                letter-spacing: -0.5px;
+            }
+        
+            .service-desc {
+                color: #94a3b8;
+                font-size: 14px;
+                line-height: 1.5;
+                margin-bottom: 20px;
+            }
+        
+            .know-more {
+                font-size: 12px;
+                font-weight: 800;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                opacity: 0.6;
+                transition: 0.3s;
+            }
+        
+            .service-card:hover .know-more {
+                opacity: 1;
+                gap: 12px;
+            }
+        
+            /* Colores temáticos por tarjeta */
+            .c-1 .icon-wrap { color: #3b82f6; } /* Azul POS */
+            .c-2 .icon-wrap { color: #25d366; } /* Verde WA */
+            .c-3 .icon-wrap { color: #f43f5e; } /* Rojo e-Shop */
+            .c-4 .icon-wrap { color: #10b981; } /* Esmeralda Masivos */
+            .c-8 .icon-wrap { color: #0ea5e9; } /* Cyan CRM */
+            .c-6 .icon-wrap { color: #f59e0b; } /* Ambar Soporte */
+            .c-5 .icon-wrap { color: #8b5cf6; } /* Violeta Finanzas */
+            .c-7 .icon-wrap { color: #ec4899; } /* Rosa Marketing */
+            .c-9 .icon-wrap { color: #64748b; } /* Slate Bots */
+        
+            .service-card:hover .know-more { color: inherit; }
+        </style>
+        
+        <style>
+            /* SAAS SECTION DESIGN - SOFT & PROFESSIONAL */
+            .saas-services-section {
+                padding: 80px 6%;
+                background: #ffffff;
+                font-family: 'Plus Jakarta Sans', sans-serif;
+            }
+            
+            .services-bento-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            
+            /* Base de la tarjeta con fondos suaves */
+            .saas-card {
+                border-radius: 24px;
+                padding: 32px;
+                position: relative;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border: 1px solid rgba(0,0,0,0.03); /* Borde casi invisible */
+                min-height: 250px;
+            }
+            
+            .saas-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+            }
+            
+            /* Paleta de Colores Suaves (Fondos) y Colores Sólidos (Textos/Iconos) */
+            .c-pos { background-color: #f5f3ff; color: #4f46e5; } /* Violeta suave */
+            .c-wa { background-color: #f0fdf4; color: #16a34a; }  /* Verde suave */
+            .c-shop { background-color: #fdf2f8; color: #db2777; } /* Rosa suave */
+            .c-mas { background-color: #eff6ff; color: #2563eb; }  /* Azul suave */
+            .c-crm { background-color: #faf5ff; color: #9333ea; }  /* Púrpura suave */
+            .c-sop { background-color: #f8fafc; color: #334155; }  /* Gris azulado suave */
+            .c-fin { background-color: #ecfdf5; color: #059669; }  /* Esmeralda suave */
+            .c-mkt { background-color: #fff1f2; color: #e11d48; }  /* Rojo suave */
+            .c-bot { background-color: #f5f3ff; color: #6366f1; }  /* Indigo suave */
+            
+            /* Icon Box con color dinámico basado en el padre */
+            .icon-box {
+                width: 50px; height: 50px;
+                background: white;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                margin-bottom: 20px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+                color: inherit; /* Hereda el color definido en la clase de la tarjeta */
+            }
+            
+            .card-content h3 {
+                font-size: 20px;
+                font-weight: 800;
+                margin-bottom: 10px;
+                color: inherit; /* Hereda color para nombre de servicio */
+            }
+            
+            .card-content p {
+                font-size: 14px;
+                line-height: 1.5;
+                color: #64748b; /* Gris neutro para la descripción (mejor lectura) */
+                margin-bottom: 0;
+            }
+            
+            .card-footer {
+                margin-top: 20px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 700;
+                font-size: 14px;
+                color: inherit;
+                opacity: 0.8;
+            }
+            
+            .saas-card:hover .card-footer i {
+                transform: translateX(4px);
+                transition: 0.2s;
+            }
+            </style>
+            
+            <div class="services-bento-grid">
+                <div class="saas-card c-pos" onclick="window.location.href='/services/pos/'">
+                    <div class="icon-box"><i class="fas fa-desktop"></i></div>
+                    <div class="card-content">
+                        <h3>Cloud POS</h3>
+                        <p>Punto de venta híbrido con sincronización en tiempo real y offline.</p>
+                    </div>
+                    <div class="card-footer">Explorar <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-wa" onclick="window.location.href='/services/whatsapp/'">
+                    <div class="icon-box"><i class="fab fa-whatsapp"></i></div>
+                    <div class="card-content">
+                        <h3>WhatsApp IA</h3>
+                        <p>Agentes autónomos entrenados para cerrar ventas y atender clientes 24/7.</p>
+                    </div>
+                    <div class="card-footer">Saber más <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-shop" onclick="window.location.href='/services/eshop/'">
+                    <div class="icon-box"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="card-content">
+                        <h3>e-Shop Pro</h3>
+                        <p>Tienda online de alto impacto con checkout optimizado y pagos integrados.</p>
+                    </div>
+                    <div class="card-footer">Ver demos <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-mas" onclick="window.location.href='/services/masivas/'">
+                    <div class="icon-box"><i class="fas fa-paper-plane"></i></div>
+                    <div class="card-content">
+                        <h3>Masivos WA</h3>
+                        <p>Campañas segmentadas con tecnología anti-bloqueo y API oficial.</p>
+                    </div>
+                    <div class="card-footer">Lanzar campaña <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-crm" onclick="window.location.href='/services/crm/'">
+                    <div class="icon-box"><i class="fas fa-address-book"></i></div>
+                    <div class="card-content">
+                        <h3>CRM Clientes</h3>
+                        <p>Gestión, seguimiento de prospectos y fidelización de base de datos.</p>
+                    </div>
+                    <div class="card-footer">Gestionar <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-sop" onclick="window.location.href='/services/support/'">
+                    <div class="icon-box"><i class="fas fa-user-shield"></i></div>
+                    <div class="card-content">
+                        <h3>Soporte Pro</h3>
+                        <p>Asistencia técnica especializada y consultoría para tu crecimiento.</p>
+                    </div>
+                    <div class="card-footer">Contactar <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-fin" onclick="window.location.href='/services/finance/'">
+                    <div class="icon-box"><i class="fas fa-chart-pie"></i></div>
+                    <div class="card-content">
+                        <h3>Finanzas IA</h3>
+                        <p>Control de caja, gastos y proyecciones financieras automatizadas.</p>
+                    </div>
+                    <div class="card-footer">Auditar <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-mkt" onclick="window.location.href='/services/marketing/'">
+                    <div class="icon-box"><i class="fas fa-magic"></i></div>
+                    <div class="card-content">
+                        <h3>Marketing IA</h3>
+                        <p>Generación de copys persuasivos y contenido visual para redes.</p>
+                    </div>
+                    <div class="card-footer">Crear <i class="fas fa-arrow-right"></i></div>
+                </div>
+            
+                <div class="saas-card c-bot" onclick="window.location.href='/services/bots/'">
+                    <div class="icon-box"><i class="fas fa-robot"></i></div>
+                    <div class="card-content">
+                        <h3>Bots Operativos</h3>
+                        <p>Automatización de tareas internas y flujos de trabajo repetitivos.</p>
+                    </div>
+                    <div class="card-footer">Automatizar <i class="fas fa-arrow-right"></i></div>
+                </div>
+            </div>
+
+        <div id="pricing-placeholder"></div>
+
+        <section id="masivos" class="masivos-hero">
+            <div class="masivos-overlay"></div>
+            <div class="masivos-container">
+                
+                <div class="masivos-header-area">
+                    <div class="wa-api-badge">
+                        <span class="pulse-dot"></span>
+                        <i class="fab fa-whatsapp"></i> API BUSINESS OFFICIAL
+                    </div>
+                    <h2>Campañas <span class="text-green-wa">Masivas</span> <span class="text-indigo-pro">Pro</span></h2>
+                    <p class="header-subtitle">Impulsa tus ventas con difusión inteligente y segmentada a gran escala.</p>
+                </div>
+        
+                <div class="masivos-content-grid">
+                    
+                    <div class="wa-calculator-card">
+                        <div class="card-glass-header">
+                            <div class="header-top">
+                                <i class="fas fa-calculator main-calc-icon"></i>
+                                <div>
+                                    <h4>Proyección de Inversión</h4>
+                                    <p>Calcula el costo de tu impacto en tiempo real.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="calc-body">
+                            <div class="input-container">
+                                <label>Volumen de Mensajes</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                    <input type="number" id="calc-qty" value="1000" oninput="calculateWA()" class="calc-input">
+                                </div>
+                            </div>
+        
+                            <div class="type-selector">
+                                <label>Tipo de Contenido</label>
+                                <div class="selector-buttons">
+                                    <button class="type-btn active" id="btn-texto" onclick="setWAType('texto', 25)">
+                                        <i class="fas fa-user"></i>
+                                        <span>Texto <b>$25</b></span>
+                                    </button>
+                                    <button class="type-btn" id="btn-multi" onclick="setWAType('multi', 50)">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span>Multimedia <b>$50</b></span>
+                                    </button>
+                                </div>
+                            </div>
+        
+                            <div class="result-display">
+                                <div class="result-row">
+                                    <div class="label-group">
+                                        <i class="fas fa-dollar-sign"></i>
+                                        <span>Inversión Estimada</span>
+                                    </div>
+                                    <div id="calc-total" class="total-amount">$25,000</div>
+                                </div>
+                                <p class="min-notice"><i class="fas fa-info-circle"></i> Mínimo de recarga: 100 créditos</p>
+                                <button onclick="irAPagarMasivos()" class="btn-main-action">
+                                    RECARGAR CRÉDITOS <i class="fas fa-bolt"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="features-visual">
+                        <div class="visual-card">
+                            <h4 class="visual-title">Pasos para iniciar</h4>
+                            <div class="vertical-timeline">
+                                <div class="time-item done">
+                                    <div class="time-icon"><i class="fas fa-user-plus"></i></div>
+                                    <div class="time-content">
+                                        <h5>Registro Gratis</h5>
+                                        <p>Crea tu cuenta sin costos iniciales.</p>
+                                    </div>
+                                </div>
+                                <div class="time-item active">
+                                    <div class="time-icon"><i class="fas fa-robot"></i></div>
+                                    <div class="time-content">
+                                        <h5>Activa el Bot</h5>
+                                        <p>Vincula tu instancia oficial en segundos.</p>
+                                    </div>
+                                </div>
+                                <div class="time-item">
+                                    <div class="time-icon"><i class="fas fa-paper-plane"></i></div>
+                                    <div class="time-content">
+                                        <h5>Envío Masivo</h5>
+                                        <p>Difunde contenido a gran escala.</p>
+                                    </div>
+                                </div>
+
+                                <div class="trust-cards-mini">
+                                    <div class="mini-badge">
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Sin riesgo de bloqueo</span>
+                                    </div>
+                                    <div class="mini-badge">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                        <span>Solo pagas lo que usas</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+        
+                        
+                    </div>
+        
+                </div>
+            </div>
+        </section>
+        
+        <style>
+        /* Estilos Base de la Sección */
+        .masivos-hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9; /* Fondo gris claro sólido para contraste */
+            position: relative;
+            padding: 60px 6%;
+            overflow: hidden;
+        }
+        
+        .masivos-overlay {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.05;
+            pointer-events: none;
+        }
+        
+        .masivos-container { max-width: 1100px; width: 100%; z-index: 2; }
+        
+        /* Header */
+        .masivos-header-area { text-align: center; margin-bottom: 40px; }
+        .wa-api-badge {
+            display: inline-flex; align-items: center;
+            background: white; color: #0f172a;
+            padding: 10px 20px; border-radius: 100px;
+            font-size: 13px; font-weight: 800;
+            margin-bottom: 25px; gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        
+        .pulse-dot { width: 8px; height: 8px; background: #25D366; border-radius: 50%; animation: pulse 1.5s infinite; }
+        
+        .masivos-header-area h2 { font-size: 52px; font-weight: 900; color: #0f172a; letter-spacing: -2px; }
+        .text-green-wa { color: #25D366; }
+        .text-indigo-pro { color: #4f46e5; }
+        .header-subtitle { color: #475569; font-size: 18px; font-weight: 500; margin-top: 10px; }
+        
+        /* Layout Grid */
+        .masivos-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: stretch;
+        }
+        
+        /* Calculadora Card */
+        .wa-calculator-card {
+            background: #e2e8f0;
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .header-top { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .main-calc-icon { font-size: 24px; color: #334155; }
+        .card-glass-header h4 { font-size: 18px; font-weight: 800; color: #1e293b; }
+        .card-glass-header p { color: #64748b; font-size: 13px; }
+        
+        .calc-body { background: white; padding: 25px; border-radius: 20px; }
+        
+        .input-container label, .type-selector label { 
+            display: block; font-weight: 700; font-size: 12px; 
+            text-transform: uppercase; color: #94a3b8; margin-bottom: 8px; 
+        }
+        
+        .input-with-icon { position: relative; margin-bottom: 20px; }
+        .input-with-icon i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+        .calc-input {
+            width: 100%; padding: 12px 15px 12px 40px; border-radius: 12px;
+            border: 1px solid #e2e8f0; font-size: 16px; font-weight: 600; color: #1e293b;
+        }
+        
+        .selector-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+        .type-btn {
+            padding: 12px; border-radius: 12px; border: 2px solid #e2e8f0;
+            background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .type-btn i { font-size: 16px; color: #64748b; }
+        .type-btn span { font-size: 14px; font-weight: 600; color: #475569; }
+        .type-btn.active { border-color: #4f46e5; background: #f5f3ff; }
+        .type-btn.active i, .type-btn.active span { color: #4f46e5; }
+        
+        .result-display { border-top: 1px solid #f1f5f9; padding-top: 20px; }
+        .result-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 10px;
+        }
+        .label-group { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #64748b; font-size: 13px; }
+        .total-amount { font-size: 24px; font-weight: 900; color: #0f172a; }
+        .min-notice { font-size: 11px; color: #94a3b8; margin-bottom: 15px; font-weight: 600; }
+        
+        .btn-main-action {
+            width: 100%; padding: 15px; background: #3730a3; color: white;
+            border: none; border-radius: 12px; font-weight: 800; cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-main-action:hover { background: #4338ca; }
+        
+        /* Visual Card (Pasos) */
+        .visual-card { background: #cbd5e1; border-radius: 30px; padding: 40px; height: 100%; }
+        .visual-title { font-size: 22px; font-weight: 800; color: #1e293b; margin-bottom: 30px; }
+        
+        .vertical-timeline { position: relative; }
+        .time-item { 
+            display: flex; align-items: center; gap: 20px; margin-bottom: 15px;
+            background: white; padding: 15px 20px; border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .time-icon {
+            width: 45px; height: 45px; border-radius: 50%; flex-shrink: 0;
+            background: #e2e8f0; color: #475569; display: flex; align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+        .time-item.active .time-icon { background: #4f46e5; color: white; }
+        .time-item.done .time-icon { background: #3730a3; color: white; }
+        
+        .time-content h5 { font-size: 16px; font-weight: 800; color: #1e293b; }
+        .time-content p { font-size: 13px; color: #64748b; }
+        
+        .trust-cards-mini { display: flex; gap: 10px; margin-top: 25px; }
+        .mini-badge {
+            background: white; padding: 12px 15px; border-radius: 12px; flex: 1;
+            font-size: 12px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 8px;
+        }
+        .mini-badge i { color: #64748b; }
+        
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2.5); opacity: 0; } }
+        
+        @media (max-width: 900px) {
+            .masivos-content-grid { grid-template-columns: 1fr; }
+            .masivos-header-area h2 { font-size: 36px; }
+        }
+
+        /* OPTIMIZACIÓN PARA MÓVILES (Pantallas < 900px) */
+        @media (max-width: 900px) {
+            .masivos-hero {
+                padding: 100px 20px 60px; /* Más espacio arriba para el navbar */
+                height: auto;
+                min-height: auto;
+            }
+
+            .masivos-header-area h2 {
+                font-size: 32px; /* Título más pequeño y legible */
+                letter-spacing: -1px;
+            }
+
+            .header-subtitle {
+                font-size: 15px;
+                padding: 0 10px;
+            }
+
+            /* Cambio de 2 columnas a 1 columna */
+            .masivos-content-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            /* Ajustes Calculadora */
+            .wa-calculator-card {
+                padding: 20px;
+                border-radius: 24px;
+            }
+
+            .calc-body {
+                padding: 15px;
+            }
+
+            .total-amount {
+                font-size: 20px; /* Evita que el precio se desborde */
+            }
+
+            /* Ajustes Pasos para Iniciar */
+            .visual-card {
+                padding: 25px 15px;
+                border-radius: 24px;
+            }
+
+            .visual-title {
+                font-size: 18px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .time-item {
+                padding: 12px;
+                gap: 12px;
+            }
+
+            .time-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 14px;
+            }
+
+            .time-content h5 {
+                font-size: 14px;
+            }
+
+            .time-content p {
+                font-size: 12px;
+            }
+
+            /* Etiquetas de confianza en móvil */
+            .trust-cards-mini {
+                flex-direction: column; /* Una sobre otra para evitar texto apretado */
+                gap: 8px;
+            }
+
+            .mini-badge {
+                width: 100%;
+                padding: 10px;
+                justify-content: flex-start;
+            }
+
+            .result-row { 
+                display: flex; 
+                flex-direction: column; /* Cambia a vertical en móviles */
+                align-items: center; /* Centra el contenido */
+                justify-content: center;
+                gap: 10px; /* Espacio entre el texto y el valor */
+                padding: 20px 15px; /* Un poco más de aire vertical */
+            }
+
+            .label-group {
+                display: flex;
+                flex-direction: row; /* Mantiene icono y texto en una sola línea */
+                white-space: nowrap; /* Evita que el texto "Inversión Estimada" se rompa */
+                font-size: 14px;
+                justify-content: center;
+            }
+
+            .total-amount {
+                font-size: 32px; /* Aumentamos un poco el tamaño para que destaque debajo */
+                line-height: 1;
+                margin: 0;
+            }
+
+        }
+
+        /* Ajuste adicional para pantallas muy pequeñas (iPhone SE, etc) */
+        @media (max-width: 380px) {
+            .masivos-header-area h2 {
+                font-size: 28px;
+            }
+            
+            .selector-buttons {
+                grid-template-columns: 1fr; /* Los botones de texto/multi uno sobre otro */
+            }
+        }
+
+        </style>
+        
+        <script>
+        let currentPrice = 25;
+        function setWAType(type, price) {
+            currentPrice = price;
+            document.querySelectorAll('.type-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(type === 'texto' ? 'btn-texto' : 'btn-multi').classList.add('active');
+            calculateWA();
+        }
+        function calculateWA() {
+            const qty = document.getElementById('calc-qty').value;
+            const total = qty * currentPrice;
+            document.getElementById('calc-total').innerText = '$' + total.toLocaleString();
+        }
+        </script>
+
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+
+    <!-- ASISTENTE CHAT ROBOT -->
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --wa-bg: #efeae2;
+            --text-main: #1e293b; /* Color de texto oscuro para legibilidad */
+        }
+    
+        /* Botón Gatillo más pequeño */
+        .bot-trigger {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 55px; height: 55px; background: var(--primary);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 24px; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); z-index: 9999;
+            transition: 0.3s;
+        }
+    
+        /* Ventana de Chat más compacta */
+        .chat-window {
+            position: fixed; bottom: 85px; right: 20px;
+            width: 320px; height: 480px; background: white;
+            border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            z-index: 9998; display: none; flex-direction: column;
+            overflow: hidden; border: 1px solid rgba(0,0,0,0.05);
+        }
+    
+        .chat-window.active { display: flex; animation: fadeInBot 0.3s ease; }
+    
+        @keyframes fadeInBot {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    
+        /* Cabecera */
+        .chat-header {
+            background: var(--dark); color: white; padding: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .chat-header img { 
+            height: 25px; width: auto; object-fit: contain; /* Proporcionalidad [cite: 2026-01-25] */
+        }
+        
+        /* Área de Mensajes corregida */
+        .chat-body {
+            flex: 1; overflow-y: auto; padding: 15px;
+            background-color: var(--wa-bg);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-blend-mode: overlay;
+            display: flex; flex-direction: column; gap: 8px;
+        }
+    
+        /* Burbujas con texto oscuro */
+        .m-msg {
+            max-width: 90%; padding: 10px 14px; border-radius: 12px;
+            font-size: 13px; line-height: 1.4; 
+            word-wrap: break-word; /* Evita que el texto se salga */
+            color: var(--text-main) !important; /* Fuerza el texto oscuro */
+        }
+        .m-msg.u { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 2px; }
+        .m-msg.a { background: white; align-self: flex-start; border-top-left-radius: 2px; border: 1px solid rgba(0,0,0,0.05); }
+    
+        /* Input Footer */
+        .chat-footer {
+            padding: 12px; background: #f0f2f5; display: flex; gap: 8px; align-items: center;
+        }
+        .chat-footer input {
+            flex: 1; border: 1px solid #ddd; padding: 10px 15px; border-radius: 20px; 
+            outline: none; font-size: 13px; color: var(--text-main);
+        }
+    
+        .btn-send-bot {
+            width: 38px; height: 38px; border-radius: 50%; background: var(--primary);
+            color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+    </style>
+    
+    <div class="bot-trigger" id="botTrigger" onclick="toggleChat()">
+        <i class="fas fa-robot"></i>
+    </div>
+    
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Logo">
+            <div style="flex: 1;">
+                <h4 style="font-size: 13px; margin:0">Asistente Tienderu</h4>
+                <p style="font-size: 10px; margin:0; opacity: 0.8;">Online</p>
+            </div>
+            <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.5;"></i>
+        </div>
+        
+        <div class="chat-body" id="bot-messages">
+            <div class="m-msg a">¡Hola! 👋 ¿En qué puedo ayudarte hoy?</div>
+        </div>
+    
+        <div class="chat-footer">
+            <input type="text" id="bot-input" placeholder="Escribe aquí..." onkeypress="if(event.key==='Enter')sendBotMessage()">
+            <button class="btn-send-bot" onclick="sendBotMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Se mantiene la lógica de envío pero se asegura la inyección de la URL
+        async function sendBotMessage() {
+            const input = document.getElementById('bot-input');
+            const text = input.value.trim();
+            if (!text) return;
+    
+            appendBotMsg(text, 'u');
+            input.value = '';
+            const tId = showBotTyping();
+    
+            try {
+                const response = await fetch('https://n8.tienderu.com/webhook/nuevo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: text, 
+                        instance: localStorage.getItem("bot_instance"),
+                        url: window.location.href // Cumpliendo con trazabilidad [cite: 2025-11-10]
+                    })
+                });
+                const data = await response.json();
+                document.getElementById(tId).remove();
+                appendBotMsg(data.output || "Recibido. ¿Algo más?", 'a');
+            } catch (e) {
+                document.getElementById(tId).remove();
+                appendBotMsg("Error de conexión.", 'a');
+            }
+        }
+    
+        function appendBotMsg(text, role) {
+            const box = document.getElementById('bot-messages');
+            const div = document.createElement('div');
+            div.className = `m-msg ${role}`;
+            div.innerHTML = text;
+            box.appendChild(div);
+            box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        }
+    
+        function showBotTyping() {
+            const id = 't-' + Date.now();
+            const box = document.getElementById('bot-messages');
+            const div = document.createElement('div');
+            div.id = id; div.className = "m-msg a";
+            div.innerHTML = "...";
+            box.appendChild(div);
+            return id;
+        }
+    
+        function toggleChat() {
+            const win = document.getElementById('chatWindow');
+            win.classList.toggle('active');
+            win.style.display = win.classList.contains('active') ? 'flex' : 'none';
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad | Ecosistema Global Tienderu</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --slate: #475569;
+            --card-shadow: rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #fcfdfe; color: var(--dark); line-height: 1.6; }
+
+        #navbar-placeholder { position: sticky; top: 0; z-index: 2000; width: 100%; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .logo { height: 40px !important; width: auto !important; object-fit: contain; display: block; }
+
+        /* HERO SECTOR */
+        .privacy-hero { padding: 80px 6% 20px; text-align: center; }
+        .privacy-hero h1 { font-size: clamp(32px, 5vw, 55px); font-weight: 800; letter-spacing: -3px; }
+        .privacy-hero h1 span { color: var(--primary); }
+
+        /* RESUMEN DE PRIVACIDAD (UX) */
+        .trust-summary {
+            max-width: 1000px; margin: 40px auto;
+            background: white; border-radius: 30px; padding: 40px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            box-shadow: 0 10px 40px var(--card-shadow);
+        }
+        .trust-item { text-align: center; }
+        .trust-item i { font-size: 24px; color: var(--primary); margin-bottom: 15px; }
+        .trust-item h4 { font-size: 14px; font-weight: 800; margin-bottom: 5px; }
+        .trust-item p { font-size: 12px; color: var(--slate); }
+
+        /* BUSCADOR COHERENTE */
+        .search-wrapper { max-width: 600px; margin: 0 auto 60px; position: relative; }
+        .search-input { 
+            width: 100%; padding: 18px 25px 18px 50px; border-radius: 50px;
+            border: 1px solid rgba(0,0,0,0.1); font-size: 16px; outline: none;
+            transition: 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 4px 25px rgba(99, 102, 241, 0.1); }
+        .search-wrapper i { position: absolute; left: 20px; top: 22px; color: var(--slate); }
+
+        /* GRID DE COMPROMISOS */
+        .privacy-grid { 
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+            gap: 30px; padding: 40px 6%; max-width: 1300px; margin: auto;
+        }
+        .privacy-card {
+            background: white; padding: 40px; border-radius: 35px;
+            border: 1px solid rgba(0,0,0,0.04); transition: 0.4s;
+            position: relative;
+        }
+        .privacy-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .privacy-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .privacy-card h3 i { color: var(--accent); font-size: 18px; }
+        .privacy-card p { font-size: 14px; color: var(--slate); }
+
+        /* PANEL ÉTICO DE IA */
+        .ai-ethics-panel {
+            max-width: 1000px; margin: 60px auto; background: var(--dark);
+            border-radius: 40px; padding: 50px; color: white; position: relative;
+            overflow: hidden;
+        }
+        .ai-ethics-panel::after {
+            content: 'AI DATA PROTECTION'; position: absolute; bottom: -20px; right: -20px;
+            font-size: 80px; font-weight: 900; opacity: 0.03; white-space: nowrap;
+        }
+
+        /* FAQ PRIVACIDAD */
+        .faq-container { max-width: 800px; margin: 60px auto; padding: 0 6%; }
+        .faq-box { background: white; margin-bottom: 12px; border-radius: 20px; padding: 25px; border: 1px solid rgba(0,0,0,0.04); cursor: pointer; }
+        .faq-answer { display: none; margin-top: 15px; font-size: 14px; color: var(--slate); border-top: 1px solid #f1f5f9; padding-top: 15px; }
+
+        @media (max-width: 768px) { .trust-summary { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="privacy-hero">
+        <h1>Tu Información es <span>Privada</span></h1>
+        <p style="margin-top: 15px; color: var(--slate); font-weight: 500;">Arquitectura de datos diseñada bajo los estándares éticos de CRSGroup.</p>
+    </header>
+
+    <div class="trust-summary">
+        <div class="trust-item">
+            <i class="fas fa-user-lock"></i>
+            <h4>Soberanía</h4>
+            <p>Tú controlas qué datos procesa la IA.</p>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-user-secret"></i>
+            <h4>Anonimato</h4>
+            <p>Procesamiento cifrado sin rastro personal.</p>
+        </div>
+        <div class="trust-item">
+            <i class="fas fa-history"></i>
+            <h4>Derecho al olvido</h4>
+            <p>Borrado total de logs bajo demanda.</p>
+        </div>
+    </div>
+
+    <div class="search-wrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" class="search-input" placeholder="¿Qué dato quieres consultar? (ej. Cookies, Logs, IP)...">
+    </div>
+
+    <section class="privacy-grid">
+        <div class="privacy-card">
+            <h3><i class="fas fa-file-invoice"></i> Datos del Negocio</h3>
+            <p>Recopilamos NIT, registros comerciales e información de contacto solo para la facturación y el soporte de CRSGroup. Nunca se comparten con fines comerciales externos.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3><i class="fas fa-comments"></i> Logs de Interacción</h3>
+            <p>Las conversaciones procesadas por nuestros bots se cifran con AES-256. Solo se usan para mejorar la precisión de respuesta de TU propio modelo.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3><i class="fas fa-microchip"></i> Inteligencia Ética</h3>
+            <p>Nuestra IA no realiza "perfilamiento intrusivo". Analiza intenciones de compra, no identidades personales protegidas.</p>
+        </div>
+
+        <div class="privacy-card">
+            <h3><i class="fas fa-shield-alt"></i> Seguridad Física</h3>
+            <p>Tus datos residen en servidores de alta seguridad con redundancia global, protegidos por los protocolos de ciberseguridad de CRSGroup Tech.</p>
+        </div>
+    </section>
+
+    <section class="ai-ethics-panel">
+        <div style="max-width: 600px;">
+            <h2 style="font-weight: 800; color: var(--accent); margin-bottom: 20px;">IA con Propósito, no con Vigilancia</h2>
+            <p style="opacity: 0.9; font-size: 15px;">En Tienderu, el aprendizaje de nuestros algoritmos es <b>federado</b>. Esto significa que la IA puede volverse más inteligente sin necesidad de "ver" datos sensibles de tus clientes de forma individual.</p>
+            <div style="margin-top: 30px; display: flex; gap: 15px;">
+                <span style="background: rgba(16, 185, 129, 0.2); padding: 8px 15px; border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--accent);">GDPR COMPLIANT</span>
+                <span style="background: rgba(255, 255, 255, 0.1); padding: 8px 15px; border-radius: 10px; font-size: 12px; font-weight: 700;">AES-256 ENCRYPTION</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="faq-container">
+        <h3 style="font-weight: 800; margin-bottom: 30px; text-align: center;">Dudas frecuentes sobre tus datos</h3>
+        
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700;">
+                ¿Venden mis datos para entrenamiento de otras IA? <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-answer">Rotundamente no. Tu base de conocimientos es privada y exclusiva de tu instancia de Tienderu.</div>
+        </div>
+
+        <div class="faq-box" onclick="toggleFaq(this)">
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700;">
+                ¿Dónde se guardan físicamente mis datos? <i class="fas fa-plus"></i>
+            </div>
+            <div class="faq-answer">Utilizamos centros de datos Tier-4 distribuidos en regiones seguras de AWS y Google Cloud, gestionados bajo la infraestructura global de CRSGroup.</div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function toggleFaq(element) {
+            const answer = element.querySelector('.faq-answer');
+            const icon = element.querySelector('i');
+            const isOpen = answer.style.display === 'block';
+            answer.style.display = isOpen ? 'none' : 'block';
+            icon.className = isOpen ? 'fas fa-plus' : 'fas fa-minus';
+        }
+
+        async function loadComponents() {
+            const checkNavbar = setInterval(() => { if (typeof loadNavbar === 'function') { loadNavbar(); clearInterval(checkNavbar); } }, 100);
+            try {
+                const response = await fetch('/footer.html'); 
+                if (response.ok) {
+                    document.getElementById('footer-placeholder').innerHTML = await response.text();
+                    const urlDisplay = document.getElementById('footer-url-display');
+                    // Inyectamos URL dinámica de privacidad
+                    if(urlDisplay) urlDisplay.textContent = "tienderu.com/privacidad";
+                }
+            } catch (error) {}
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

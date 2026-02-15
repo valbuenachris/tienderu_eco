@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte Técnico | Tienderu Global</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-accent: #a5b4fc;
+            --bg-dark: #020617;
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.05);
+            --neon-glow: rgba(99, 102, 241, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-dark); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+        /* EL LOGO NO PIERDE PROPORCIONALIDAD [cite: 2026-01-25] */
+        .logo { height: 40px !important; width: auto !important; object-fit: contain; }
+
+        /* --- HERO SECTION --- */
+        .support-hero {
+            position: relative; padding: 140px 6% 60px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            background: radial-gradient(circle at 50% 0%, var(--neon-glow) 0%, transparent 70%);
+        }
+        .hero-tag {
+            background: rgba(99, 102, 241, 0.1); color: var(--primary-accent);
+            padding: 8px 20px; border-radius: 100px; font-size: 11px; font-weight: 800;
+            letter-spacing: 2px; border: 1px solid rgba(99, 102, 241, 0.2); margin-bottom: 25px;
+        }
+        .support-hero h1 { 
+            font-size: clamp(38px, 6vw, 64px); font-weight: 800; line-height: 1; 
+            letter-spacing: -2px; margin-bottom: 20px;
+        }
+        .support-hero h1 span { color: var(--primary); }
+        .support-hero p { color: var(--text-dim); max-width: 600px; margin-bottom: 40px; }
+
+        /* --- GRID DE 4 COLUMNAS (CANALES) --- */
+        .nexus-line-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 20px; width: 100%; max-width: 1200px; margin: 0 auto;
+        }
+        .nexus-mini-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            backdrop-filter: blur(15px); border-radius: 28px; padding: 30px 22px;
+            text-align: left; transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex; flex-direction: column; height: 100%;
+        }
+        .nexus-mini-card:hover { border-color: var(--primary); transform: translateY(-8px); background: rgba(15, 23, 42, 0.8); }
+        
+        .status-pill {
+            display: inline-flex; align-items: center; gap: 6px; font-size: 9px;
+            font-weight: 800; color: #22c55e; background: rgba(34, 197, 94, 0.1);
+            padding: 5px 12px; border-radius: 100px; margin-bottom: 15px; text-transform: uppercase;
+        }
+        .icon-mini {
+            width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 22px; color: var(--primary); margin-bottom: 20px;
+        }
+        .nexus-mini-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 12px; color: white; }
+        .nexus-mini-card p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+
+        /* --- SECCIÓN DE NIVELES POR PLAN --- */
+        .levels-section { padding: 100px 6%; background: rgba(0,0,0,0.2); text-align: center; }
+        .levels-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 30px; max-width: 1200px; margin: 50px auto 0; 
+        }
+        .level-box {
+            padding: 45px 35px; border-radius: 32px; background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border); text-align: left; position: relative;
+            transition: 0.4s;
+        }
+        .active-level { 
+            border-color: var(--primary); 
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+        }
+        .popular-badge {
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+            background: var(--primary); color: white; padding: 5px 15px;
+            border-radius: 100px; font-size: 10px; font-weight: 900;
+        }
+        .level-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .level-header i { font-size: 28px; color: var(--primary); }
+        .level-header h4 { font-size: 22px; font-weight: 800; color: white; }
+        
+        .level-list { list-style: none; margin-top: 20px;}
+        .level-list li { 
+            display: flex; align-items: flex-start; gap: 12px; 
+            color: var(--text-main); font-size: 14.5px; margin-bottom: 18px;
+        }
+        .level-list li i { color: var(--primary); margin-top: 4px; }
+
+        @media (max-width: 1024px) { .nexus-line-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 650px) { 
+            .nexus-line-grid { grid-template-columns: 1fr; }
+            .levels-grid { grid-template-columns: 1fr; }
+            .support-hero { padding-top: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="support-hero">
+        <div class="hero-tag">SUPPORT NEXUS SYSTEM</div>
+        <h1>¿Cómo podemos <span>ayudarte</span> hoy?</h1>
+        <p>Infraestructura dedicada para resolver incidencias y potenciar tu operación en tiempo real mediante múltiples canales de atención.</p>
+        
+        <div class="nexus-line-grid">
+            <div class="nexus-mini-card">
+                <div class="status-pill"><i class="fas fa-circle" style="font-size:6px;"></i> SISTEMA ACTIVO</div>
+                <div class="icon-mini"><i class="fas fa-ticket-alt"></i></div>
+                <h3>Tickets de Soporte</h3>
+                <p>Gestión formal de requerimientos técnicos y administrativos con seguimiento detallado por correo electrónico.</p>
+            </div>
+            <div class="nexus-mini-card" style="border-color: rgba(99, 102, 241, 0.3);">
+                <div class="status-pill"><i class="fas fa-bolt" style="font-size:6px;"></i> RESPUESTA 24/7</div>
+                <div class="icon-mini"><i class="fas fa-robot"></i></div>
+                <h3>Asistente Nexus IA</h3>
+                <p>Nuestra inteligencia artificial resuelve dudas de configuración y guías de uso de manera inmediata y sin esperas.</p>
+            </div>
+            <div class="nexus-mini-card">
+                <div class="status-pill"><i class="fas fa-comment-dots" style="font-size:6px;"></i> CHAT EN VIVO</div>
+                <div class="icon-mini"><i class="fab fa-whatsapp"></i></div>
+                <h3>Soporte por Chat</h3>
+                <p>Comunicación directa con nuestro equipo técnico para asistencia rápida y optimización de servicios contratados.</p>
+            </div>
+            <div class="nexus-mini-card">
+                <div class="status-pill" style="color:#f59e0b; background:rgba(245,158,11,0.1);"><i class="fas fa-crown" style="font-size:6px;"></i> LÍNEA VIP</div>
+                <div class="icon-mini"><i class="fas fa-phone-alt"></i></div>
+                <h3>Atención Telefónica</h3>
+                <p>Acceso directo de voz con ingenieros dedicados. Canal exclusivo para solución inmediata a situaciones críticas.</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="levels-section">
+        <h2 style="font-size: clamp(32px, 4vw, 48px); font-weight: 800;">Cobertura Adaptada a tu <span>Crecimiento</span></h2>
+        
+        <div class="levels-grid">
+            <div class="level-box">
+                <div class="level-header">
+                    <i class="fas fa-layer-group"></i>
+                    <h4>Plan Starter</h4>
+                </div>
+                <p style="color:var(--text-dim); font-size:14.5px;">Ideal para emprendedores iniciando su camino digital con las herramientas esenciales.</p>
+                <ul class="level-list">
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Tickets:</strong> Respuesta en menos de 24h hábiles.</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Wiki:</strong> Acceso total a base de conocimientos.</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Comunidad:</strong> Foro de soporte entre usuarios.</span></li>
+                </ul>
+            </div>
+
+            <div class="level-box active-level">
+                <div class="popular-badge">RECOMENDADO</div>
+                <div class="level-header">
+                    <i class="fas fa-star"></i>
+                    <h4>Plan Business</h4>
+                </div>
+                <p style="color:var(--text-dim); font-size:14.5px;">Para empresas que requieren agilidad y mínima fricción operativa.</p>
+                <ul class="level-list">
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Nexus IA:</strong> Asistencia técnica inmediata por WhatsApp.</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Prioridad:</strong> Respuesta en tickets en menos de 8h.</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Setup:</strong> Ayuda en configuración de pasarelas.</span></li>
+                </ul>
+            </div>
+
+            <div class="level-box">
+                <div class="level-header">
+                    <i class="fas fa-crown"></i>
+                    <h4>Plan Elite VIP</h4>
+                </div>
+                <p style="color:var(--text-dim); font-size:14.5px;">Soporte de grado corporativo con acompañamiento humano directo.</p>
+                <ul class="level-list">
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Teléfono:</strong> Acceso a ingenieros de guardia.</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Criticidad:</strong> Resolución de incidencias en tiempo real.</span></li>
+                    <li><i class="fas fa-check-circle"></i> <span><strong>Consultoría:</strong> Sesión mensual de optimización.</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function loadComponents() {
+            // Navbar - Buscando en raíz
+            const nav = document.getElementById('navbar-placeholder');
+            try {
+                const resNav = await fetch('/navbar.html');
+                if (resNav.ok) nav.innerHTML = await resNav.text();
+            } catch (e) { console.warn("Error cargando Navbar"); }
+
+            // Footer - Buscando en raíz
+            const foot = document.getElementById('footer-placeholder');
+            try {
+                const resFoot = await fetch('/footer.html');
+                if (resFoot.ok) {
+                    foot.innerHTML = await resFoot.text();
+                    // Incluir URL del producto obligatoria [cite: 2025-11-10]
+                    const urlDisplay = document.getElementById('footer-url-display');
+                    if(urlDisplay) urlDisplay.textContent = "tienderu.com/soporte";
+                }
+            } catch (e) { console.warn("Error cargando Footer"); }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

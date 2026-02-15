@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp IA | Tienderu Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root {
+            --primary: #25d366;
+            --primary-dark: #128c7e;
+            --primary-glow: rgba(37, 211, 102, 0.3);
+            --bg-deep: #020617;
+            --bg-surface: #0f172a;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #6366f1;
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --wa-bg: #efeae2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-deep); color: var(--text-main); line-height: 1.4; overflow-x: hidden; scroll-behavior: smooth; }
+
+        /* --- LOGO PROPORCIONAL [cite: 2026-01-25] --- */
+        .logo, .chat-header img { height: 40px !important; width: auto !important; object-fit: contain; }
+
+        /* --- HERO SECTION --- */
+        .hero-split {
+            display: grid; grid-template-columns: 1.1fr 0.9fr;
+            min-height: 85vh; align-items: center;
+            padding: 80px 6% 40px; gap: 40px;
+            background: radial-gradient(circle at 80% 20%, rgba(37, 211, 102, 0.1) 0%, transparent 40%);
+        }
+        .hero-tag { 
+            display: inline-block; padding: 4px 12px; border-radius: 100px;
+            background: rgba(37, 211, 102, 0.1); color: var(--primary);
+            font-size: 11px; font-weight: 800; text-transform: uppercase; margin-bottom: 15px;
+            border: 1px solid var(--primary-glow);
+        }
+        .hero-split h1 { font-size: clamp(32px, 5vw, 64px); font-weight: 800; line-height: 1.1; letter-spacing: -2px; }
+        .hero-split h1 span { color: var(--primary); }
+        .hero-split p { font-size: clamp(16px, 1.8vw, 19px); color: var(--text-dim); margin: 15px 0 25px; max-width: 600px; }
+
+        .video-wrapper {
+            position: relative; width: 100%; padding-bottom: 56.25%; border-radius: 30px; overflow: hidden;
+            box-shadow: 0 0 50px rgba(37, 211, 102, 0.1); border: 1px solid rgba(255,255,255,0.05);
+        }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+
+        /* --- CAPACIDADES GRID 3x3 --- */
+        .capabilities-section { padding: 60px 6% 40px; background: radial-gradient(circle at center, #0f172a 0%, #020617 100%); }
+        .cap-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1300px; margin: 0 auto; }
+        .cap-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 30px; border-radius: 30px; backdrop-filter: blur(10px); transition: 0.3s; }
+        .cap-card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.1); }
+        .cap-icon { width: 50px; height: 50px; background: rgba(37, 211, 102, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary); font-size: 20px; }
+        .cap-card h3 { font-size: 18px; margin-bottom: 10px; color: white; font-weight: 700; }
+        .cap-card p { font-size: 13.5px; color: var(--text-dim); line-height: 1.5; }
+
+        /* --- CENTRO DE DEMOS IA (COMPACTO) --- */
+        .demo-section { padding: 40px 6%; background: var(--bg-deep); }
+        .demo-layout {
+            max-width: 1000px; margin: auto; display: grid;
+            grid-template-columns: 280px 1fr; gap: 20px; height: 500px;
+        }
+        .bot-list {
+            background: var(--bg-surface); border-radius: 20px; padding: 15px;
+            border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 10px; overflow-y: auto;
+        }
+        .bot-list::-webkit-scrollbar { width: 5px; }
+        .bot-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+        .bot-card {
+            border: 1px solid var(--glass-border); border-radius: 12px;
+            padding: 12px; cursor: pointer; transition: .2s;
+            display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.02);
+        }
+        .bot-card:hover { border-color: var(--primary); background: rgba(37, 211, 102, 0.05); transform: translateX(5px); }
+        .bot-card div strong { font-size: 13px; color: white; display: block; }
+        .bot-card div p { font-size: 10px; color: var(--text-dim); }
+        
+        .chat-container {
+            background: #fff; border-radius: 20px; display: flex; flex-direction: column; 
+            height: 100%; overflow: hidden; border: 1px solid var(--glass-border);
+        }
+        .chat-header {
+            padding: 12px 20px; background: #fff; border-bottom: 1px solid #eee;
+            display: flex; align-items: center; gap: 12px; color: #1e293b;
+        }
+        .status-dot { width: 8px; height: 8px; background: #cbd5e1; border-radius: 50%; }
+        .status-dot.active { background: var(--primary); }
+        .chat-messages {
+            flex: 1; overflow-y: auto; padding: 20px; background-color: var(--wa-bg);
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-blend-mode: overlay; display: flex; flex-direction: column; gap: 8px;
+        }
+        .msg { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; color: #1e293b; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .msg.user { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 2px; }
+        .msg.ai { background: white; align-self: flex-start; border-top-left-radius: 2px; }
+        .chat-input-area { padding: 12px 15px; background: #f0f2f5; display: flex; gap: 10px; align-items: center; }
+        .chat-input-area input { flex: 1; border: 1px solid #e2e8f0; border-radius: 25px; padding: 10px 18px; outline: none; color: #1e293b; font-size: 13px; }
+
+        /* --- PLANES --- */
+        .pricing-section { padding: 60px 6% 40px; background: var(--bg-deep); text-align: center; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 30px auto 0; }
+        .plan-card { background: var(--bg-surface); border: 1px solid var(--glass-border); padding: 40px 30px; border-radius: 35px; transition: 0.4s; display: flex; flex-direction: column; }
+        .plan-card.featured { border-color: var(--primary); transform: scale(1.03); z-index: 2; box-shadow: 0 15px 30px rgba(37, 211, 102, 0.05); }
+        .plan-name { font-size: 13px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+        .plan-price { font-size: 40px; font-weight: 800; color: white; margin: 5px 0; }
+        .plan-price span { font-size: 14px; color: var(--text-dim); }
+        .plan-features { list-style: none; text-align: left; margin-bottom: 30px; flex: 1; }
+        .plan-features li { color: white; font-size: 13.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .plan-features li i { color: var(--primary); font-size: 12px; }
+
+        /* --- SOPORTE VIP --- */
+        .support-dark {
+            margin: 20px 6% 60px; background: var(--bg-surface);
+            padding: 40px 60px; border-radius: 35px; 
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- BOTONES Y CHAT SOPORTE --- */
+        .btn-plan { background: rgba(255,255,255,0.05); color: white; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; border: 1px solid var(--glass-border); transition: 0.3s; }
+        .featured .btn-plan { background: var(--primary); border: none; }
+        .btn-plan:hover { background: var(--primary); transform: scale(1.02); }
+        .btn-send { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--primary-dark); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Chat Flotante de Soporte */
+        .chat-window { position: fixed; bottom: 20px; right: 20px; width: 340px; height: 480px; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); z-index: 10000; display: none; flex-direction: column; overflow: hidden; }
+        .chat-window.active { display: flex; }
+        .chat-window .chat-header { background: #075e54; color: white; }
+
+        @media (max-width: 1000px) { .cap-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 900px) {
+            .hero-split { grid-template-columns: 1fr; text-align: center; padding-top: 60px; }
+            .hero-visual { order: -1; }
+            .cap-container { grid-template-columns: 1fr; }
+            .demo-layout { grid-template-columns: 1fr; height: auto; }
+            .chat-container { height: 450px; }
+            .support-dark { flex-direction: column; text-align: center; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <section class="hero-split">
+        <div class="hero-info">
+            <span class="hero-tag">Tecnología de Vanguardia</span>
+            <h1>Tu Empresa en <span>Autopiloto</span> con WhatsApp IA</h1>
+            <p>Una Inteligencia Artificial que entiende, razona y vende por ti las 24 horas.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                <button onclick="document.getElementById('planes').scrollIntoView()" class="btn-wa" style="background: white; color: var(--bg-deep); border:none; cursor:pointer; padding:12px 25px; border-radius:12px; font-weight:800;">EMPEZAR AHORA</button>
+                <button onclick="document.getElementById('demos').scrollIntoView()" class="btn-wa" style="background: transparent; border: 1px solid rgba(255,255,255,0.2); color:white; cursor:pointer; padding:12px 25px; border-radius:12px; font-weight:800;">VER DEMO EN VIVO</button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&controls=1" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="capabilities-section">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <h2 style="font-size: 32px; font-weight: 800;">Ecosistema de Automatización Total</h2>
+        </div>
+        <div class="cap-container">
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-images"></i></div>
+                <h3>Venta Visual</h3>
+                <p>Envía fotos, videos y PDFs de tus productos automáticamente para cerrar ventas.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-calendar-alt"></i></div>
+                <h3>Agendamiento Pro</h3>
+                <p>Reserva citas sincronizadas con Google Calendar sin intervención humana.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-language"></i></div>
+                <h3>Inteligencia Políglota</h3>
+                <p>Detecta y responde en más de 95 idiomas de forma fluida y natural.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-shopping-cart"></i></div>
+                <h3>Toma de Pedidos</h3>
+                <p>Gestiona carritos de compra, calcula totales y solicita datos de envío por chat.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-file-pdf"></i></div>
+                <h3>Memoria Infinita</h3>
+                <p>Entrena tu IA con manuales, bases de datos o la URL de tu sitio web en segundos.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-user-plus"></i></div>
+                <h3>Captura de Leads</h3>
+                <p>Extrae nombres, correos y teléfonos de los chats para tu base de datos CRM.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-microphone"></i></div>
+                <h3>Escucha Activa</h3>
+                <p>La IA es capaz de entender notas de voz de tus clientes y responder por texto o voz.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-plug"></i></div>
+                <h3>Conectividad Total</h3>
+                <p>Se conecta con Shopify, WooCommerce, CRMs y más vía Webhooks o API.</p>
+            </div>
+            <div class="cap-card">
+                <div class="cap-icon"><i class="fas fa-paper-plane"></i></div>
+                <h3>Marketing Masivo</h3>
+                <p>Envía campañas de difusión segmentadas y alertas de carrito abandonado.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section" id="demos">
+        <div style="text-align: center; margin-bottom: 25px;">
+            <h2 style="font-size: 28px; font-weight: 800;">Centro de <span>Demos IA</span></h2>
+            <p style="color: var(--text-dim); font-size: 14px;">Prueba la potencia de nuestros agentes en tiempo real.</p>
+        </div>
+
+        <div class="demo-layout">
+            <div class="bot-list">
+                <div class="bot-card" onclick="selectBot('Restaurante', 'fas fa-pizza-slice')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-pizza-slice" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Restaurante</strong><p>Pedidos y Reservas</p></div>
+                </div>
+                <div class="bot-card" onclick="selectBot('Barbería', 'fas fa-cut')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-cut" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Barbería</strong><p>Agendamiento de Citas</p></div>
+                </div>
+                <div class="bot-card" onclick="selectBot('Almacén', 'fas fa-store')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-store" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Almacén</strong><p>Ventas y Catálogo</p></div>
+                </div>
+                <div class="bot-card" onclick="selectBot('Odontología', 'fas fa-tooth')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-tooth" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Odontología</strong><p>Consultas Médicas</p></div>
+                </div>
+                <div class="bot-card" onclick="selectBot('Inmobiliaria', 'fas fa-home')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-home" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Inmobiliaria</strong><p>Venta y Alquiler</p></div>
+                </div>
+                <div class="bot-card" onclick="selectBot('Cursos Online', 'fas fa-graduation-cap')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-graduation-cap" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Educación</strong><p>Inscripciones y Soporte</p></div>
+                </div>
+                <div class="bot-card" onclick="selectBot('Hotel & Turismo', 'fas fa-bed')">
+                    <div class="cap-icon" style="margin-bottom:0; width:30px; height:30px; border-radius:8px;"><i class="fas fa-bed" style="font-size:12px;"></i></div>
+                    <div><strong>Bot Hotelería</strong><p>Check-in y Reservas</p></div>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div id="header-dot" class="status-dot"></div>
+                    <span id="bot-title" style="font-weight: 700; font-size: 14px; color: #1e293b;">Selecciona un bot</span>
+                </div>
+                <div id="chat-messages-demo" class="chat-messages">
+                    <div style="margin: auto; text-align: center; color: #94a3b8; font-size: 13px;">
+                        <i class="fas fa-robot" style="font-size: 32px; display: block; margin-bottom: 10px; opacity: 0.3;"></i>
+                        Elige un bot para comenzar la simulación.
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input id="demo-input" type="text" placeholder="Selecciona un bot..." disabled onkeypress="if(event.key==='Enter')sendDemoMessage()">
+                    <button id="demo-send-btn" class="btn-send" onclick="sendDemoMessage()" disabled>
+                        <i class="fas fa-paper-plane" style="font-size: 14px;"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="planes">
+        <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 10px;">Planes de Agente IA</h2>
+        <div class="pricing-grid">
+            <div class="plan-card">
+                <div class="plan-name">Starter IA</div>
+                <div class="plan-price">$89.000 <span>/mes</span></div>
+                <p class="plan-desc">Entrenamiento básico para pequeños negocios.</p>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> 1 Agente de IA</li>
+                    <li><i class="fas fa-check"></i> Entrenamiento con 5 PDFs</li>
+                    <li><i class="fas fa-check"></i> Captura de Leads</li>
+                </ul>
+                <button onclick="buyPlan('ia_starter', 89000)" class="btn-plan">ELEGIR PLAN</button>
+            </div>
+
+            <div class="plan-card featured">
+                <div class="plan-name">Business Pro</div>
+                <div class="plan-price">$150.000 <span>/mes</span></div>
+                <p class="plan-desc">El poder total de la IA para ventas masivas.</p>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> IA con Razonamiento</li>
+                    <li><i class="fas fa-check"></i> Entrenamiento Ilimitado</li>
+                    <li><i class="fas fa-check"></i> Agendamiento de Citas</li>
+                    <li><i class="fas fa-check"></i> Catálogo Visual</li>
+                </ul>
+                <button onclick="buyPlan('ia_business_pro', 150000)" class="btn-plan">PLAN RECOMENDADO</button>
+            </div>
+
+            <div class="plan-card">
+                <div class="plan-name">Custom Elite</div>
+                <div class="plan-price">$290.000 <span>/mes</span></div>
+                <p class="plan-desc">Flujos complejos e integraciones API.</p>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check"></i> Multi-agentes especializados</li>
+                    <li><i class="fas fa-check"></i> Integración API Custom</li>
+                    <li><i class="fas fa-check"></i> Soporte VIP Prioritario</li>
+                </ul>
+                <button onclick="buyPlan('ia_custom_elite', 290000)" class="btn-plan">CONTACTAR VENTAS</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="support-dark">
+        <div style="text-align: left;">
+            <h3 style="font-size: 22px; font-weight: 800;">¿Buscas una IA a medida?</h3>
+            <p style="color:var(--text-dim); font-size: 15px;">Configuramos tu flujo de ventas gratis.</p>
+        </div>
+        <button onclick="toggleChat()" style="background:var(--primary); color:white; padding:15px 25px; border-radius:12px; border:none; font-weight:800; cursor:pointer; display:flex; align-items:center; gap:10px; font-size: 14px;">
+            <i class="fab fa-whatsapp"></i> HABLAR CON UN ASESOR
+        </button>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header" style="padding: 12px; display: flex; align-items: center;">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Logo">
+            <div style="flex:1; margin-left:10px;">
+                <p style="margin:0; font-weight:800; font-size:13px;">Asesor WhatsApp IA</p>
+                <p style="margin:0; font-size:10px; opacity:0.8;">En línea ahora</p>
+            </div>
+            <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer;"></i>
+        </div>
+        <div class="chat-body" id="bot-messages" style="flex:1; overflow-y:auto; padding:20px; background:var(--wa-bg); display:flex; flex-direction:column; gap:10px;">
+            <div class="msg ai">¡Hola! 👋 Estoy aquí para ayudarte a configurar tu IA. ¿Qué plan te interesa conocer mejor?</div>
+        </div>
+        <div class="chat-footer" style="padding:10px; background:#f0f2f5; display:flex; gap:8px;">
+            <input type="text" id="bot-input" placeholder="Escribe aquí..." onkeypress="if(event.key==='Enter')sendBotMessage()" style="flex:1; border:none; padding:10px; border-radius:8px; outline:none; font-size:13px;">
+            <button onclick="sendBotMessage()" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        const webhookUrl = 'https://n8.tienderu.com/webhook/nuevo';
+        
+        // --- LÓGICA DE COMPRA ACTUALIZADA (Sincronizada con POS) ---
+        function buyPlan(planName, price) {
+            const raw = localStorage.getItem('ss') || localStorage.getItem('user');
+            let sessionActive = null;
+            try {
+                if (raw && raw !== "null" && raw !== "undefined") sessionActive = JSON.parse(raw);
+            } catch (e) { sessionActive = null; }
+
+            if (sessionActive && sessionActive.username) {
+                const iden = (sessionActive.slug || sessionActive.username.split('@')[0]).replace(/[^a-z0-9]/gi, '');
+                window.location.href = `/checkout.html?plan=${planName}_${iden}&monto=${price}&ref=whatsapp_ia`;
+            } else {
+                const loginUrl = `/login.html?tab=registro&plan=${planName}&monto=${price}&ref=whatsapp_ia`;
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Identificación Necesaria',
+                        text: `Para activar el plan ${planName.replace(/_/g, ' ')}, primero debes crear tu cuenta o iniciar sesión.`,
+                        icon: 'info',
+                        confirmButtonText: 'IR AL REGISTRO',
+                        confirmButtonColor: '#25d366',
+                        showCancelButton: true,
+                        cancelButtonText: 'CANCELAR'
+                    }).then((result) => {
+                        if (result.isConfirmed) window.location.href = loginUrl;
+                    });
+                } else {
+                    if (confirm(`Para activar ${planName}, debes iniciar sesión. ¿Ir al registro?`)) window.location.href = loginUrl;
+                }
+            }
+        }
+
+        // --- LÓGICA CENTRO DE DEMOS ---
+        let currentBot = null;
+        let demoInstance = localStorage.getItem("demo_instance") || `demo_${Math.random().toString(36).substr(2,9)}`;
+        localStorage.setItem("demo_instance", demoInstance);
+
+        function selectBot(name, icon) {
+            currentBot = name;
+            document.getElementById("bot-title").innerText = "Asistente: " + name;
+            document.getElementById("header-dot").classList.add("active");
+            const input = document.getElementById("demo-input");
+            const btn = document.getElementById("demo-send-btn");
+            input.disabled = false; btn.disabled = false;
+            input.placeholder = "Escribe a " + name + "...";
+            input.focus();
+            const box = document.getElementById("chat-messages-demo");
+            // [cite: 2025-11-10] URL de producto incluida
+            box.innerHTML = `<div class="msg ai">Hola 👋 Soy el asistente de <b>${name}</b>. Puedes ver nuestros servicios en tienderu.com/services/whatsappbot. ¿Cómo puedo ayudarte?</div>`;
+        }
+
+        async function sendDemoMessage() {
+            const input = document.getElementById("demo-input");
+            const text = input.value.trim();
+            if (!text || !currentBot) return;
+            appendMsg("chat-messages-demo", text, 'user');
+            input.value = '';
+            showTyping("chat-messages-demo", "demo-typing");
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, bot: currentBot, instance: demoInstance, source: 'whatsapp_demo', url: window.location.href })
+                });
+                const data = await response.json();
+                document.getElementById("demo-typing")?.remove();
+                appendMsg("chat-messages-demo", data.output || "He recibido tu consulta.", 'ai');
+            } catch (e) {
+                document.getElementById("demo-typing")?.remove();
+                appendMsg("chat-messages-demo", "Error de conexión.", 'ai');
+            }
+        }
+
+        // --- LÓGICA CHAT SOPORTE ---
+        async function sendBotMessage() {
+            const input = document.getElementById('bot-input');
+            const text = input.value.trim();
+            if (!text) return;
+            appendMsg("bot-messages", text, 'user');
+            input.value = '';
+            showTyping("bot-messages", "support-typing");
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text, instance: localStorage.getItem("bot_instance") || 'support_ia', url: window.location.href })
+                });
+                const data = await response.json();
+                document.getElementById("support-typing")?.remove();
+                appendMsg("bot-messages", data.output || "Un asesor te contactará.", 'ai');
+            } catch (e) {
+                document.getElementById("support-typing")?.remove();
+                appendMsg("bot-messages", "Error de conexión.", 'ai');
+            }
+        }
+
+        // --- HELPERS ---
+        function appendMsg(containerId, text, role) {
+            const box = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.className = `msg ${role === 'user' ? 'user' : 'ai'}`;
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            box.appendChild(div);
+            box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        }
+
+        function showTyping(containerId, id) {
+            const box = document.getElementById(containerId);
+            const div = document.createElement('div');
+            div.id = id; div.className = "msg ai"; div.innerHTML = "Escribiendo...";
+            box.appendChild(div);
+            box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        }
+
+        function toggleChat() { document.getElementById('chatWindow').classList.toggle('active'); }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof loadNavbar === 'function') loadNavbar();
+            const footerPlaceholder = document.getElementById('footer-placeholder');
+            if (footerPlaceholder) {
+                try {
+                    const response = await fetch('/footer.html'); 
+                    if (response.ok) footerPlaceholder.innerHTML = await response.text();
+                } catch (error) {}
+            }
+        });
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

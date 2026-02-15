@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Cloud Pro | Tienderu Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-accent: #a5b4fc;
+            --bg-deep: #020617;
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-dim: #64748b;
+            --border: rgba(0, 0, 0, 0.08);
+            --wa-bg: #efeae2;
+            --accent: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: white; color: var(--text-dark); line-height: 1.6; overflow-x: hidden; }
+
+        /* --- HERO SECTION MOBILE OPTIMIZED --- */
+        .hero-premium {
+            background: radial-gradient(circle at top right, #1e1b4b, #020617);
+            padding: 100px 6% 60px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        .hero-premium h1 { font-size: clamp(32px, 7vw, 72px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 20px; }
+        .hero-premium h1 span { color: var(--primary); }
+        .hero-premium p { font-size: clamp(16px, 4vw, 20px); max-width: 800px; margin: 0 auto 30px; opacity: 0.8; }
+        .hero-badge { background: rgba(99, 102, 241, 0.15); color: var(--primary-accent); padding: 8px 20px; border-radius: 50px; font-weight: 700; font-size: 12px; display: inline-block; margin-bottom: 20px; border: 1px solid var(--primary); letter-spacing: 1px; }
+
+        .mockup-container { margin-top: -30px; padding: 0 4%; position: relative; z-index: 10; }
+        .mockup-container img { width: 100%; max-width: 1000px; border-radius: 15px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); display: block; margin: 0 auto; }
+
+        /* --- FEATURES GRID --- */
+        .features-grid { padding: 60px 6%; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; max-width: 1300px; margin: 0 auto; }
+        .feature-item { padding: 15px; text-align: center; }
+        .feature-item i { font-size: 28px; color: var(--primary); margin-bottom: 15px; display: inline-block; }
+        .feature-item h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+        .feature-item p { font-size: 14px; color: var(--text-dim); }
+
+        /* --- PRICING SECTION: 3 PLANES EN UNA LÍNEA (ESCRITORIO) --- */
+        .pricing-section { background: #f1f5f9; padding: 80px 6%; text-align: center; }
+        .pricing-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 3 Columnas fijas en escritorio */
+            gap: 20px; 
+            max-width: 1200px; 
+            margin: 40px auto 0; 
+            align-items: stretch;
+        }
+        
+        .price-card { background: white; border: 1px solid #e2e8f0; border-radius: 24px; padding: 35px 25px; display: flex; flex-direction: column; transition: 0.3s; position: relative; }
+        .price-card.featured { border: 2px solid var(--primary); transform: scale(1.05); z-index: 2; box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15); }
+        .price-card h4 { font-size: 18px; font-weight: 800; }
+        .price-card .amount { font-size: 34px; font-weight: 800; margin: 15px 0; color: var(--text-dark); }
+        .price-card ul { list-style: none; padding: 0; margin-bottom: 25px; text-align: left; flex: 1; }
+        .price-card ul li { padding: 8px 0; font-size: 14px; color: var(--text-dim); display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f1f5f9; }
+        .price-card ul li i { color: var(--accent); font-size: 12px; }
+
+        .btn-checkout { width: 100%; padding: 14px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 14px; transition: 0.3s; border: none; cursor: pointer; text-align: center; }
+        .btn-checkout span { display: block; font-size: 10px; opacity: 0.9; margin-top: 2px; }
+
+        /* --- SUPPORT & CTA --- */
+        .support-cta { background: var(--bg-deep); border-radius: 30px; margin: 40px 4%; padding: 40px 25px; text-align: center; color: white; display: flex; flex-direction: column; gap: 20px; align-items: center; }
+        .support-cta h2 { font-size: 24px; font-weight: 800; margin-bottom: 0px; }
+        .support-cta p { font-size: 15px; opacity: 0.8; }
+        
+        .btn-white { display: inline-block; background: white; color: var(--bg-deep); padding: 16px 32px; border-radius: 12px; font-weight: 800; text-decoration: none; border: none; font-size: 15px; cursor: pointer; transition: 0.3s; }
+        
+        /* --- CHAT MODERNO --- */
+        .chat-window { position: fixed; bottom: 0; right: 0; width: 100%; height: 100%; background: white; z-index: 10000; display: none; flex-direction: column; }
+        @media (min-width: 600px) {
+            .chat-window { width: 380px; height: 550px; bottom: 30px; right: 30px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 25px 80px rgba(0,0,0,0.4); }
+        }
+        .chat-window.active { display: flex; }
+        .chat-header { background: #1e1b4b; color: white; padding: 15px 20px; display: flex; align-items: center; }
+        .chat-header img { height: 28px !important; width: auto !important; object-fit: contain; } /* [cite: 2026-01-25] El logo no pierde proporcionalidad */
+        .chat-body { flex: 1; overflow-y: auto; padding: 20px; background: var(--wa-bg); background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); display: flex; flex-direction: column; gap: 10px; }
+        
+        .m-msg { max-width: 85%; padding: 12px 16px; border-radius: 15px; font-size: 14px; color: #1e293b !important; position: relative; }
+        .m-msg.u { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .m-msg.a { background: white; align-self: flex-start; border-top-left-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+
+        .chat-footer { padding: 12px; background: #f0f2f5; display: flex; gap: 8px; align-items: center; }
+        #bot-input { flex: 1; padding: 12px 18px; border-radius: 25px; border: none; outline: none; font-size: 14px; }
+
+        /* RESPONSIVE OVERRIDES */
+        @media (max-width: 1024px) {
+            .pricing-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+            .price-card.featured { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .hero-premium { padding: 80px 6% 40px; }
+            .hero-premium div { flex-direction: column; }
+            .mockup-container { margin-top: -10px; }
+            .pricing-grid { grid-template-columns: 1fr; gap: 20px; }
+            .feature-item { text-align: left; }
+            .support-cta { margin: 20px 4%; padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <section class="hero-premium">
+        <span class="hero-badge">NUEVA VERSIÓN 4.0</span>
+        <h1>El POS que <span>impulsa</span> tu crecimiento</h1>
+        <p>Gestiona ventas, inventarios y clientes desde cualquier lugar. Potencia tu negocio con la tecnología Cloud de Tienderu.</p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <a href="https://pruebapos.tienderu.com/" target="_blank" rel="noopener noreferrer" class="btn-white" style="background: var(--primary); color: white; width: 100%; max-width: 280px; text-align: center;">PROBAR GRATIS</a>
+            <button onclick="toggleChat()" class="btn-white" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); width: 100%; max-width: 280px;">AGENDAR DEMO</button>
+        </div>
+    </section>
+
+    <div class="mockup-container">
+        <img src="https://tienderu.com/uploads/pospantallazo.png" alt="Tienderu POS Dashboard">
+    </div>
+
+    <section class="features-grid">
+        <div class="feature-item">
+            <i class="fas fa-bolt"></i>
+            <h3>Venta Ultrarrápida</h3>
+            <p>Procesa transacciones en segundos con tecnología de caché local y sincronización asíncrona.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-box-open"></i>
+            <h3>Inventario Inteligente</h3>
+            <p>Sincronización en tiempo real entre tus tiendas físicas y tu tienda online Tienderu.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-chart-pie"></i>
+            <h3>Reportes Pro</h3>
+            <p>Analiza ventas, márgenes y productos más vendidos con un solo clic desde tu dashboard.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-users-cog"></i>
+            <h3>Multisucursal</h3>
+            <p>Controla 1 o 100 tiendas desde una sola cuenta centralizada en la nube de forma global.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <h3>Facturación Electrónica</h3>
+            <p>Emisión de documentos legales cumpliendo con todas las normativas tributarias vigentes.</p>
+        </div>
+        <div class="feature-item">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>App de Control</h3>
+            <p>Monitorea tu negocio desde tu smartphone con nuestra aplicación nativa para gerentes.</p>
+        </div>
+    </section>
+
+    <section class="pricing-section" id="precios">
+        <div class="section-header">
+            <h2 style="font-size: 32px; font-weight: 800; margin-bottom: 10px; color: #0f172a;">Planes a tu medida</h2>
+            <p style="color: var(--text-dim); font-size: 16px;">Precios en COP. Ahorra 20% en planes anuales.</p>
+        </div>
+        
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h4>Emprendedor</h4>
+                <div class="amount">$29.000<small style="font-size: 14px; opacity: 0.6;">/mes</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 1 Sucursal</li>
+                    <li><i class="fas fa-check"></i> 500 Productos</li>
+                    <li><i class="fas fa-check"></i> Soporte por Ticket</li>
+                </ul>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button onclick="validarYComprarPOS('pos_mensual', '29000', 'Emprendedor_Mensual')" class="btn-checkout" style="border: 1px solid #e2e8f0; background: transparent; color: #0f172a;">Pagar Mensual ($29.000)</button>
+                    <button onclick="validarYComprarPOS('pos_anual', '278000', 'Emprendedor_Anual')" class="btn-checkout" style="background: #0f172a; color: white;">Pagar Anual ($278.000) <span>Ahorras 20%</span></button>
+                </div>
+            </div>
+    
+            <div class="price-card featured">
+                <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #6366f1; color: white; padding: 5px 20px; border-radius: 20px; font-size: 10px; font-weight: 800; letter-spacing: 1px;">RECOMENDADO</div>
+                <h4>Business Pro</h4>
+                <div class="amount" style="color: #6366f1;">$59.000<small style="font-size: 14px; opacity: 0.6;">/mes</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> 5 Sucursales</li>
+                    <li><i class="fas fa-check"></i> Productos Ilimitados</li>
+                    <li><i class="fas fa-check"></i> Facturación Electrónica</li>
+                </ul>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button onclick="validarYComprarPOS('pos_mensual', '59000', 'Business_Pro_Mensual')" class="btn-checkout" style="border: 1px solid #6366f1; background: transparent; color: #6366f1;">Pagar Mensual ($59.000)</button>
+                    <button onclick="validarYComprarPOS('pos_anual', '566000', 'Business_Pro_Anual')" class="btn-checkout" style="background: #6366f1; color: white;">Pagar Anual ($566.000) <span>Ahorras 20%</span></button>
+                </div>
+            </div>
+    
+            <div class="price-card">
+                <h4>Enterprise</h4>
+                <div class="amount">$99.000<small style="font-size: 14px; opacity: 0.6;">/mes</small></div>
+                <ul>
+                    <li><i class="fas fa-check"></i> Sucursales Ilimitadas</li>
+                    <li><i class="fas fa-check"></i> Account Manager VIP</li>
+                    <li><i class="fas fa-check"></i> Servidor Dedicado</li>
+                </ul>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button onclick="validarYComprarPOS('pos_mensual', '99000', 'Enterprise_Mensual')" class="btn-checkout" style="border: 1px solid #e2e8f0; background: transparent; color: #0f172a;">Pagar Mensual ($99.000)</button>
+                    <button onclick="validarYComprarPOS('pos_anual', '950000', 'Enterprise_Anual')" class="btn-checkout" style="background: #0f172a; color: white;">Pagar Anual ($950.000) <span>Ahorras 20%</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="support-cta">
+        <div class="support-text">
+            <h2>¿Necesitas asesoría técnica?</h2>
+            <p>Nuestro equipo está listo para ayudarte a configurar tu punto de venta.</p>
+        </div>
+        <button onclick="toggleChat()" class="btn-white">HABLAR CON UN ASESOR</button>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Tienderu" style="height:28px; width:auto; object-fit:contain;">
+            <div style="flex:1; margin-left:15px;">
+                <h4 style="font-size:14px; margin:0; color:white;">Soporte POS Cloud</h4>
+                <p style="font-size:11px; margin:0; opacity:0.8; color:white;"><i class="fas fa-circle" style="color:#10b981; font-size:7px;"></i> Online</p>
+            </div>
+            <i class="fas fa-times" onclick="toggleChat()" style="cursor:pointer; opacity:0.7; color:white; font-size:20px;"></i>
+        </div>
+        <div class="chat-body" id="bot-messages">
+            <div class="m-msg a">¡Hola! 👋 Estás hablando con el soporte de **POS Cloud**. ¿Tienes alguna duda técnica sobre los planes?</div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="bot-input" placeholder="Escribe aquí..." onkeypress="if(event.key==='Enter')sendBotMessage()">
+            <button onclick="sendBotMessage()" style="width: 45px; height: 45px; border-radius: 50%; background: var(--primary); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ASISTENTE DE CHAT
+        async function sendBotMessage() {
+            const input = document.getElementById('bot-input');
+            const text = input.value.trim();
+            if (!text) return;
+    
+            appendBotMsg(text, 'u');
+            input.value = '';
+            const tId = showBotTyping();
+    
+            try {
+                const response = await fetch('https://n8.tienderu.com/webhook/nuevo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        message: text, 
+                        instance: localStorage.getItem("bot_instance"),
+                        url: window.location.href // [cite: 2025-11-10] El agente debe incluir la URL del producto
+                    })
+                });
+                const data = await response.json();
+                document.getElementById(tId).remove();
+                appendBotMsg(data.output || "Recibido. Un asesor te responderá pronto.", 'a');
+            } catch (e) {
+                if(document.getElementById(tId)) document.getElementById(tId).remove();
+                appendBotMsg("Error de conexión.", 'a');
+            }
+        }
+    
+        function appendBotMsg(text, role) {
+            const box = document.getElementById('bot-messages');
+            const div = document.createElement('div');
+            div.className = `m-msg ${role}`;
+            div.innerHTML = text.replace(/\n/g, '<br>');
+            box.appendChild(div);
+            box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        }
+    
+        function showBotTyping() {
+            const id = 't-' + Date.now();
+            const box = document.getElementById('bot-messages');
+            const div = document.createElement('div');
+            div.id = id; div.className = "m-msg a";
+            div.innerHTML = "...";
+            box.appendChild(div);
+            return id;
+        }
+    
+        function toggleChat() {
+            document.getElementById('chatWindow').classList.toggle('active');
+        }
+
+        // LÓGICA DE COMPRA
+        window.validarYComprarPOS = function(planKey, monto, refComercial) {
+            const raw = localStorage.getItem('ss') || localStorage.getItem('user');
+            let sessionActive = null;
+            try { if (raw) sessionActive = JSON.parse(raw); } catch (e) { sessionActive = null; }
+
+            if (sessionActive && sessionActive.username) {
+                const iden = (sessionActive.slug || sessionActive.username.split('@')[0]).replace(/[^a-z0-9]/gi, '');
+                window.location.href = `/checkout.html?plan=${iden}&monto=${monto}&ref=${refComercial}`;
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Identificación Necesaria',
+                        text: `Para activar ${refComercial.replace(/_/g, ' ')}, crea tu cuenta o inicia sesión.`,
+                        icon: 'info',
+                        confirmButtonText: 'IR AL REGISTRO',
+                        confirmButtonColor: '#6366f1',
+                        showCancelButton: true
+                    }).then((result) => {
+                        if (result.isConfirmed) window.location.href = `/login.html?tab=registro&plan=${planKey}&monto=${monto}&ref=${refComercial}`;
+                    });
+                } else {
+                    if (confirm(`Para activar ${refComercial}, debes iniciar sesión.`)) window.location.href = `/login.html?tab=registro&plan=${planKey}&monto=${monto}&ref=${refComercial}`;
+                }
+            }
+        };
+
+        async function loadComponents() {
+            const footer = document.getElementById('footer-placeholder');
+            if (footer) {
+                try {
+                    const res = await fetch('/footer.html'); 
+                    if (res.ok) footer.innerHTML = await res.text();
+                } catch (e) {}
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

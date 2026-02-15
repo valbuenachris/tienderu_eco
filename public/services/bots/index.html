@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bots Operativos | Automatización Extrema Tienderu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --accent: #3a7bd5;
+            --dark-bg: #030712;
+            --card-bg: #0f172a;
+            --text-slate: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--dark-bg); color: #f8fafc; line-height: 1.5; overflow-x: hidden; }
+
+        /* NAVBAR DINÁMICO */
+        #navbar-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            background: rgba(3, 7, 18, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        /* El logo no puede perder la proporcionalidad */
+        .logo { height: 40px !important; width: auto !important; object-fit: contain; display: block; }
+
+        /* HERO */
+        .hero {
+            padding: 100px 6% 80px; /* Ajustado el padding por el navbar dinámico */
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(0, 210, 255, 0.1) 0%, transparent 70%);
+        }
+        .hero h1 { font-size: clamp(38px, 6vw, 68px); font-weight: 800; letter-spacing: -3px; line-height: 1; margin-bottom: 20px; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 18px; color: var(--text-slate); max-width: 800px; margin: 0 auto; }
+
+        /* GRID CAPACIDADES */
+        .grid-section { padding: 40px 6%; max-width: 1400px; margin: 0 auto; }
+        .capabilities-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1px; background: var(--border); border: 1px solid var(--border);
+        }
+        .cap-card { background: var(--dark-bg); padding: 40px; transition: 0.4s; }
+        .cap-card:hover { background: var(--card-bg); }
+        .cap-card i { font-size: 32px; color: var(--primary); margin-bottom: 20px; display: block; }
+
+        /* AGENTES */
+        .agents-wrap { background: var(--card-bg); padding: 80px 6%; border-top: 1px solid var(--border); }
+        .expert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .expert-card {
+            background: rgba(255,255,255,0.02); padding: 25px; border-radius: 15px;
+            border: 1px solid var(--border); border-left: 4px solid var(--primary);
+        }
+
+        @media (max-width: 768px) { .hero { padding: 60px 6% 40px; } }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="hero">
+        <h1>Operación <span>Autónoma</span> Total</h1>
+        <p>Convertimos procesos manuales lentos en flujos de trabajo digitales que no duermen ni fallan.</p>
+    </header>
+
+    <section class="grid-section">
+        <div class="capabilities-grid">
+            <div class="cap-card">
+                <i class="fas fa-microchip"></i>
+                <h3>Arquitectura n8n</h3>
+                <p>Diseñamos el cerebro operativo que conecta sus aplicaciones mediante flujos lógicos.</p>
+            </div>
+            <div class="cap-card">
+                <i class="fas fa-database"></i>
+                <h3>Integridad de Datos</h3>
+                <p>Bots que sincronizan sus bases de datos entre CRMs y plataformas en tiempo real.</p>
+            </div>
+            <div class="cap-card">
+                <i class="fas fa-network-wired"></i>
+                <h3>Ecosistema API</h3>
+                <p>Conexión nativa para automatizar facturación y logística de envíos.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="agents-wrap">
+        <div class="section-header" style="margin-bottom: 40px;">
+            <h2 style="font-size: 30px;">Agentes Especializados</h2>
+        </div>
+        <div class="expert-grid">
+            <div class="expert-card">
+                <h4>Sincronizador Maestro</h4>
+                <p>Mantiene el stock y los precios unificados en todos sus canales.</p>
+            </div>
+            <div class="expert-card">
+                <h4>Extractor de KPIs</h4>
+                <p>Genera reportes financieros y operativos directo a su bandeja de entrada.</p>
+            </div>
+            <div class="expert-card">
+                <h4>Bridge de Terceros</h4>
+                <p>Integra WhatsApp, Shopify y Slack en un solo flujo de control.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function loadComponents() {
+            // Carga dinámica del Navbar vía script.js
+            const checkNavbar = setInterval(() => {
+                if (typeof loadNavbar === 'function') {
+                    loadNavbar();
+                    clearInterval(checkNavbar);
+                }
+            }, 100);
+
+            // Carga dinámica del Footer
+            const placeholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('/footer.html'); 
+                if (response.ok) {
+                    placeholder.innerHTML = await response.text();
+                    
+                    // Inyección de URL del producto
+                    const urlDisplay = document.getElementById('footer-url-display');
+                    if(urlDisplay) urlDisplay.textContent = "tienderu.com/services/bots-operativos";
+                }
+            } catch (error) {
+                console.error('Error cargando el footer:', error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

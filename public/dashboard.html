@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Tienderu Control</title>
+    
+    <link rel="icon" type="image/png" href="/uploads/ico.png">
+    <link rel="apple-touch-icon" href="/uploads/ico.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+    <header class="mobile-header">
+        <div class="mobile-logo">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Tienderu" style="height: 30px; width: auto;">
+        </div>
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <div id="loader-overlay">
+        <i class="fas fa-sync fa-spin fa-2x"></i>
+        <p id="loader-text">Procesando Solicitud...</p>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+        <button class="mobile-close" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+        
+        <div class="sidebar-logo">
+            <img src="https://tienderu.com/uploads/logo.png" alt="Logo Tienderu">
+        </div>
+
+        <div class="admin-profile">
+            <img src="https://tienderu.com/uploads/ico.png" id="admin-avatar" onerror="this.src='/uploads/ico.png'">
+            <div class="admin-info">
+                <p id="admin-display-name">Central Admin</p>
+                <span>TIENDERU CLOUD</span>
+            </div>
+        </div>
+        
+        <nav>
+            <div class="nav-item active" id="b-home" onclick="tab('home')"><i class="fas fa-chart-pie"></i> Analítica</div>
+            <div class="nav-item" id="b-list" onclick="tab('list')"><i class="fas fa-store"></i> Gestionar POS</div>
+            <div class="nav-item" id="b-create" onclick="tab('create')"><i class="fas fa-rocket"></i> Desplegar Nuevo</div>
+            <div class="nav-item" id="b-staff" onclick="tab('staff')"><i class="fas fa-users-cog"></i> Gestionar Vendedores</div>
+        </nav>
+        
+        <div class="nav-item logout" onclick="logout()"><i class="fas fa-power-off"></i> Salir</div>
+    </aside>
+
+    <main class="main">
+        
+        <section id="tab-home" class="tab-content">
+            <h1 class="page-title">Estado de Red</h1>
+            <div class="stats-grid" id="stats-render"></div>
+            <div class="charts-container">
+                <div class="card" style="min-height: 350px;">
+                    <h4 style="margin-bottom:15px; color:var(--gray);">Distribución de Estados</h4>
+                    <div style="position: relative; height: 250px;">
+                        <canvas id="chartStatus"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container" style="position: relative; height:300px; width:100%"">
+                    <h4 style="margin-bottom:15px; color:var(--gray);">Sedes por Ciudad</h4>
+                    <div style="position: relative; height: 250px;">
+                        <canvas id="chartCities"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-list" class="tab-content hidden">
+            <div class="tab-header">
+                <h1 class="page-title">Control de Comercios</h1>
+                <div class="header-actions">
+                    <button onclick="runVerifySync()" class="btn-sync">
+                        <i class="fas fa-bolt"></i> Actualizar estados por corte
+                    </button>
+                </div>
+            </div>
+            <div class="card" id="admin-table-container"></div>
+        </section>
+
+        <section id="tab-create" class="tab-content hidden">
+            <h1 class="page-title">Lanzar Nueva Instancia</h1>
+            <div class="card form-card">
+                <div class="form-group">
+                    <label>NOMBRE TIENDA</label>
+                    <input type="text" id="adm-nom" class="form-control">
+                </div>
+                <div class="form-row">
+                    <div class="form-group flex-2">
+                        <label>TELÉFONO</label>
+                        <input type="text" id="adm-tel" class="form-control">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>DÍA CORTE</label>
+                        <input type="number" id="adm-corte" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group"><label>CIUDAD</label><input type="text" id="adm-ciu" class="form-control"></div>
+                <div class="form-group"><label>USUARIO ACCESO</label><input type="text" id="adm-user" class="form-control"></div>
+                <div class="form-group"><label>CONTRASEÑA</label><input type="password" id="adm-pass" class="form-control"></div>
+                <div class="form-group"><label>SLUG (URL)</label><input type="text" id="adm-slug" class="form-control" placeholder="ej: mi-tienda"></div>
+                <button onclick="execFullDeploy()" class="btn-deploy">DESPLEGAR CLOUD POS</button>
+            </div>
+        </section>
+
+        <section id="tab-staff" class="tab-content hidden">
+            <h1 class="page-title">Gestión de Vendedores</h1>
+            <div class="admin-grid">
+                <div class="card">
+                    <h3><i class="fas fa-user-plus"></i> Registrar Vendedor</h3>
+                    <div id="vendedorForm">
+                        <div class="form-group">
+                            <label>Nombre del Vendedor</label>
+                            <input type="text" id="v-nombre" class="form-control" placeholder="Ej: Carlos Martínez">
+                        </div>
+                    
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Usuario</label>
+                                <input type="text" id="v-user" class="form-control" placeholder="carlos.vende">
+                            </div>
+                            <div class="form-group">
+                                <label>Contraseña</label>
+                                <input type="password" id="v-pass" class="form-control" placeholder="Crea una clave única">
+                            </div>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label>% de Comisión</label>
+                            <input type="number" id="v-comision" class="form-control" placeholder="10">
+                        </div>
+                    
+                        <button type="button" onclick="crearVendedor()" class="btn-deploy">
+                            <i class="fas fa-save"></i> GUARDAR VENDEDOR
+                        </button>
+                    </div>
+                </div>
+        
+                <div class="card">
+                    <h3><i class="fas fa-users"></i> Vendedores Activos</h3>
+                    <div id="vendedores-table-container">
+                        </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

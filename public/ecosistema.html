@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecosistema Tienderu | Panel Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/uploads/ico.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ecosistema.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div style="text-align:center; margin-bottom:30px">
+            <img id="main-logo-img" src="/uploads/logo.png" alt="Tienderu Logo">
+        </div>
+
+        <div class="user-box">
+            <img src="/uploads/ico.png" alt="Icon">
+            <div class="user-info">
+                <p id="side-user-name">Cargando...</p>
+                <span id="user-plan-badge" class="plan-badge">Cargando Plan...</span>
+            </div>
+        </div>
+
+        <div class="nav-item upgrade-button" onclick="window.location.href='/'" style="background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); color: white; margin-bottom: 20px; border-radius: 12px; cursor: pointer;">
+            <i class="fas fa-gem" style="color: white;"></i> Ir al Inicio
+        </div>
+        
+        <div class="nav-item active" id="btn-eco-parent" onclick="toggleEcoMenu()">
+            <i class="fas fa-rocket"></i> Mi Ecosistema <i class="fas fa-chevron-down" style="margin-left:auto; font-size:10px"></i>
+        </div>
+        <div id="eco-submenu" class="submenu" style="display:block;">
+            <div class="nav-item sub-item" id="btn-eco" onclick="switchTab('eco')">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </div>
+            <div class="nav-item sub-item" id="btn-wa" onclick="switchTab('wa')">
+                <i class="fab fa-whatsapp"></i> WhatsApp Bot IA
+            </div>
+            <div class="nav-item sub-item" id="btn-camp" onclick="switchTab('camp')">
+                <i class="fas fa-paper-plane"></i> Mensajería Pro
+            </div>
+        </div>
+
+        <div class="nav-item" id="btn-perfil" onclick="switchTab('perfil')">
+            <i class="fas fa-user-shield"></i> Perfil Negocio
+        </div>
+        <div class="nav-item" id="btn-fact" onclick="switchTab('fact')">
+            <i class="fas fa-receipt"></i> Facturación
+        </div>
+        
+        <div class="nav-item" onclick="logout()" style="color: #ff4444; cursor: pointer;">
+            <i class="fas fa-power-off"></i>
+            <span>Cerrar Sesión</span>
+        </div>
+    </aside>
+
+    <main class="main">
+        <button class="btn-menu-mobile" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div id="tab-eco" class="tab-content active">
+            <div class="header-main">
+                <h1 id="user-welcome">¡Hola!</h1>
+                <p class="subtitle">Gestiona tus herramientas profesionales.</p>
+                
+            </div>
+            
+            <div class="services-grid" id="servicesContainer">
+                <div class="service-tile c-1" id="card-pos">
+                    <div class="tile-status">Sincronizado</div>
+                    <div class="tile-icon"><i class="fas fa-terminal"></i></div>
+                    <div class="tile-body">
+                        <h3>Cloud POS</h3>
+                        <p>Terminal de venta inteligente y gestión de inventarios en tiempo real.</p>
+                    </div>
+                    <div class="tile-footer" id="btn-pos" onclick="ejecutarPOS()" style="cursor:pointer;">
+                        <span>EJECUTAR</span>
+                        <i class="fas fa-external-link-alt"></i>
+                    </div>
+                </div>
+            
+                <div class="service-tile c-2" id="card-wa" onclick="switchTab('wa')">
+                    <div class="tile-status ia-active">IA Activa</div>
+                    <div class="tile-icon"><i class="fab fa-whatsapp"></i></div>
+                    <div class="tile-body">
+                        <h3>WhatsApp Bot IA</h3>
+                        <p>Configura el cerebro de tu asistente inteligente para ventas 24/7.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>CONFIGURAR</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            
+                <div class="service-tile c-3" id="card-shop" onclick="window.open(`https://${userData.nombre_shop}.tienderu.com`, '_blank')">
+                    <div class="tile-status">Online</div>
+                    <div class="tile-icon"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="tile-body">
+                        <h3>e-Shop Tienda</h3>
+                        <p>Tu vitrina digital optimizada para conversiones y ventas masivas.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>VER TIENDA</span>
+                        <i class="fas fa-globe"></i>
+                    </div>
+                </div>
+            
+                <div class="service-tile c-4" id="card-camp" onclick="switchTab('camp')">
+                    <div class="tile-status">Campañas</div>
+                    <div class="tile-icon"><i class="fas fa-paper-plane"></i></div>
+                    <div class="tile-body">
+                        <h3>Mensajería Pro</h3>
+                        <p>Envío masivo segmentado con inteligencia de datos para fidelización.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>LANZAR</span>
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                </div>
+
+                <div class="service-tile c-robot" id="card-bots">
+                    <div class="tile-status label-new">Beta</div>
+                    <div class="tile-icon"><i class="fas fa-robot"></i></div>
+                    <div class="tile-body">
+                        <h3>Agentes Virtuales</h3>
+                        <p>Bots de software para automatizar tareas operativas repetitivas.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>VER MÁS</span>
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+
+                <div class="service-tile c-6" id="card-support" 
+                    onclick="window.open('soporte.html','_blank')">
+                    
+                    <div class="tile-icon"><i class="fas fa-headset"></i></div>
+                    <div class="tile-body">
+                        <h3>Soporte Pro</h3>
+                        <p>Soporte técnico prioritario y consultoría directa de infraestructura.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>CHAT DIRECTO</span>
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                </div>
+            
+                <div class="service-tile c-7" id="card-marketing">
+                    <div class="tile-status label-new">Premium</div>
+                    <div class="tile-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <div class="tile-body">
+                        <h3>Marketing IA</h3>
+                        <p>Generación automática de contenido visual y copys para redes.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>PRÓXIMAMENTE</span>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+            
+                <div class="service-tile c-8" id="card-crm" onclick="alert('Accediendo a base de datos...')">
+                    <div class="tile-icon"><i class="fas fa-user-tag"></i></div>
+                    <div class="tile-body">
+                        <h3>CRM Clientes</h3>
+                        <p>Base de datos avanzada y perfiles de consumo de tus compradores.</p>
+                    </div>
+                    <div class="tile-footer">
+                        <span>GESTIONAR</span>
+                        <i class="fas fa-database"></i>
+                    </div>
+                </div>
+            
+                
+            
+                
+            </div>
+            
+        </div>
+
+        <div id="tab-wa" class="tab-content">
+            <h1 style="font-weight:800; margin-bottom:10px; font-size:32px;">WhatsApp Business IA</h1>
+            <p style="color:var(--gray); margin-bottom:30px;">Instancia: <strong id="wa-display-name" style="color:var(--primary)">Cargando...</strong></p>
+            
+            <div class="card">
+                <div class="wa-panel">
+                    <div>
+                        <h4 style="font-size:11px; font-weight:800; color:var(--dark); margin-bottom:15px; text-transform:uppercase;"><i class="fas fa-link"></i> Conexión del Bot</h4>
+                        
+                        <div class="wa-qr-area" id="wa-qr-box" style="min-height:200px; display:flex; align-items:center; justify-content:center; border:2px dashed #eee; border-radius:15px; margin-bottom:15px;">
+                            <p style="color:var(--gray); font-size:12px;">El código QR aparecerá aquí</p>
+                        </div>
+                
+                        <div id="wa-status" style="margin:15px 0; font-size:11px; font-weight:800; text-transform:uppercase; color:var(--gray); text-align:center;">
+                            Esperando acción...
+                        </div>
+                
+                        <input type="hidden" id="wa-instance-name">
+                        
+                        <button onclick="saveAndConnectWA()" class="btn-main" style="background:var(--dark); color:white; width:100%">
+                            <i class="fab fa-whatsapp"></i> GENERAR QR
+                        </button>
+                    </div>
+                    
+                    <div class="card-saas-brain">
+                        <div class="brain-header">
+                            
+                            <div class="brain-icon-wrapper" style="flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                                <i class="fas fa-brain" style="font-size: 20px; color: #6366f1;"></i>
+                            </div>
+                            <div class="brain-title-meta">
+                                <h4>Cerebro de la IA</h4>
+                                <span>Configuración del motor de respuestas</span>
+                            </div>
+                            <div class="status-badge-ia">Activo</div>
+                        </div>
+                    
+                        <div class="form-group-saas">
+                            <div class="label-row">
+                                <label class="form-label-pro">Prompt del Bot</label>
+                                <span class="char-count">IA Avanzada</span>
+                            </div>
+                            
+                            <div class="textarea-container">
+                                <textarea id="bot-prompt" 
+                                    placeholder="Ej: Eres un asistente de ventas profesional para Tienderu, tu objetivo es captar leads y agendar citas..."
+                                    spellcheck="false"></textarea>
+                                <div class="focus-border"></div>
+                            </div>
+                    
+                            <div class="prompt-tips">
+                                <div class="tip-item">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Usa lenguaje directo y define el rol claramente.</span>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <button onclick="guardarCerebroBot()" id="btn-save-brain" class="btn-saas-ia">
+                            <span class="btn-text">ACTUALIZAR CONOCIMIENTO</span>
+                            <!-- <i class="fas fa-sync-alt icon-spin hidden"></i> -->
+                        </button>
+                    </div>
+
+                </div>
+                <div id="wa-webhook-info" style="display:none; margin-top:15px; padding:10px; background:#f1f5f9; border-radius:12px;">
+                    <p style="font-size:10px; font-weight:800; color:var(--gray); margin-bottom:5px;">PUENTE DE DATOS ACTIVO:</p>
+                    <code id="wa-webhook-url" style="font-size:10px; color:var(--primary); word-break: break-all;"></code>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-camp" class="tab-content">
+            <h1 style="font-weight:800; margin-bottom:10px;">Campañas Masivas Pro</h1>
+    
+            <div class="sub-tab-nav">
+                <button class="btn-sub-tab active" id="btn-sub-envio" onclick="switchSubTab('envio')">Nueva Campaña</button>
+                <button class="btn-sub-tab" id="btn-sub-listas" onclick="switchSubTab('listas')">Gestión de Listas</button>
+                <button class="btn-sub-tab" id="btn-sub-hist" onclick="switchSubTab('hist')">Historial</button>
+                
+            </div>
+        
+            <div id="sub-envio" class="sub-tab-content">
+                <div class="card campaign-pro-layout">
+                    <div class="campaign-grid">
+                        <div class="campaign-settings">
+                            <div class="section-header-mini">
+                                <i class="fas fa-cog"></i> 
+                                <span>Configuración de Envío</span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label-saas">Nombre de la Campaña</label>
+                                <input type="text" id="camp-name-input" class="form-control" placeholder="Ej: Promo de Navidad">
+                            </div>
+            
+                            <div class="form-group">
+                                <label class="form-label-saas">Audiencia Destino</label>
+                                <select id="camp-group-select" class="form-control">
+                                    <option value="">Cargando listas...</option>
+                                </select>
+                            </div>
+            
+                            <div class="form-group">
+                                <label class="form-label-saas">Tipo de Mensaje</label>
+                                <select id="camp-type" class="form-control" onchange="toggleMediaInput()">
+                                    <option value="text">Solo Texto</option>
+                                    <option value="image">Imagen (URL)</option>
+                                    <option value="document">Documento (Archivo)</option>
+                                </select>
+                            </div>
+            
+                            <div id="container-url-imagen" style="display:none;" class="form-group animate-in">
+                                <label class="form-label-saas">URL de la Imagen</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-link"></i>
+                                    <input type="text" id="camp-media-url" class="form-control" placeholder="https://tusitio.com/imagen.jpg">
+                                </div>
+                            </div>
+                            
+                            <div id="container-upload-doc" style="display:none;" class="form-group animate-in">
+                                <label class="form-label-saas">Archivo Adjunto</label>
+                                <div class="mini-dropzone">
+                                    <input type="file" id="camp-file-upload">
+                                    <p><i class="fas fa-cloud-upload-alt"></i> Clic para subir</p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="campaign-message">
+                            <div class="section-header-mini">
+                                <i class="fas fa-pen-nib"></i> 
+                                <span>Cuerpo del Mensaje</span>
+                            </div>
+            
+                            <div class="form-group">
+                                <label class="form-label-saas">Redacción (Soporta Variables)</label>
+                                <textarea id="camp-msg" class="form-control msg-textarea" placeholder="Ej: Hola {nombre}, tenemos una oferta especial en {ciudad}..."></textarea>
+                            </div>
+            
+                            <div class="ia-helper-box">
+                                <div class="ia-tag"><i class="fas fa-robot"></i> IA TIPS</div>
+                                <p>Usa <b>{nombre}</b> para personalizar. Los mensajes personalizados tienen un 40% más de apertura.</p>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="campaign-footer">
+                        <div class="info-badge">
+                            <i class="fas fa-shield-check"></i> Envío seguro vía WhatsApp Business IA
+                        </div>
+
+                        <div class="credit-status-display" style="display: flex; gap: 15px; margin-right: auto; padding: 10px; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;">
+                            <div style="text-align: left;">
+                                <span style="font-size: 9px; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">Saldo Texto</span>
+                                <span id="display-creditos-texto" style="color: #0f172a; font-weight: 800;">0</span>
+                            </div>
+                            <div style="border-left: 1px solid #e2e8f0; padding-left: 15px; text-align: left;">
+                                <span style="font-size: 9px; font-weight: 800; color: #64748b; display: block; text-transform: uppercase;">Saldo Multi</span>
+                                <span id="display-creditos-multi" style="color: #0f172a; font-weight: 800;">0</span>
+                            </div>
+                        </div>
+                        
+                        <button onclick="lanzarCampañaIA(event)" class="btn-main b-pro btn-launch">
+                            <i class="fas fa-paper-plane"></i> INICIAR ENVÍO MASIVO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        
+            <div id="sub-listas" class="sub-tab-content" style="display:none">
+                <div class="card list-management-pro">
+                    <div class="list-header-pro">
+                        <div class="title-group">
+                            <i class="fas fa-users-gear"></i>
+                            <div>
+                                <h3>Configuración de Audiencias</h3>
+                                <p>Crea segmentos de clientes para tus campañas masivas</p>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="list-creation-grid">
+                        <div class="creation-column">
+                            <div class="form-group">
+                                <label class="form-label-saas">Nombre Identificador de la Lista</label>
+                                <input type="text" id="nuevo-nombre-lista" class="form-control" placeholder="Ej: Clientes VIP Enero">
+                            </div>
+            
+                            <div class="form-group" style="margin-top: 20px;">
+                                <label class="form-label-saas">Entrada Manual de Contactos</label>
+                                <textarea id="lista-manual-input" class="form-control manual-textarea" 
+                                    placeholder="Juan Perez, 573001234567&#10;Maria Lopez, 573109876543"></textarea>
+                                
+                                <div class="input-tip">
+                                    <i class="fas fa-keyboard"></i> Formato: Nombre, Celular (con código de país)
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="creation-column">
+                            <label class="form-label-saas">Importación Masiva (CSV)</label>
+                            <div class="advanced-dropzone" onclick="document.getElementById('csv-file').click()">
+                                <input type="file" id="csv-file" accept=".csv" onchange="procesarArchivoCSV(event)" style="display: none;">
+                                <div class="dz-content">
+                                    <div class="dz-icon">
+                                        <i class="fas fa-file-csv"></i>
+                                    </div>
+                                    <h4>Arrastra tu archivo .csv</h4>
+                                    <p>O haz clic para explorar tus documentos</p>
+                                    <span class="dz-btn">Seleccionar Archivo</span>
+                                </div>
+                                <div id="file-info" class="file-success-msg"></div>
+                            </div>
+                            
+                            <div class="csv-helper">
+                                <p><i class="fas fa-info-circle"></i> La primera columna debe ser el <b>Nombre</b> y la segunda el <b>Teléfono</b>.</p>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="list-action-footer">
+                        <button class="btn-main b-pro btn-full-width" onclick="guardarNuevaLista()">
+                            <i class="fas fa-save"></i> PROCESAR Y GUARDAR LISTA
+                        </button>
+                    </div>
+                </div>
+            
+                <div class="card repository-pro" style="margin-top: 30px;">
+                    <div class="repo-header">
+                        <h4 class="form-label-saas"><i class="fas fa-database"></i> Mis Listas Guardadas</h4>
+                        <div class="repo-stats" id="total-lists-count">Cargando repositorio...</div>
+                    </div>
+                    
+                    <div id="render-listas-repo" class="lists-grid-display">
+                        </div>
+                </div>
+            </div>
+        
+            <div id="sub-hist" class="sub-tab-content" style="display:none">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>Campaña</th><th>Enviados</th><th>Fecha</th><th>Estado</th></tr>
+                        </thead>
+                        <tbody id="render-historial-campanas"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-fact" class="tab-content">
+            <h1 style="font-weight:800; margin-bottom:30px; font-size:32px;">Historial de Facturación</h1>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Periodo</th><th>Monto</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody id="render-facturas"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-perfil" class="tab-content">
+            <h1 style="font-weight:800; margin-bottom:30px;">Configuración del Negocio</h1>
+            <div class="card">
+                <div class="profile-grid">
+                    <div class="form-group"><label class="form-label-saas">Nombre del Propietario</label><input type="text" id="p-nombre" class="form-control" readonly></div>
+                    <div class="form-group"><label class="form-label-saas">ID de Usuario</label><input type="text" id="p-user" class="form-control" readonly></div>
+                    <div class="form-group"><label class="form-label-saas">Teléfono de Enlace</label><input type="text" id="p-tel" class="form-control" readonly></div>
+                    <div class="form-group"><label class="form-label-saas">Ciudad Sede</label><input type="text" id="p-ciu" class="form-control" readonly></div>
+                    <div class="form-group" style="grid-column: span 2;"><label class="form-label-saas">Dirección Fiscal</label><input type="text" id="p-dir" class="form-control" readonly></div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="form-label-saas">URL Pública de la Tienda</label>
+                        <input type="text" id="p-url" class="form-control" style="color:var(--primary); font-weight: 700;" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="qr-hidden" style="visibility: hidden; position: absolute; left: -9999px;"></div>
+    <script src="whatsapp.js"></script>
+    <script src="ecosistema.js"></script>
+
+    <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; color: white; backdrop-filter: blur(5px);">
+        <div class="loader-box" style="text-align: center;">
+            <i class="fas fa-paper-plane fa-spin" style="font-size: 3rem; color: #6366f1; margin-bottom: 20px;"></i>
+            <h2 style="margin: 0;">Lanzando Campaña...</h2>
+            <p style="opacity: 0.8;">Estamos conectando con los nodos de WhatsApp.</p>
+            <div style="width: 200px; height: 4px; background: #333; border-radius: 10px; margin: 20px auto; overflow: hidden;">
+                <div id="loader-bar" style="width: 30%; height: 100%; background: #6366f1; transition: width 0.3s;"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing IA | Creatividad & Conversión Tienderu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/style.css">
+    
+    <style>
+        :root {
+            --primary: #f43f5e;
+            --primary-dark: #e11d48;
+            --accent: #fbbf24;
+            --dark: #0f172a;
+            --slate: #475569;
+            --bg: #fff1f2;
+            --white: #ffffff;
+            --border: rgba(244, 63, 94, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--white); color: var(--dark); line-height: 1.6; }
+
+        /* AJUSTE NAVBAR DINÁMICO */
+        #navbar-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            background: #ffffff;
+        }
+        
+        /* Proporcionalidad del logo [cite: 2026-01-25] */
+        .logo { height: 40px !important; width: auto !important; object-fit: contain; display: block; }
+
+        /* HERO CREATIVO */
+        .hero-marketing {
+            padding: 80px 6% 80px; /* Reducido el padding superior ya que no es fixed */
+            background: radial-gradient(circle at top right, #fff1f2 0%, #ffffff 100%);
+            text-align: center;
+        }
+        .hero-marketing h1 { font-size: clamp(35px, 6vw, 60px); font-weight: 800; letter-spacing: -3px; line-height: 1; margin-bottom: 20px; }
+        .hero-marketing h1 span { 
+            background: linear-gradient(90deg, var(--primary), #fb7185);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-marketing p { font-size: 19px; max-width: 800px; margin: 0 auto; color: var(--slate); font-weight: 500; }
+
+        /* SECCIÓN DE IMPACTO VISUAL */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px; padding: 40px 6%; max-width: 1400px; margin: 0 auto;
+        }
+        .impact-card {
+            background: var(--white); padding: 40px; border-radius: 35px;
+            border: 2px solid var(--bg); transition: 0.4s;
+            text-align: left;
+        }
+        .impact-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .impact-card i { font-size: 30px; color: var(--primary); margin-bottom: 20px; display: block; }
+        .impact-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 15px; }
+        .impact-card p { font-size: 14px; color: var(--slate); }
+
+        /* SECCIÓN EQUIPO CREATIVO IA */
+        .creative-wrap { 
+            background: var(--dark); 
+            padding: 80px 6%; 
+            border-radius: 60px; 
+            margin: 0 2% 40px;
+            color: white;
+        }
+        .creative-header { text-align: center; max-width: 800px; margin: 0 auto 50px; }
+        .creative-header h2 { font-size: 36px; font-weight: 800; margin-bottom: 15px; letter-spacing: -1.5px; }
+        .creative-header h2 span { color: var(--primary); }
+
+        .expert-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .expert-item { 
+            background: rgba(255,255,255,0.05); 
+            padding: 25px; 
+            border-radius: 24px; 
+            display: flex; 
+            gap: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+        .expert-item:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
+        .expert-icon { 
+            width: 50px; height: 50px; background: var(--primary); color: white; 
+            border-radius: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            font-size: 20px;
+        }
+        .expert-info h4 { font-size: 16px; font-weight: 800; margin-bottom: 5px; color: white; }
+        .expert-info p { font-size: 13px; color: #94a3b8; line-height: 1.5; }
+
+        /* BANNER DINÁMICO */
+        .promo-banner { 
+            background: linear-gradient(90deg, var(--primary) 0%, #ff718b 100%); 
+            color: white; padding: 50px 6%; 
+            text-align: center; border-radius: 40px; margin: 0 2% 60px;
+        }
+        .promo-banner h3 { font-size: 28px; font-weight: 800; margin-bottom: 20px; }
+        .tag-cloud { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .tag-mkt { background: rgba(0,0,0,0.2); padding: 8px 18px; border-radius: 100px; font-size: 12px; font-weight: 700; }
+
+        @media (max-width: 900px) { .expert-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="hero-marketing">
+        <h1>Contenido que <span>Vende</span></h1>
+        <p>Fusionamos psicología persuasiva con algoritmos generativos para dominar el feed de tus clientes.</p>
+    </header>
+
+    <section class="impact-grid">
+        <div class="impact-card">
+            <i class="fas fa-pen-nib"></i>
+            <h3>Copywriting Persuasivo</h3>
+            <p>Textos diseñados bajo estructuras AIDA y PAS para maximizar el CTR en anuncios y publicaciones orgánicas.</p>
+        </div>
+        <div class="impact-card">
+            <i class="fas fa-swatchbook"></i>
+            <h3>Diseño Visual IA</h3>
+            <p>Generación de imágenes y assets gráficos de alto impacto que mantienen la identidad visual de tu marca.</p>
+        </div>
+        <div class="impact-card">
+            <i class="fas fa-rocket"></i>
+            <h3>Estrategia de Reels/TikTok</h3>
+            <p>Guiones optimizados para retención de audiencia y ganchos (hooks) iniciales que detienen el scroll.</p>
+        </div>
+    </section>
+
+    <section class="creative-wrap">
+        <div class="creative-header">
+            <h2>Agentes <span>Creativos</span> Especializados</h2>
+            <p>Un equipo autónomo de perfiles expertos en comunicación y diseño digital.</p>
+        </div>
+
+        <div class="expert-grid">
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-bullhorn"></i></div>
+                <div class="expert-info">
+                    <h4>Directores de Copy</h4>
+                    <p>Especialistas en narrativa de marca y redacción publicitaria para conversiones directas.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-magic"></i></div>
+                <div class="expert-info">
+                    <h4>Prompt Engineers Visuales</h4>
+                    <p>Expertos en la generación de piezas gráficas realistas y abstractas para catálogos y redes.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="expert-info">
+                    <h4>Analistas de Tendencias</h4>
+                    <p>Monitoreo constante de algoritmos para adaptar el contenido al trending actual.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-hashtag"></i></div>
+                <div class="expert-info">
+                    <h4>Social Media Strategists</h4>
+                    <p>Planificación de grillas de contenido que conectan emocionalmente con la audiencia.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-eye"></i></div>
+                <div class="expert-info">
+                    <h4>Especialistas en UX Writing</h4>
+                    <p>Optimización de micro-copy para mejorar la navegación y compra dentro de tu tienda.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-video"></i></div>
+                <div class="expert-info">
+                    <h4>Editores de Micro-Contenido</h4>
+                    <p>Producción de clips dinámicos y contenido vertical enfocado en viralidad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="promo-banner">
+        <h3>¿Listo para dominar el mercado digital?</h3>
+        <div class="tag-cloud">
+            <span class="tag-mkt">Ads de Alta Conversión</span>
+            <span class="tag-mkt">Stories Engagement</span>
+            <span class="tag-mkt">SEO Copywriting</span>
+            <span class="tag-mkt">Branding IA</span>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function loadComponents() {
+            // Carga dinámica del Navbar
+            const checkNavbar = setInterval(() => {
+                if (typeof loadNavbar === 'function') {
+                    loadNavbar();
+                    clearInterval(checkNavbar);
+                }
+            }, 100);
+
+            // Carga dinámica del Footer
+            const footerPlaceholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('/footer.html');
+                if (response.ok) {
+                    footerPlaceholder.innerHTML = await response.text();
+                    
+                    // Inyección de la URL del producto [cite: 2025-11-10]
+                    const display = document.getElementById('footer-url-display');
+                    if(display) {
+                        display.textContent = "tienderu.com/services/marketing-ia";
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando footer:', error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+
+</body>
+</html>

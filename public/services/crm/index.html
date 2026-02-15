@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Clientes | Tienderu Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    
+    <style>
+        :root {
+            --primary: #0ea5e9; 
+            --primary-dark: #0369a1;
+            --primary-glow: rgba(14, 165, 233, 0.3);
+            --bg-deep: #020617;
+            --bg-surface: #0f172a;
+            --bg-card: rgba(15, 23, 42, 0.7);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-deep); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+        /* EL LOGO NO PIERDE PROPORCIONALIDAD [cite: 2026-01-25] */
+        .logo, .navbar-brand img { height: 40px !important; width: auto !important; object-fit: contain; display: block; }
+
+        /* HERO CRM */
+        .hero-crm {
+            padding: 140px 6% 60px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            background: radial-gradient(circle at 50% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 70%);
+        }
+        .badge-crm {
+            background: rgba(14, 165, 233, 0.1); color: var(--primary);
+            padding: 6px 16px; border-radius: 100px; font-size: 11px; font-weight: 800;
+            border: 1px solid var(--primary-glow); margin-bottom: 20px;
+        }
+        .hero-crm h1 { font-size: clamp(32px, 5vw, 55px); font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+        .hero-crm h1 span { color: var(--primary); }
+        .hero-crm p { font-size: 18px; color: var(--text-dim); max-width: 700px; margin-bottom: 30px; }
+
+        /* SHOWCASE CARDS */
+        .crm-showcase {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px; width: 100%; max-width: 1100px; margin-top: 20px;
+        }
+        .user-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            backdrop-filter: blur(10px); padding: 20px; border-radius: 20px;
+            transition: 0.3s;
+        }
+        .user-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .user-avatar { width: 40px; height: 40px; border-radius: 50%; background: #1e293b; display: flex; align-items: center; justify-content: center; color: var(--primary); }
+
+        /* CARACTERÍSTICAS BLANCO */
+        .crm-features { padding: 80px 6%; background: #ffffff; color: #0f172a; border-radius: 40px 40px 0 0; }
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .feature-box { padding: 30px; border-radius: 25px; background: #f8fafc; border: 1px solid #e2e8f0; transition: 0.3s; }
+        .feature-box:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .feature-box i { font-size: 24px; color: var(--primary); margin-bottom: 15px; display: block; }
+        .feature-box h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+
+        /* FAQ PREMIUM */
+        .faq-section { padding: 80px 6%; background: var(--bg-deep); }
+        .faq-header { text-align: center; margin-bottom: 50px; }
+        .faq-header h2 { font-size: 36px; font-weight: 800; }
+        .faq-header h2 span { color: var(--primary); }
+        .faq-container { max-width: 850px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+        .faq-item { background: var(--bg-surface); border: 1px solid var(--glass-border); border-radius: 18px; overflow: hidden; transition: 0.3s; }
+        .faq-item:hover { border-color: var(--primary-glow); }
+        .faq-question { padding: 22px 30px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+        .faq-question h3 { font-size: 16px; font-weight: 600; color: white; margin: 0; }
+        .faq-icon { width: 24px; height: 24px; background: rgba(14, 165, 233, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); transition: 0.4s; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.2); }
+        .faq-answer-content { padding: 0 30px 25px; color: var(--text-dim); font-size: 14.5px; line-height: 1.6; }
+        
+        .faq-item.active { border-color: var(--primary); box-shadow: 0 10px 30px rgba(14, 165, 233, 0.1); }
+        .faq-item.active .faq-icon { transform: rotate(180deg); background: var(--primary); color: white; }
+        .faq-item.active .faq-answer { max-height: 300px; }
+
+        /* CTA */
+        .cta-section { padding: 80px 6%; text-align: center; }
+        .btn-crm { background: var(--primary); color: white; padding: 18px 45px; border-radius: 14px; font-weight: 800; text-decoration: none; display: inline-block; transition: 0.3s; box-shadow: 0 10px 25px rgba(14, 165, 233, 0.3); }
+        .btn-crm:hover { transform: scale(1.05); background: var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="hero-crm">
+        <div class="badge-crm"><i class="fas fa-users"></i> DATA-DRIVEN GROWTH</div>
+        <h1>Domina tu relación con el <span>Cliente</span></h1>
+        <p>No pierdas un solo dato. Centraliza historiales, segmenta con IA y dispara tus ventas recurrentes con el CRM más intuitivo del mercado.</p>
+        
+        <div class="crm-showcase">
+            <div class="user-card">
+                <div class="user-header">
+                    <div class="user-avatar"><i class="fas fa-user-check"></i></div>
+                    <div class="user-info" style="text-align:left;"><h4>Juan Pérez</h4><span style="font-size:11px; color:var(--primary);">Cliente Platino</span></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px;"><span>12 Compras</span><span>$1.2M Total</span></div>
+            </div>
+            <div class="user-card" style="border-color:var(--primary);">
+                <div class="user-header">
+                    <div class="user-avatar" style="color:var(--primary);"><i class="fas fa-star"></i></div>
+                    <div class="user-info" style="text-align:left;"><h4>Ana Beltrán</h4><span style="font-size:11px; color:var(--primary);">Recurrente</span></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px;"><span>8 Compras</span><span>$850k Total</span></div>
+            </div>
+            <div class="user-card">
+                <div class="user-header">
+                    <div class="user-avatar"><i class="fas fa-clock"></i></div>
+                    <div class="user-info" style="text-align:left;"><h4>Carlos Ruiz</h4><span style="font-size:11px; color:var(--text-dim);">Nuevo</span></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:12px;"><span>1 Compra</span><span>$120k Total</span></div>
+            </div>
+        </div>
+    </header>
+
+    <section class="crm-features">
+        <div class="feature-grid">
+            <div class="feature-box">
+                <i class="fas fa-sync"></i>
+                <h3>Sincronización Total</h3>
+                <p>Tus ventas de la e-Shop Pro y el POS físico convergen en un solo perfil de cliente en tiempo real.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-filter"></i>
+                <h3>Segmentación Pro</h3>
+                <p>Crea listas basadas en el ticket promedio, ubicación o frecuencia de compra para campañas de marketing.</p>
+            </div>
+            <div class="feature-box">
+                <i class="fas fa-chart-line"></i>
+                <h3>Análisis de Valor</h3>
+                <p>Identifica automáticamente a tus clientes VIP (LTV) y genera estrategias para recuperarlos si dejan de comprar.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section" id="faq">
+        <div class="faq-header">
+            <h2>Consultas <span>Frecuentes</span></h2>
+            <p style="color:var(--text-dim);">Optimiza tu gestión de datos con respuestas claras.</p>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>¿Puedo importar mis clientes actuales al CRM?</h3>
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sí, puedes importar masivamente tus contactos mediante archivos CSV o Excel. Nuestro sistema mapea automáticamente los campos de nombre, teléfono y correo para que no pierdas tiempo en la migración.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>¿El CRM se comunica con el bot de WhatsApp?</h3>
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Absolutamente. Cada interacción que un cliente tiene con tu bot de IA se registra en su perfil del CRM, permitiéndote ver historiales de chat y preferencias de compra en tiempo real.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>¿Cómo protegen la seguridad de mis datos?</h3>
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Utilizamos cifrado de grado bancario y protocolos SSL para proteger toda la información de tus clientes. Tus datos están alojados en servidores seguros y solo tú tienes acceso a la administración de tu base de datos.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>¿Puedo automatizar mensajes de cumpleaños o recordatorios?</h3>
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Sí, el CRM te permite configurar disparadores (triggers) basados en fechas especiales o falta de compra para enviar notificaciones automáticas y mantener a tu audiencia activa. Puedes conocer más en <a href="https://tienderu.com/services/crm-clientes" style="color:var(--primary); text-decoration:none;">tienderu.com/services/crm-clientes</a>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <h3>¿Existe un límite de clientes registrados?</h3>
+                    <div class="faq-icon"><i class="fas fa-chevron-down"></i></div>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Contamos con planes flexibles que van desde los 1,000 registros hasta bases de datos ilimitadas. Todos los perfiles incluyen analítica de compra, segmentación avanzada y seguimiento de valor de vida del cliente (LTV).
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 style="margin-bottom:20px; font-size: 32px; font-weight: 800;">Transforma tus datos en ventas</h2>
+        <a href="https://wa.me/573104039092?text=Deseo+probar+el+CRM+Clientes" class="btn-crm">ACTIVAR MI CRM GRATIS</a>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            const isActive = item.classList.contains('active');
+            document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('active'));
+            if (!isActive) item.classList.add('active');
+        }
+
+        async function loadComponents() {
+            // Navbar
+            const checkNavbar = setInterval(() => {
+                if (typeof loadNavbar === 'function') {
+                    loadNavbar();
+                    clearInterval(checkNavbar);
+                }
+            }, 100);
+
+            // Footer e Inclusión de URL [cite: 2025-11-10]
+            const footerPlaceholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('/footer.html');
+                if (response.ok) {
+                    footerPlaceholder.innerHTML = await response.text();
+                    const display = document.getElementById('footer-url-display');
+                    if(display) display.textContent = "tienderu.com/services/crm-clientes";
+                }
+            } catch (error) { console.error('Error:', error); }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

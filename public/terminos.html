@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones | Tienderu IA</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --slate: #475569;
+            --card-shadow: rgba(0, 0, 0, 0.04);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #fcfdfe; color: var(--dark); line-height: 1.6; }
+
+        #navbar-placeholder { position: sticky; top: 0; z-index: 2000; width: 100%; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .logo { height: 40px !important; width: auto !important; object-fit: contain; display: block; }
+
+        /* HERO ESPECÍFICO */
+        .terms-hero { padding: 80px 6% 20px; text-align: center; }
+        .terms-hero h1 { font-size: clamp(32px, 5vw, 55px); font-weight: 800; letter-spacing: -3px; }
+        .terms-hero h1 span { color: var(--primary); }
+
+        /* SECCIÓN RESUMEN RÁPIDO (UX IMPROVEMENT) */
+        .summary-box {
+            max-width: 1000px; margin: 40px auto;
+            background: white; border-radius: 30px; padding: 40px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            box-shadow: 0 10px 40px var(--card-shadow);
+        }
+        .summary-item { text-align: center; padding: 10px; }
+        .summary-item i { font-size: 24px; color: var(--accent); margin-bottom: 15px; }
+        .summary-item h4 { font-size: 14px; font-weight: 800; margin-bottom: 5px; }
+        .summary-item p { font-size: 12px; color: var(--slate); }
+
+        /* BUSCADOR DE TÉRMINOS */
+        .search-container { max-width: 600px; margin: 0 auto 60px; position: relative; }
+        .search-input { 
+            width: 100%; padding: 18px 25px 18px 50px; border-radius: 50px;
+            border: 1px solid rgba(0,0,0,0.1); font-size: 16px; outline: none;
+            transition: 0.3s; box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 4px 25px rgba(99, 102, 241, 0.1); }
+        .search-container i { position: absolute; left: 20px; top: 22px; color: var(--slate); }
+
+        /* GRID DE TÉRMINOS */
+        .terms-grid-section { padding: 40px 6%; max-width: 1300px; margin: auto; }
+        .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; }
+        
+        .terms-card {
+            background: white; padding: 40px; border-radius: 35px;
+            border: 1px solid rgba(0,0,0,0.04); transition: 0.4s;
+        }
+        .terms-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .terms-num { font-size: 12px; font-weight: 800; color: white; background: var(--dark); width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin-bottom: 20px; }
+        .terms-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 15px; }
+        .terms-card p { font-size: 15px; color: var(--slate); margin-bottom: 20px; }
+        
+        .pill-legal { font-size: 11px; font-weight: 700; color: var(--primary); background: rgba(99,102,241,0.05); padding: 5px 12px; border-radius: 20px; }
+
+        /* FAQ SECCIÓN */
+        .faq-section { padding: 80px 6%; max-width: 800px; margin: auto; }
+        .faq-item { background: white; margin-bottom: 15px; border-radius: 20px; padding: 25px; border: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: 0.3s; }
+        .faq-item:hover { background: #f9faff; }
+        .faq-question { display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+        .faq-answer { display: none; margin-top: 15px; color: var(--slate); font-size: 14px; border-top: 1px solid #eee; padding-top: 15px; }
+
+        @media (max-width: 768px) { .summary-box { grid-template-columns: 1fr; } .terms-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="terms-hero">
+        <h1>Claridad en cada <span>Contrato</span></h1>
+        <p style="margin-top: 15px; color: var(--slate); font-weight: 500;">Entendemos que el lenguaje legal puede ser complejo, por eso lo hacemos transparente.</p>
+    </header>
+
+    <div class="summary-box">
+        <div class="summary-item">
+            <i class="fas fa-eye"></i>
+            <h4>Transparencia</h4>
+            <p>Tus datos son tuyos. Nosotros solo los procesamos para tu beneficio.</p>
+        </div>
+        <div class="summary-item">
+            <i class="fas fa-bolt"></i>
+            <h4>Disponibilidad</h4>
+            <p>Garantizamos que tu Cerebro Digital nunca deje de trabajar.</p>
+        </div>
+        <div class="summary-item">
+            <i class="fas fa-undo"></i>
+            <h4>Cancelación</h4>
+            <p>Sin contratos de permanencia ocultos. Te vas cuando quieras.</p>
+        </div>
+    </div>
+
+    <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" class="search-input" placeholder="Busca una palabra clave (ej. Pagos, IA, Datos)...">
+    </div>
+
+    <section class="terms-grid-section">
+        <div class="terms-grid">
+            
+            <div class="terms-card">
+                <div class="terms-num">01</div>
+                <h3>Suscripción y Acceso</h3>
+                <p>El acceso a Tienderu es mediante planes mensuales. La cuenta es personal para su empresa y no puede ser compartida con competidores directos.</p>
+                <span class="pill-legal">#ACCESO</span>
+            </div>
+
+            <div class="terms-card">
+                <div class="terms-num">02</div>
+                <h3>Uso de la IA</h3>
+                <p>Nuestra IA aprende de tus catálogos, pero no comparte esa ventaja competitiva con otras empresas del ecosistema sin tu permiso.</p>
+                <span class="pill-legal">#PROPIEDAD-INTELECTUAL</span>
+            </div>
+
+            <div class="terms-card">
+                <div class="terms-num">03</div>
+                <h3>Límites de Respuesta</h3>
+                <p>Cada plan tiene un límite de "neuronas activas" (créditos de mensaje). El exceso se facturará según la tasa vigente al final del ciclo.</p>
+                <span class="pill-legal">#FACTURACIÓN</span>
+            </div>
+
+            <div class="terms-card">
+                <div class="terms-num">04</div>
+                <h3>Responsabilidad Ética</h3>
+                <p>Tienderu se reserva el derecho de suspender cuentas que utilicen la IA para generar spam, estafas o contenido ofensivo.</p>
+                <span class="pill-legal">#ÉTICA</span>
+            </div>
+
+            <div class="terms-card">
+                <div class="terms-num">05</div>
+                <h3>Interconexión API</h3>
+                <p>Cualquier integración de terceros es responsabilidad del cliente, aunque nuestro equipo brindará soporte para asegurar la estabilidad.</p>
+                <span class="pill-legal">#API</span>
+            </div>
+
+            <div class="terms-card">
+                <div class="terms-num">06</div>
+                <h3>Resolución de Conflictos</h3>
+                <p>Cualquier disputa técnica será resuelta bajo la jurisdicción de las cortes internacionales de tecnología donde CRSGroup tiene sede.</p>
+                <span class="pill-legal">#LEGAL</span>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <h2 style="text-align: center; margin-bottom: 40px; font-weight: 800;">Preguntas Frecuentes</h2>
+        
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">¿Puedo descargar mi base de datos si decido irme? <i class="fas fa-plus"></i></div>
+            <div class="faq-answer">Totalmente. La portabilidad de datos es un derecho. Puedes exportar tus contactos y configuraciones en cualquier momento.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">¿Cómo se factura el exceso de mensajes? <i class="fas fa-plus"></i></div>
+            <div class="faq-answer">Si superas el límite de tu plan, el sistema te notificará. El costo adicional se calcula por mil mensajes procesados exitosamente.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">¿Qué pasa si la IA comete un error en un precio? <i class="fas fa-plus"></i></div>
+            <div class="faq-answer">Nuestros sistemas tienen capas de seguridad. El administrador siempre tiene la última palabra sobre los catálogos y puede corregir flujos en tiempo real.</div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function toggleFaq(element) {
+            const answer = element.querySelector('.faq-answer');
+            const icon = element.querySelector('i');
+            const isOpen = answer.style.display === 'block';
+            
+            answer.style.display = isOpen ? 'none' : 'block';
+            icon.className = isOpen ? 'fas fa-plus' : 'fas fa-minus';
+        }
+
+        async function loadComponents() {
+            const checkNavbar = setInterval(() => { if (typeof loadNavbar === 'function') { loadNavbar(); clearInterval(checkNavbar); } }, 100);
+            try {
+                const response = await fetch('/footer.html'); 
+                if (response.ok) {
+                    document.getElementById('footer-placeholder').innerHTML = await response.text();
+                    const urlDisplay = document.getElementById('footer-url-display');
+                    if(urlDisplay) urlDisplay.textContent = "tienderu.com/terminos";
+                }
+            } catch (error) {}
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

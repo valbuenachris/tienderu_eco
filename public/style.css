@@ -1,0 +1,1245 @@
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg-dark: #0f172a; 
+            --bg-deep: #020617; 
+            --text-dim: #94a3b8;
+            --text-dark: #1e293b;
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(15, 23, 42, 0.9);
+            --ia: #a78bfa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { 
+            background-color: var(--bg-deep); 
+            color: white; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth; 
+            line-height: 1.6;
+        }
+
+        /* Asegurar logo proporcional [cite: 2026-01-25] */
+        .logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* --- LOADER --- */
+        #loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-deep); display: none; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid rgba(99, 102, 241, 0.1);
+            border-top: 4px solid var(--primary); border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin-bottom: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- NAVBAR --- */
+        
+        .navbar .logo { height: 35px; width: auto; object-fit: contain; }
+
+        /* Login Escritorio */
+        .nav-login-desktop { display: flex; gap: 10px; align-items: center; }
+        .nav-login-desktop input {
+            padding: 10px 14px; border-radius: 10px; border: 1px solid #334155;
+            background: rgba(30, 41, 59, 0.4); color: white; font-size: 13px; width: 140px; outline: none;
+        }
+        /* Botón ACCEDER (Estado normal) */
+        .btn-login-nav {
+            background: transparent;
+            color: #4f46e5;
+            border: 2px solid #4f46e5;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Este es el contenedor que pusiste en el HTML */
+        #navbar-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        /* Este es el estilo de la barra que viene de navbar.html */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 6%;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            /* Importante para que no se vea transparente al hacer scroll */
+            width: 100%;
+            box-sizing: border-box; 
+        }
+        
+        .nav-actions { display: flex; gap: 10px; }
+        
+        /* Botón Mi Panel - Azul Indigo Legible */
+        .btn-panel-nav {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        
+        /* Botón Logout - Rojo suave */
+        .btn-logout-nav {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-logout-nav:hover {
+            background-color: #fecaca;
+            transform: scale(1.05);
+        }
+
+
+        /* --- MEJORA NAVBAR Y MODAL --- */
+        /* Contenedor de botones en Navbar */
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn-mobile-trigger {
+            display: none;
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* Overlay del Modal */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(8px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 2000; padding: 20px;
+        }
+
+        /* Caja del Modal */
+        .modal-content {
+            background: white;
+            width: 100%; max-width: 400px;
+            padding: 40px; border-radius: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: modalSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Esto hace que al pasar el mouse brille en el verde de masivos */
+        .service-card.c-4:hover {
+            border-color: #10b981;
+            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+            transform: translateY(-10px);
+        }
+
+        @keyframes modalSlideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header { text-align: center; margin-bottom: 30px; }
+        .modal-header h3 { color: var(--bg-dark); font-size: 24px; font-weight: 800; }
+        .modal-header p { color: #64748b; font-size: 14px; }
+
+        .input-group {
+            position: relative; margin-bottom: 15px;
+        }
+        .input-group i {
+            position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+            color: var(--primary);
+        }
+        .input-group input {
+            width: 100%; padding: 14px 14px 14px 45px;
+            border-radius: 15px; border: 1px solid #e2e8f0;
+            background: #f8fafc; font-size: 15px;
+        }
+
+        .btn-close-modal {
+            width: 100%; background: none; border: none; color: #94a3b8;
+            margin-top: 15px; font-weight: 700; cursor: pointer;
+        }
+
+        /* Media Query corregido */
+        @media (max-width: 768px) {
+            .nav-login-desktop { display: none; }
+            .btn-mobile-trigger { display: block; }
+        }
+
+        /* Botón Entrar Móvil */
+        .btn-mobile-login {
+            display: none; /* Se oculta en PC */
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 12px;
+        }
+
+        /* Cajón de Login Móvil */
+        .mobile-login-drawer {
+            position: fixed;
+            top: -100%; /* Oculto arriba */
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: 0.4s ease-in-out;
+            z-index: 999;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        .mobile-login-drawer.active { top: 60px; } /* Se muestra debajo de la nav */
+
+        .mobile-login-drawer input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .mobile-login-drawer h4 { color: var(--bg-dark); margin-bottom: 15px; text-align: center; }
+
+        /*
+        /* Ajuste en el Media Query de 768px 
+        @media (max-width: 768px) {
+            .nav-login-desktop { display: none !important; }
+            .btn-mobile-login { display: flex; align-items: center; gap: 8px; }
+        }
+        */
+
+        /* --- HERO --- */
+        .main-wrapper { max-width: 1300px; margin: 120px auto 60px; padding: 0 5%; }
+        .hero-section { text-align: center; margin-bottom: 80px; }
+        .hero-section h1 { font-size: clamp(38px, 8vw, 72px); font-weight: 800; letter-spacing: -3px; line-height: 1; margin-bottom: 20px; }
+        .hero-section h1 span { color: var(--primary); }
+        .hero-section p { color: var(--text-dim); font-size: clamp(16px, 2vw, 19px); max-width: 800px; margin: 0 auto; }
+
+        /* --- GRID LAYOUT --- */
+        .content-layout { 
+            display: grid; 
+            grid-template-columns: 1fr 350px; 
+            gap: 30px; 
+            align-items: start; 
+        }
+
+        /* --- SERVICIOS ESTILO PASTEL PREMIUM --- */
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 20px; 
+        }
+
+        .service-card {
+            padding: 35px 25px;
+            border-radius: 35px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            filter: brightness(1.05);
+        }
+
+        /* Efecto Hover para las tarjetas clicables */
+        .service-card[onclick] {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .service-card[onclick]:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Color específico si es la de WhatsApp al pasar el mouse */
+        .service-card.c-2:hover {
+            border-color: #25d366;
+            box-shadow: 0 20px 40px rgba(37, 211, 102, 0.15);
+        }
+
+        /* Paleta de Colores Pasteles Coherente */
+        .c-1 { background-color: #eff6ff; color: #1e40af; } /* Azul */
+        .c-2 { background-color: #ecfdf5; color: #065f46; } /* Esmeralda */
+        .c-3 { background-color: #fff7ed; color: #9a3412; } /* Naranja */
+        .c-4 { background-color: #fef2f2; color: #991b1b; } /* Rojo */
+        .c-5 { background-color: #f0fdfa; color: #115e59; } /* Teal */
+        .c-6 { background-color: #eef2ff; color: #3730a3; } /* Indigo */
+        .c-7 { background-color: #f5f3ff; color: #5b21b6; } /* Violeta */
+        .c-8 { background-color: #ecfeff; color: #164e63; } /* Cyan */
+        .c-9 { background-color: #fdf2f8; color: #9d174d; } /* Rosa */
+
+        .icon-wrap {
+            width: 65px;
+            height: 65px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+        }
+
+        .service-card h3 { 
+            font-size: 18px; 
+            font-weight: 800; 
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .service-desc { 
+            font-size: 14px; 
+            line-height: 1.5; 
+            font-weight: 600; 
+            opacity: 0.8;
+        }
+
+        /* --- REGISTRO SIDEBAR --- */
+        .reg-sidebar { background: white; padding: 40px; border-radius: 35px; color: var(--text-dark); position: sticky; top: 110px; }
+        .reg-sidebar h3 { font-size: 24px; font-weight: 800; margin-bottom: 25px; text-align: center; color: var(--bg-dark); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-w { grid-column: span 2; }
+        .reg-sidebar input, .reg-sidebar select { 
+            width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; outline: none; transition: 0.3s;
+        }
+        .reg-sidebar input:focus, .reg-sidebar select:focus { border-color: var(--primary); background: white; }
+        .btn-reg-main { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-reg-main:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* --- NUEVOS ESTILOS PARA PLANES PREMIUM --- */
+        /* --- SECCIÓN DE PRECIOS FULL WIDTH --- */
+        .pricing-section {
+            width: 100%;
+            padding: 80px 0;
+            background: #0f172a; /* Fondo oscuro */
+            text-align: center;
+        }
+
+        .pricing-section h2 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 50px;
+            font-weight: 800;
+        }
+
+        .pricing-section h2 span {
+            color: #6366f1;
+        }
+
+        /* --- GRID DE 4 COLUMNAS PARA ESCRITORIO --- */
+        .pricing-grid {
+            display: grid;
+            /* Forzamos 4 columnas iguales en pantallas grandes */
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 20px;
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        /* --- ESTILO DE LAS TARJETAS --- */
+        .pricing-card {
+            background: white;
+            padding: 40px 20px;
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #e2e8f0;
+            height: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- RESPONSIVIDAD (MÓVIL Y TABLET) --- */
+
+        /* Tablets: 2 columnas */
+        @media (max-width: 1100px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+        }
+
+        /* Móviles: 1 columna (una a una) */
+        @media (max-width: 650px) {
+            .pricing-grid {
+                grid-template-columns: 1fr; 
+                width: 90%;
+                gap: 30px;
+            }
+            
+            .pricing-section h2 {
+                font-size: 28px;
+            }
+
+            .pricing-card {
+                padding: 35px 25px;
+            }
+        }
+
+        /* Colores Pasteles por Tarjeta */
+        .card-free { background-color: #eff6ff; color: #c5336d; } /* Azul Pastel */ 
+        .card-enterprise { background-color: #eff6ff; color: #1e40af; } /* Azul Pastel */
+        .card-premium { background-color: #ecfdf5; color: #065f46; }    /* Verde/Esmeralda Pastel */
+        .card-pro { background-color: #f5f3ff; color: #5b21b6; }         /* Violeta/Lila Pastel */
+
+        .pricing-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        /* Mejora del Plan Destacado (Premium) */
+        .pricing-card.popular {
+            transform: scale(1.05);
+            z-index: 2;
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.3); /* Resplandor verde suave */
+            border: 2px solid #10b981;
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.08) translateY(-10px);
+        }
+
+        .badge-free {
+            position: absolute;
+            top: -15px; /* Sobresale por encima de la tarjeta */
+            left: 50%;
+            transform: translateX(-50%); /* Centrado exacto */
+            background: #fedf17; /* Tu amarillo vibrante */
+            color: rgb(204, 42, 109); /* Tu rosa/magenta */
+            padding: 10px 24px; 
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 3px solid white; 
+            /* Sombra ajustada al color magenta para que resalte más */
+            box-shadow: 0 10px 20px rgba(204, 42, 109, 0.3); 
+            z-index: 10;
+            white-space: nowrap;
+            
+            /* Nueva animación de latido */
+            animation: pulse-glow 2s infinite;
+        }
+        
+        .badge-free i {
+            font-size: 16px;
+            animation: bounce 2s infinite; /* Tu animación de salto original */
+        }
+        
+        /* --- ANIMACIONES --- */
+        
+        /* Efecto de latido y brillo */
+        @keyframes pulse-glow {
+            0% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 10px 20px rgba(204, 42, 109, 0.3);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05); /* Crece un poco */
+                box-shadow: 0 15px 25px rgba(204, 42, 109, 0.5); /* Brilla más */
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 10px 20px rgba(204, 42, 109, 0.3);
+            }
+        }
+        
+        /* Tu animación original de salto del icono */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-5px);}
+            60% {transform: translateY(-3px);}
+        }
+
+        .plan-highlight {
+            border-color: var(--primary) !important;
+            background-color: rgba(79, 70, 229, 0.1) !important;
+            transition: all 0.5s ease;
+        }
+
+        /* Estilo ajustado para máxima seguridad de proporción */
+        .logo-checkout { 
+            height: 45px; /* Altura fija profesional */
+            width: auto !important; /* El ancho se ajusta solo */
+            margin-bottom: 24px; 
+            object-fit: contain; 
+            display: inline-block;
+        }
+
+        .badge-popular {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Iconos y Textos */
+        .plan-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .pricing-card h4 { font-size: 28px; font-weight: 800; margin-bottom: 5px; }
+        .price { font-size: 48px; font-weight: 800; margin-bottom: 25px; }
+        .price span { font-size: 16px; opacity: 0.7; }
+
+        .pricing-features { list-style: none; margin-bottom: 35px; flex-grow: 1; }
+        .pricing-features li { 
+            margin-bottom: 12px; 
+            font-size: 14px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .pricing-features li i { font-size: 14px; }
+        .disabled { opacity: 0.4; text-decoration: line-through; }
+
+        /* Botones */
+        .btn-plan { 
+            width: 100%;
+            border: none;
+            padding: 18px; 
+            border-radius: 20px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        
+        .card-free .btn-plan { background: #c5336d; color: white; }
+        .card-enterprise .btn-plan { background: #3b82f6; color: white; }
+        .card-premium .btn-plan { background: #10b981; color: white; }
+        .card-pro .btn-plan { background: #7c3aed; color: white; }
+
+        .btn-plan:hover { filter: brightness(1.1); transform: scale(1.03); }
+
+        /* --- SECCIÓN MASIVOS COMPACTA --- */
+        .masivos-section {
+            padding: 60px 20px;
+            background: transparent; /* Se adapta al fondo de tu sitio */
+        }
+
+        .masivos-container {
+            max-width: 950px; /* Tamaño más pequeño en escritorio (tipo tarjeta de plan) */
+            margin: 0 auto;
+            background: #f8fafc;
+            border-radius: 35px;
+            padding: 40px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+        }
+
+        .masivos-header-area {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .masivos-header-area h2 {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0f172a;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .masivos-header-area p {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .text-green-wa { color: #10b981; }
+        .text-indigo-pro { color: #6366f1; }
+
+        .wa-api-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e2f7f1;
+            color: #10b981;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #c2e9df;
+        }
+
+        /* Grid de dos columnas */
+        .masivos-body-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        /* CALCULADORA */
+        .wa-calculator {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid #f1f5f9;
+        }
+
+        .calc-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e293b;
+        }
+
+        .calc-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .calc-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            font-weight: 700;
+            font-size: 18px;
+            outline: none;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .calc-type-container {
+            display: flex;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .calc-type-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            color: #64748b;
+            transition: 0.3s;
+        }
+
+        .calc-type-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .calc-result-box {
+            border: 2px dashed #e2e8f0;
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            background: #fdfdfd;
+        }
+
+        .calc-result-box .total-price {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 20px; /* Espacio antes del botón */
+            letter-spacing: -1.5px;
+        }
+
+        /* PASOS Y BOTÓN */
+        .features-right {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .step-card {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .icon-box {
+            width: 38px;
+            height: 38px;
+            background: #10b981;
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-card.indigo .icon-box { background: #6366f1; }
+
+        .step-text h5 { font-weight: 800; font-size: 1rem; color: #1e293b; margin: 0; }
+        .step-text p { color: #64748b; font-size: 0.85rem; margin: 0; line-height: 1.4; }
+
+        .btn-whatsapp-calc {
+            width: 100%;
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+            font-size: 1rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .btn-whatsapp-calc:hover {
+            transform: translateY(-2px);
+            background: #1e293b;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+        
+        .min-recarga {
+            display: block;
+            margin-top: 12px;
+            font-size: 11px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        /* Contenedor de la línea de tiempo */
+        .steps-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0; /* Quitamos el gap para que la línea sea continua */
+            padding-left: 5px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 20px;
+            padding-bottom: 30px; /* Espacio para la línea entre pasos */
+            position: relative;
+        }
+
+        /* La línea conectora */
+        .step-line {
+            position: absolute;
+            left: 19px; /* Mitad del icon-box */
+            top: 40px;
+            bottom: -5px;
+            width: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .step-item .icon-box {
+            z-index: 2; /* Para que el icono tape la línea */
+            background: white;
+            border: 2px solid #10b981;
+            color: #10b981;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.1);
+        }
+
+        .step-item.active-step .icon-box {
+            background: #6366f1;
+            border-color: #6366f1;
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .step-text h5 {
+            margin: 0 0 5px 0;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .step-text p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* Badge de confianza con animación */
+        .trust-badge {
+            margin-top: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* Ajuste móvil */
+        @media (max-width: 480px) {
+            .step-line { left: 19px; }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 850px) {
+            .masivos-body-grid {
+                grid-template-columns: 1fr; /* Una columna en móvil/tablet */
+                gap: 30px;
+            }
+            .masivos-container {
+                padding: 30px 20px;
+            }
+            .masivos-header-area h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .masivos-section { padding: 40px 10px; }
+            .calc-result-box .total-price { font-size: 1.8rem; }
+            .btn-whatsapp-calc { font-size: 0.9rem; }
+        }
+
+        /* --- FOOTER --- */
+        .footer { background: #010409; padding: 80px 5% 40px; border-top: 1px solid var(--border); }
+        .footer-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 0.8fr 0.8fr 0.8fr; gap: 40px; }
+        .footer-col h4 { color: white; margin-bottom: 25px; font-size: 16px; font-weight: 700; text-transform: uppercase; }
+        .footer-links { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: var(--text-dim); text-decoration: none; font-size: 14px; transition: 0.3s; }
+        .footer-links a:hover { color: var(--primary); }
+
+        .footer-bottom { 
+            border-top: 1px solid var(--border); 
+            margin-top: 50px; 
+            padding-top: 30px; 
+            text-align: center; 
+            color: var(--text-dim); 
+            font-size: 12px; 
+            font-weight: 700;
+            text-transform: none; }
+
+        .pulse-secure { display: inline-block; color: var(--primary); font-weight: 800; animation: softPulse 3s infinite ease-in-out; }
+
+        #footer-url-display {
+            font-weight: 800; /* Negrita intensa */
+            text-transform: lowercase; /* Forzar minúsculas */
+            color: var(--primary); /* Opcional: usa el color cyan de tu marca */
+        }
+
+        @keyframes softPulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; text-shadow: 0 0 8px var(--primary); transform: scale(1.02); } }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .content-layout { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; padding: 0 20px; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .reg-sidebar { position: static; order: 2; margin-top: 50px; }
+        }
+        @media (max-width: 768px) {
+            .services-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+        }
+
+        /* --- RESPONSIVE OPTIMIZADO PARA MÓVILES --- */
+        @media (max-width: 768px) {
+            /* Ajuste de Títulos Generales */
+            .hero-section h1 { font-size: 42px; }
+            .pricing-section h2, .masivos-content h2 { font-size: 32px; }
+
+            /* Layout de Planes: De 3 columnas a 1 sola */
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+                gap: 40px; /* Espacio para que no se peguen las tarjetas */
+            }
+
+            .pricing-card.popular {
+                transform: scale(1); /* Quitamos el aumento de tamaño en móvil para evitar recortes */
+                margin: 10px 0;
+            }
+
+            .pricing-card.popular:hover {
+                transform: translateY(-10px); /* Efecto hover más sutil en móvil */
+            }
+
+            /* Layout de Campañas Masivas */
+            .masivos-section {
+                grid-template-columns: 1fr; /* Una sola columna */
+                padding: 40px 20px;
+                margin: 40px 5%;
+                border-radius: 30px;
+                gap: 30px;
+            }
+
+            .masivos-content {
+                order: 1; /* El texto va primero */
+                text-align: center;
+            }
+
+            .wa-feature-list li {
+                justify-content: center;
+                text-align: left;
+            }
+
+            .pricing-bubble-grid {
+                grid-template-columns: 1fr; /* Burbujas de precio una sobre otra */
+            }
+
+            /* Ajuste del Calculador */
+            .calc-input-wrap {
+                flex-direction: column; /* Inputs y botones uno debajo de otro */
+            }
+
+            .wa-calculator {
+                order: 2; /* El calculador va después del texto */
+                padding: 20px;
+            }
+
+            .masivos-visual {
+                order: 3; /* El video/GIF va al final */
+                margin-top: 20px;
+            }
+
+            /* Ajuste de Servicios (Grid de 3 a 1) */
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            /* Barra de navegación móvil */
+            .nav-login-desktop {
+                display: none; /* Ocultamos el login de la barra para ganar espacio */
+            }
+
+            @media (max-width: 768px) {
+            /* Ajuste del contenedor principal */
+            .masivos-section {
+                padding: 30px 20px;
+                margin: 40px 15px;
+                border-radius: 30px;
+            }
+
+            /* Título y descripción */
+            .masivos-header-area h2 {
+                font-size: 28px;
+                line-height: 1.2;
+            }
+            
+            .masivos-header-area p {
+                font-size: 16px;
+            }
+
+            /* Cambiamos el cuerpo de 2 columnas a 1 sola */
+            .masivos-body-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            /* Los videos ahora se ven uno debajo del otro para mantener el tamaño */
+            .video-duo {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .video-box {
+                max-width: 100%;
+            }
+
+            /* Lista de características centrada para móvil */
+            .wa-feature-list {
+                grid-column: span 1 !important;
+                margin-top: 10px;
+            }
+
+            .wa-feature-list li {
+                font-size: 14px;
+                justify-content: flex-start; /* Alineado a la izquierda para mejor lectura */
+            }
+
+            /* Ajuste del Calculador para que los botones no se amontonen */
+            .calc-input-wrap {
+                flex-direction: column; /* Apila el input y los botones de tipo */
+                gap: 10px;
+            }
+
+            .calc-type-btn {
+                width: 100%; /* Botones de ancho completo para facilitar el toque */
+                padding: 15px;
+            }
+
+            .calc-input {
+                text-align: center;
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            .calc-result {
+                padding: 15px;
+            }
+
+            .calc-result .total-price {
+                font-size: 28px;
+            }
+        }
+
+        }
+
+        /* Ajustes para pantallas muy pequeñas (iPhone SE, etc) */
+        @media (max-width: 480px) {
+            .price { font-size: 40px; }
+            .masivos-content h2 { font-size: 28px; }
+            .btn-reg-main, .btn-plan { padding: 15px; }
+        }
+
+        
+
+.blob {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: var(--primary);
+    filter: blur(120px);
+    opacity: 0.15;
+    border-radius: 50%;
+}
+
+.blob-1 { top: -100px; left: -100px; }
+.blob-2 { bottom: -100px; right: -100px; background: var(--success); }
+
+
+.form-header h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--dark);
+    margin-bottom: 5px;
+}
+
+.form-header p {
+    color: var(--gray);
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-group-modern {
+    margin-bottom: 20px;
+}
+
+.input-group-modern label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: var(--gray);
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 14px 15px 14px 45px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    transition: all 0.3s;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    outline: none;
+}
+
+/* --- BOTÓN DE INGRESO AZUL SAAS --- */
+.btn-login-submit {
+    width: 100%;
+    background: var(--primary); /* Azul inicial */
+    color: white !important;
+    padding: 14px; /* Un poco más compacto */
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.btn-login-submit:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(79, 70, 229, 0.3);
+}
+
+/* Efecto al hacer clic */
+.btn-login-submit:active {
+    transform: translateY(0);
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: #64748b; /* Un gris más oscuro para que se vea el icono */
+    font-size: 16px;
+}
+
+.input-wrapper input::placeholder {
+    color: #94a3b8;
+    opacity: 1;
+}
+
+
+.form-footer {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.form-footer a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+
+/* --- CONTENEDOR DE LOGO (PROPORCIÓN 100% PROTEGIDA) --- */
+.logo-container-pro {
+    width: fit-content;
+    height: 50px; /* Altura controlada para el header del login */
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+
+/* --- AJUSTE ESTRICTO PARA MÓVILES --- */
+@media (max-width: 1024px) {
+    
+    .form-header h3 { font-size: 18px; margin-bottom: 5px; }
+    .form-header p { margin-bottom: 20px; font-size: 13px; }
+    
+    .input-group-modern { margin-bottom: 15px; }
+    .input-wrapper input { padding: 12px 12px 12px 40px; }
+    
+    .form-footer { margin-top: 15px; }
+}
+
+
+.logo-wrapper {
+    height: 45px; /* Altura fija para el logo */
+    margin-bottom: 30px;
+}
+
+
+

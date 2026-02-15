@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro de Soporte | Tienderu</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+:root{
+--primary:#f59e0b;
+--dark:#0f172a;
+--bg:#f1f5f9;
+--white:#fff;
+--border:rgba(0,0,0,0.08);
+--text-dim:#64748b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
+body{background:var(--bg);color:var(--dark);}
+
+/* NAV */
+.navbar{
+position:fixed;
+width:100%;
+top:0;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:16px 6%;
+background:rgba(255,255,255,.8);
+backdrop-filter:blur(18px);
+border-bottom:1px solid var(--border);
+z-index:999;
+}
+
+.logo-wrap img{height:32px}
+
+/* HERO */
+.hero{
+padding:120px 6% 40px;
+max-width:1200px;
+margin:auto;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+align-items:center;
+}
+
+.hero h1{
+font-size:44px;
+font-weight:800;
+line-height:1.1;
+letter-spacing:-1px;
+}
+
+.hero h1 span{color:var(--primary)}
+
+.hero p{
+margin-top:14px;
+color:var(--text-dim);
+font-size:15px;
+max-width:520px;
+}
+
+.hero-cards{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.card{
+background:white;
+border-radius:18px;
+padding:20px;
+border:1px solid var(--border);
+box-shadow:0 10px 30px rgba(0,0,0,.04);
+}
+
+.card i{color:var(--primary);font-size:18px;margin-bottom:8px}
+.card h4{font-size:14px;margin-bottom:4px}
+.card p{font-size:12px;color:var(--text-dim);line-height:1.4}
+
+/* MAIN GRID */
+.main-wrap{
+max-width:1200px;
+margin:0 auto 60px;
+padding:0 6%;
+display:grid;
+grid-template-columns:380px 1fr;
+gap:25px;
+}
+
+/* INFO PANEL */
+.support-info{
+background:white;
+border-radius:26px;
+padding:28px;
+border:1px solid var(--border);
+display:flex;
+flex-direction:column;
+gap:22px;
+}
+
+.support-block{
+display:flex;
+gap:14px;
+}
+
+.support-block i{
+background:#fff7ed;
+color:var(--primary);
+width:42px;
+height:42px;
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.support-block h5{font-size:14px;margin-bottom:4px}
+.support-block p{font-size:12px;color:var(--text-dim);line-height:1.4}
+
+/* CHAT */
+.chat-experience{
+background:white;
+border-radius:30px;
+overflow:hidden;
+border:1px solid var(--border);
+box-shadow:0 40px 100px rgba(0,0,0,.05);
+height:680px;
+display:flex;
+flex-direction:column;
+}
+
+.chat-header{
+padding:16px 22px;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.status-dot{
+width:8px;height:8px;background:#10b981;border-radius:50%;
+}
+
+.chat-messages{
+flex:1;
+overflow-y:auto;
+padding:25px;
+display:flex;
+flex-direction:column;
+gap:14px;
+background:#f8fafc;
+}
+
+.msg{
+max-width:80%;
+padding:12px 16px;
+border-radius:18px;
+font-size:14px;
+white-space:pre-wrap;
+line-height:1.5;
+}
+
+.msg.ai{background:#0f172a;color:white;align-self:flex-start;border-bottom-left-radius:4px}
+.msg.user{background:var(--primary);color:white;align-self:flex-end;border-bottom-right-radius:4px}
+
+.chat-input-area{
+flex-shrink:0;
+display:flex;
+gap:12px;
+padding:18px;
+border-top:1px solid var(--border);
+}
+
+.chat-input-area input{
+flex:1;
+padding:14px;
+border-radius:12px;
+border:1px solid var(--border);
+background:#f1f5f9;
+outline:none;
+}
+
+.btn-send{
+width:48px;height:48px;border:none;border-radius:12px;background:var(--primary);color:white;cursor:pointer;
+}
+
+.typing{
+font-size:11px;
+padding:0 22px 10px;
+display:none;
+color:var(--text-dim);
+}
+
+/* RESPONSIVE */
+@media(max-width:950px){
+.hero{grid-template-columns:1fr}
+.main-wrap{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+<div class="logo-wrap">
+<img src="https://tienderu.com/uploads/logo.png">
+</div>
+<div style="font-size:10px;font-weight:800;color:var(--text-dim);">CENTRO DE SOPORTE TIENDERU</div>
+</nav>
+
+<section class="hero">
+<div>
+<h1>Soporte inteligente para <span>Tienderu POS & IA</span></h1>
+<p>Obtén ayuda inmediata sobre ventas, impresoras, bots de WhatsApp, campañas masivas, configuración del sistema POS y automatizaciones avanzadas con inteligencia artificial.</p>
+</div>
+
+<div class="hero-cards">
+<div class="card"><i class="fa-solid fa-robot"></i><h4>Asistencia IA</h4><p>Respuestas técnicas guiadas por flujos inteligentes n8n.</p></div>
+<div class="card"><i class="fa-solid fa-store"></i><h4>Soporte POS</h4><p>Ventas, inventario, impresión, usuarios y configuración.</p></div>
+<div class="card"><i class="fa-solid fa-message"></i><h4>WhatsApp Bot</h4><p>Automatización de pedidos y atención con IA.</p></div>
+<div class="card"><i class="fa-solid fa-bullhorn"></i><h4>Campañas</h4><p>Envíos masivos optimizados cada 30 segundos.</p></div>
+</div>
+</section>
+
+<section class="main-wrap">
+
+<div class="support-info">
+
+<div class="support-block">
+<i class="fa-solid fa-screwdriver-wrench"></i>
+<div>
+<h5>Configuración técnica</h5>
+<p>Te ayudamos con instalación inicial, conexión de dispositivos y optimización del sistema.</p>
+</div>
+</div>
+
+<div class="support-block">
+<i class="fa-solid fa-brain"></i>
+<div>
+<h5>Automatización con IA</h5>
+<p>Implementación de asistentes inteligentes conectados a tus procesos comerciales.</p>
+</div>
+</div>
+
+<div class="support-block">
+<i class="fa-solid fa-chart-line"></i>
+<div>
+<h5>Optimización comercial</h5>
+<p>Mejora la velocidad de ventas, campañas y conversión mediante herramientas Tienderu.</p>
+</div>
+</div>
+
+<div class="support-block">
+<i class="fa-solid fa-headset"></i>
+<div>
+<h5>Soporte especializado</h5>
+<p>Nuestro equipo analiza cada caso técnico antes de escalar a soporte avanzado.</p>
+</div>
+</div>
+
+</div>
+
+<div class="chat-experience">
+
+<div class="chat-header">
+<div class="status-dot"></div>
+<div>
+<p style="font-weight:800;font-size:13px;">Asistente n8n / Tienderu</p>
+<p style="font-size:10px;color:var(--text-dim);">En línea</p>
+</div>
+</div>
+
+<div class="chat-messages" id="chat-box">
+<div class="msg ai">Bienvenido al soporte Tienderu. ¿Qué necesitas configurar hoy?</div>
+</div>
+
+<div class="typing" id="typing">Procesando en n8tienderu.com...</div>
+
+<div class="chat-input-area">
+<input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+<button class="btn-send" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+</div>
+
+</div>
+
+</section>
+
+<div id="footer-placeholder"></div>
+    <script>
+        // Función para cargar el footer externo
+        async function loadFooter() {
+            const placeholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('footer.html');
+                if (response.ok) {
+                    const content = await response.text();
+                    placeholder.innerHTML = content;
+                } else {
+                    console.error('Error al cargar el footer:', response.statusText);
+                    // Fallback en caso de error: mostrar el enlace del producto como respaldo
+                    placeholder.innerHTML = '<footer style="text-align:center; padding:40px;"><a href="https://tienderu.com/bots-operativos" style="color:#00d2ff; text-decoration:none;">tienderu.com/bots-operativos</a></footer>';
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        }
+    
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', loadFooter);
+    </script>
+
+<script>
+
+const webhookUrl='https://n8.tienderu.com/webhook/nuevo';
+const chatBox=document.getElementById('chat-box');
+const userInput=document.getElementById('user-input');
+const typing=document.getElementById('typing');
+
+let currentInstance=localStorage.getItem("instance");
+if(!currentInstance){
+currentInstance='tr_'+Math.random().toString(36).substr(2,9)+'_'+Date.now();
+localStorage.setItem("instance",currentInstance);
+}
+
+async function sendMessage(){
+
+const message=userInput.value.trim();
+if(!message)return;
+
+appendMessage(message,'user');
+userInput.value='';
+
+typing.style.display='block';
+
+try{
+
+const response=await fetch(webhookUrl,{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({
+message:message,
+timestamp:new Date().toISOString(),
+source:'soporte_web_tienderu',
+instance:currentInstance
+})
+});
+
+if(response.ok){
+const data=await response.json();
+const aiText=data.output ?? "Respuesta recibida.";
+appendMessage(aiText,'ai');
+}else{
+appendMessage("Servidor ocupado, intenta nuevamente.",'ai');
+}
+
+}catch(e){
+appendMessage("Error de conexión con n8n.",'ai');
+}
+
+typing.style.display='none';
+}
+
+function appendMessage(text,role){
+const div=document.createElement('div');
+div.className=`msg ${role}`;
+div.textContent=text;
+chatBox.appendChild(div);
+requestAnimationFrame(()=>{
+chatBox.scrollTop=chatBox.scrollHeight;
+});
+}
+
+userInput.addEventListener("keypress",e=>{
+if(e.key==="Enter")sendMessage();
+});
+
+</script>
+
+</body>
+</html>

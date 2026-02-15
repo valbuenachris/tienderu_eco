@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas IA | Consultoría Técnica Tienderu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/style.css">
+
+    <style>
+        :root {
+            --primary: #6d28d9;
+            --primary-light: #8b5cf6;
+            --dark: #0f172a;
+            --slate: #475569;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --border: rgba(0, 0, 0, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--white); color: var(--dark); line-height: 1.6; }
+
+        /* AJUSTE NAVBAR DINÁMICO */
+        #navbar-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        /* Proporcionalidad del logo mantenida [cite: 2026-01-25] */
+        .logo {
+            height: 40px !important;
+            width: auto !important;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 120px 6% 60px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white; text-align: center;
+        }
+        .hero h1 { font-size: clamp(32px, 5vw, 52px); font-weight: 800; letter-spacing: -2px; margin-bottom: 15px; }
+        .hero h1 span { color: var(--primary-light); }
+        .hero p { font-size: 18px; max-width: 750px; margin: 0 auto 30px; color: #94a3b8; }
+
+        /* SECCIÓN EQUIPO DE ÉLITE */
+        .experts-wrap { 
+            background: #f1f5f9; 
+            padding: 80px 6%; 
+            border-radius: 60px; 
+            margin: 0 2% 40px;
+        }
+        .experts-header { text-align: center; max-width: 800px; margin: 0 auto 50px; }
+        .experts-header h2 { font-size: 36px; font-weight: 800; margin-bottom: 15px; letter-spacing: -1.5px; }
+        .experts-header h2 span { color: var(--primary); }
+
+        .expert-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .expert-item { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 24px; 
+            display: flex; 
+            gap: 20px;
+            border: 1px solid rgba(0,0,0,0.03);
+            transition: 0.3s;
+        }
+        .expert-item:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+        .expert-icon { 
+            width: 50px; height: 50px; background: #f5f3ff; color: var(--primary); 
+            border-radius: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            font-size: 20px;
+        }
+        .expert-info h4 { font-size: 16px; font-weight: 800; margin-bottom: 5px; color: var(--dark); }
+        .expert-info p { font-size: 13px; color: var(--slate); line-height: 1.5; }
+
+        /* BANNER FINAL */
+        .docs-banner { 
+            background: var(--dark); color: white; padding: 40px 6%; 
+            text-align: center; border-radius: 30px; margin: 0 2% 60px;
+        }
+        .docs-tags { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+        .tag { background: rgba(255,255,255,0.1); padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+
+        @media (max-width: 900px) { .expert-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="hero">
+        <h1>Inteligencia <span>Financiera Aplicada</span></h1>
+        <p>Garantizamos que su ejercicio comercial cumpla con cada estándar legal y tributario mediante asesoría de alto nivel.</p>
+    </header>
+
+    <section class="experts-wrap">
+        <div class="experts-header">
+            <h2>Un equipo de <span>Élite</span> a su disposición</h2>
+            <p style="color: var(--slate);">Contamos con especialistas en cada rama del derecho comercial y la economía para respaldar su negocio.</p>
+        </div>
+
+        <div class="expert-grid">
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-balance-scale"></i></div>
+                <div class="expert-info">
+                    <h4>Contadores Especialistas</h4>
+                    <p>Expertos en normatividad DIAN, presentación de renta y conciliación fiscal permanente.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="expert-info">
+                    <h4>Economistas & Financieros</h4>
+                    <p>Analistas de riesgo y estrategas en optimización de flujo de caja y rentabilidad comercial.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-gavel"></i></div>
+                <div class="expert-info">
+                    <h4>Asesores Jurídico-Tributarios</h4>
+                    <p>Expertos legales encargados de la defensa y cumplimiento normativo ante entes reguladores.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-search-dollar"></i></div>
+                <div class="expert-info">
+                    <h4>Auditores Externos</h4>
+                    <p>Revisores fiscales dedicados a la transparencia de sus estados financieros y libros oficiales.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-file-signature"></i></div>
+                <div class="expert-info">
+                    <h4>Especialistas en Exógena</h4>
+                    <p>Equipo dedicado exclusivamente al reporte y cruce de información de medios magnéticos.</p>
+                </div>
+            </div>
+
+            <div class="expert-item">
+                <div class="expert-icon"><i class="fas fa-calculator"></i></div>
+                <div class="expert-info">
+                    <h4>Consultores NIIF</h4>
+                    <p>Implementación y reporte bajo Estándares Internacionales de Información Financiera.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="docs-banner">
+        <h3>Soporte Documental Integral</h3>
+        <div class="docs-tags">
+            <span class="tag">Estados de Resultados</span>
+            <span class="tag">Balances Generales</span>
+            <span class="tag">Declaraciones DIAN</span>
+            <span class="tag">Certificaciones Contables</span>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function loadComponents() {
+            // 1. Cargar Navbar (coordinado con script.js)
+            const checkNavbar = setInterval(() => {
+                if (typeof loadNavbar === 'function') {
+                    loadNavbar();
+                    clearInterval(checkNavbar);
+                }
+            }, 100);
+
+            // 2. Cargar Footer
+            const placeholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('/footer.html');
+                if (response.ok) {
+                    const content = await response.text();
+                    placeholder.innerHTML = content;
+                    
+                    // Inyección de la URL del producto según requerimiento [cite: 2025-11-10]
+                    const display = document.getElementById('footer-url-display');
+                    if(display) {
+                        display.textContent = "tienderu.com/services/finance-ia";
+                    }
+                }
+            } catch (error) {
+                console.error('Error cargando footer:', error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

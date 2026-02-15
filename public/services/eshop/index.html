@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-Shop Pro | Tienderu Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/style.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #f43f5e;
+            --bg-deep: #020617;
+            --bg-glass: rgba(15, 23, 42, 0.6);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-deep); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+        /* AJUSTE NAVBAR DINÁMICO */
+        #navbar-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        /* El logo no puede perder la proporcionalidad [cite: 2026-01-25] */
+        .logo {
+            height: 40px !important;
+            width: auto !important;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* HERO */
+        .hero-shop {
+            padding: 180px 6% 100px; text-align: center;
+            background: radial-gradient(circle at 50% -20%, rgba(244, 63, 94, 0.15) 0%, transparent 50%);
+        }
+        .shop-badge {
+            background: rgba(244, 63, 94, 0.1); color: var(--secondary);
+            padding: 8px 20px; border-radius: 100px; font-size: 12px; font-weight: 800;
+            border: 1px solid rgba(244, 63, 94, 0.2); display: inline-block; margin-bottom: 25px;
+        }
+        .hero-shop h1 { font-size: clamp(40px, 8vw, 80px); font-weight: 800; letter-spacing: -4px; line-height: 0.9; margin-bottom: 30px; }
+        .hero-shop h1 span { color: var(--secondary); }
+        .hero-shop p { font-size: 20px; color: var(--text-dim); max-width: 700px; margin: 0 auto 50px; }
+
+        /* GRID DE PRODUCTOS (3 Columnas) */
+        .showcase-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 30px; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .product-card {
+            background: var(--bg-glass); border: 1px solid var(--border);
+            border-radius: 30px; padding: 25px; transition: 0.4s; text-align: left;
+        }
+        .product-card:hover { transform: translateY(-10px); border-color: var(--secondary); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .product-card img { width: 100%; border-radius: 20px; margin-bottom: 20px; aspect-ratio: 1/1; object-fit: cover; }
+        .product-card h3 { font-size: 18px; margin-bottom: 8px; font-weight: 700; }
+        .product-card .desc { font-size: 13px; color: var(--text-dim); margin-bottom: 15px; line-height: 1.4; }
+        .price-tag { color: var(--secondary); font-weight: 800; font-size: 20px; }
+
+        /* SECCIÓN CARACTERÍSTICAS */
+        .features-glass { padding: 100px 6%; background: white; color: var(--bg-deep); border-radius: 60px 60px 0 0; }
+        .features-header { text-align: center; margin-bottom: 60px; }
+        .features-header h2 { font-size: 45px; font-weight: 800; letter-spacing: -2px; }
+        .glass-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1250px; margin: 0 auto; }
+        .glass-item { background: #f8fafc; padding: 45px 35px; border-radius: 35px; border: 1px solid rgba(0,0,0,0.05); }
+        .glass-item i { font-size: 28px; color: var(--secondary); margin-bottom: 25px; display: block; }
+
+        /* CTA */
+        .shop-cta { padding: 100px 6%; text-align: center; background: var(--bg-deep); }
+        .btn-premium { background: var(--secondary); color: white; padding: 22px 55px; border-radius: 20px; font-weight: 800; font-size: 18px; text-decoration: none; display: inline-block; transition: 0.3s; }
+
+        @media (max-width: 1000px) { .showcase-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .showcase-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <header class="hero-shop">
+        <div class="shop-badge"><i class="fas fa-bolt"></i> INFRAESTRUCTURA NEXT-GEN</div>
+        <h1>Vende sin <span>Límites</span> con e-Shop Pro</h1>
+        <p>No solo es una tienda online, es una máquina de conversión optimizada con sincronización nativa en la nube.</p>
+        
+        <div class="showcase-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?q=80&w=400" alt="Gafas">
+                <h3>Horizon Vision</h3>
+                <p class="desc">Lentes de alta resistencia con protección UV400 y diseño ergonómico.</p>
+                <p class="price-tag">$145.00</p>
+            </div>
+            <div class="product-card" style="border-color: var(--secondary);">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400" alt="Headphones">
+                <h3>Studio Pro ANC</h3>
+                <p class="desc">Cancelación de ruido activa y sonido de alta fidelidad para profesionales.</p>
+                <p class="price-tag">$189.00</p>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=400" alt="Instax">
+                <h3>Instax Mini Series</h3>
+                <p class="desc">Captura momentos al instante con la mejor tecnología de revelado físico.</p>
+                <p class="price-tag">$120.00</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="features-glass">
+        <div class="features-header">
+            <h2>Tecnología que impulsa Ventas</h2>
+            <p style="color: #64748b;">Tu tienda estará equipada con las herramientas de los gigantes del retail.</p>
+        </div>
+        <div class="glass-grid">
+            <div class="glass-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <h3>Core Web Vitals</h3>
+                <p>Puntuación máxima en velocidad de carga. Google amará tu tienda y tus clientes también.</p>
+            </div>
+            <div class="glass-item">
+                <i class="fas fa-credit-card"></i>
+                <h3>Checkout Seguro</h3>
+                <p>Integración con Stripe, PayPal y MercadoPago. Procesamiento de pagos encriptado.</p>
+            </div>
+            <div class="glass-item">
+                <i class="fas fa-boxes"></i>
+                <h3>Stock Omnicanal</h3>
+                <p>Si vendes en la tienda física, tu e-Shop se actualiza en milisegundos. Sin errores de inventario.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="shop-cta">
+        <h2 style="font-size: clamp(30px, 5vw, 50px); font-weight: 800; margin-bottom: 25px;">¿Listo para el <span>Siguiente Nivel?</span></h2>
+        <a href="https://wa.me/573104039092" class="btn-premium">LANZAR MI TIENDA AHORA</a>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function loadComponents() {
+            // 1. Cargar Navbar (desde script.js)
+            const checkNavbar = setInterval(() => {
+                if (typeof loadNavbar === 'function') {
+                    loadNavbar();
+                    clearInterval(checkNavbar);
+                }
+            }, 100);
+
+            // 2. Cargar Footer
+            const footerPlaceholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('/footer.html');
+                if (response.ok) {
+                    const content = await response.text();
+                    footerPlaceholder.innerHTML = content;
+                    
+                    const display = document.getElementById('footer-url-display');
+                    if(display) {
+                        /* Inclusión de la URL del producto [cite: 2025-11-10] */
+                        display.textContent = "tienderu.com/services/eshop-pro";
+                    }
+                }
+            } catch (error) { console.error('Error cargando footer:', error); }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>

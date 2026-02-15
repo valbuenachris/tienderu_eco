@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Finalizar Pago | Tienderu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/uploads/ico.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            background: #0f172a; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+        }
+        .checkout-card { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 32px; 
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); 
+            text-align: center; 
+            max-width: 420px; 
+            width: 92%; 
+        }
+        /* Mantener proporcionalidad del logo según instrucciones */
+        .logo-checkout { 
+            width: 160px; 
+            height: auto; 
+            margin-bottom: 24px; 
+            object-fit: contain; 
+        }
+        .plan-tag { 
+            background: #6366f1; 
+            color: white; 
+            padding: 6px 16px; 
+            border-radius: 100px; 
+            font-size: 11px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+        .price { 
+            font-size: 42px; 
+            font-weight: 800; 
+            margin: 20px 0; 
+            color: #1e293b; 
+            letter-spacing: -1px; 
+        }
+        .price span { font-size: 18px; color: #94a3b8; font-weight: 400; }
+        
+        /* Contenedor principal centrado */
+        #contenedor-bold { 
+            margin: 30px 0; 
+            min-height: 120px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Contenedor específico del botón para forzar centrado del iframe de Bold */
+        #btn-bold-target {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .footer-info { 
+            font-size: 11px; 
+            color: #94a3b8; 
+            border-top: 1px solid #f1f5f9; 
+            padding-top: 20px; 
+            margin-top: 10px; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="checkout-card">
+        <img src="/uploads/logo.png" class="logo-checkout" alt="Tienderu Logo">
+        <br>
+        <span class="plan-tag" id="plan-nombre">VERIFICANDO...</span>
+        <div class="price" id="plan-price">$0 <span>COP</span></div>
+        
+        <div id="contenedor-bold">
+            </div>
+
+        <div class="footer-info">
+            Pago procesado de forma segura por <strong>Bold.co</strong>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            const params = new URLSearchParams(window.location.search);
+            const planRaw = params.get('plan') || ''; 
+            const monto = (params.get('monto') || "0").replace(/\D/g, '');
+            
+            let tituloDisplay = "";
+            let descripcionBold = "";
+            let emailForced = "";
+            let idTienda = "";
+            let metadataReferencia = ""; // Aquí armaremos el string para n8n
+    
+            // --- LÓGICA DE DIFERENCIACIÓN (Recarga vs POS) ---
+            if (planRaw.startsWith('recarga_')) {
+                // Formato de entrada: recarga_USERNAME_CANTIDAD_TIPO
+                const partes = planRaw.split('_');
+                idTienda = partes[1] || 'anonimo';
+                const cantidad = partes[2] || '0';
+                const tipo = partes[3] || 'servicio';
+    
+                tituloDisplay = "RECARGA DE CRÉDITOS";
+                descripcionBold = `Recarga ${cantidad} ${tipo} - Usuario: ${idTienda}`;
+                emailForced = idTienda + "@tienderu.com"; 
+                
+                // REFERENCIA PARA n8n: usuario_cantidad_tipo_random
+                metadataReferencia = `${idTienda}_${cantidad}_${tipo}`;
+                
+            } else {
+                // 1. Extraemos el ID de la tienda de forma segura
+                // Si contiene '_', tomamos lo que sigue al guion; si no, lo tomamos directo.
+                let idTiendaRaw = planRaw.includes('_') ? planRaw.split('_')[1] : planRaw;
+                let idTiendaFinal = idTiendaRaw.replace(/[^a-z0-9]/gi, '').toUpperCase();
+                
+                // 2. Capturamos el plan comercial (ref)
+                const urlParams = new URLSearchParams(window.location.search);
+                const planNombre = (urlParams.get('ref') || 'enterprise').toUpperCase();
+                
+                // 3. Obtenemos el mes actual en mayúsculas
+                const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+                const mesNombre = meses[new Date().getMonth()].toUpperCase();
+                
+                // --- CONSTRUCCIÓN FINAL SIN REPETICIONES ---
+                // El formato será exactamente: PLAN - MES - TIENDA
+                tituloDisplay = `${planNombre} - ${mesNombre} - ${idTiendaFinal}`;
+                descripcionBold = tituloDisplay;
+                
+                emailForced = idTiendaFinal.toLowerCase() + "@tienderu.com";
+
+                // Referencia limpia para n8n (puedes dejar el guion bajo aquí para tu base de datos)
+                metadataReferencia = `${idTiendaFinal.toLowerCase()}_${planNombre.toLowerCase()}`;
+            }
+
+            // 1. Configuración Técnica y Firma de Integridad
+            const currency = 'COP';
+            // Agregamos un timestamp corto al final para que la orden sea única
+            const ordenId = `${metadataReferencia}_${Date.now().toString().slice(-5)}`;
+            
+            const sKey = '8VcqnycBbCXIMmB6t9YN0A'; 
+            const hash = CryptoJS.SHA256(ordenId + monto + currency + sKey).toString();
+    
+            // 2. Actualizar Interfaz Visual
+            document.getElementById('plan-nombre').innerText = tituloDisplay + (idTienda ? " - " + idTienda.toUpperCase() : "");
+            document.getElementById('plan-price').innerHTML = "$" + Number(monto).toLocaleString() + " <span>COP</span>";
+    
+            // 3. Inyectar HTML de Identidad y Contenedor del Botón (Centrados)
+            const contenedor = document.getElementById('contenedor-bold');
+            contenedor.innerHTML = `
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:12px; border-radius:16px; margin-bottom:20px; text-align:center; width: 100%; max-width: 300px; display: inline-block;">
+                    <span style="display:block; font-size:10px; color:#64748b; text-transform:uppercase; font-weight:bold; letter-spacing:0.5px; margin-bottom:4px;">Recibo enviado a:</span>
+                    <span style="font-size:13px; color:#1e293b; font-weight:bold;">${emailForced}</span>
+                </div>
+                <div id="btn-bold-target" style="width: 100%; display: flex; justify-content: center;"></div>
+            `;
+    
+            // 4. Inyección Dinámica del SDK de Bold
+            const scriptBold = document.createElement('script');
+            scriptBold.src = "https://checkout.bold.co/library/boldPaymentButton.js";
+            scriptBold.setAttribute('data-bold-button', 'dark-L');
+            scriptBold.setAttribute('data-api-key', '-nkKoQGEDYzGLg_czhU4V5WYCwkB8TsHSmmBWQYGJb0');
+            scriptBold.setAttribute('data-merchant-id', 'S0QV4V8092');
+            scriptBold.setAttribute('data-order-id', ordenId); // Esto es lo que n8n recibirá como 'reference'
+            scriptBold.setAttribute('data-currency', currency);
+            scriptBold.setAttribute('data-amount', monto);
+            scriptBold.setAttribute('data-integrity-signature', hash);
+            scriptBold.setAttribute('data-customer-email', emailForced);
+            scriptBold.setAttribute('data-description', descripcionBold);
+            scriptBold.setAttribute('data-render-mode', 'embedded');
+            scriptBold.setAttribute('data-redirection-url', 'https://tienderu.com/ecosistema.html?pago=exitoso');
+    
+            document.getElementById('btn-bold-target').appendChild(scriptBold);
+        });
+    </script>
+
+</body>
+</html>

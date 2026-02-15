@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campañas Masivas | Tienderu Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="/style.css">
+    
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.2);
+            --bg-deep: #020617;
+            --bg-panel: #0f172a;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #6366f1;
+            --border: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg-deep); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
+        /* AJUSTE NAVBAR DINÁMICO */
+        #navbar-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 2000;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        /* Proporcionalidad del Logo [cite: 2026-01-25] */
+        .logo {
+            height: 40px !important;
+            width: auto !important;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* HERO COMANDO */
+        .hero-command {
+            padding: 160px 6% 80px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+            align-items: center; max-width: 1300px; margin: 0 auto;
+        }
+        .badge-live {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(16, 185, 129, 0.1); color: var(--primary);
+            padding: 6px 16px; border-radius: 100px; font-size: 11px; font-weight: 800;
+            margin-bottom: 25px; border: 1px solid var(--primary-glow);
+        }
+        .badge-live span { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; }
+
+        .hero-command h1 { font-size: clamp(38px, 5vw, 65px); font-weight: 800; line-height: 1; letter-spacing: -3px; margin-bottom: 25px; }
+        .hero-command h1 span { color: var(--primary); }
+        .hero-command p { font-size: 18px; color: var(--text-dim); margin-bottom: 35px; max-width: 500px; }
+
+        /* PANEL DE MÉTRICAS */
+        .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .metric-card {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            padding: 25px; border-radius: 24px; transition: 0.3s;
+        }
+        .metric-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .metric-card h2 { font-size: 36px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+        .metric-card p { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px; }
+
+        /* SECCIÓN DIFUSIÓN */
+        .diffusion-white {
+            background: #f8fafc; color: var(--bg-deep);
+            padding: 100px 6%; border-radius: 60px 60px 0 0; margin-top: 50px;
+        }
+        .section-header { text-align: center; margin-bottom: 70px; }
+        .section-header h2 { font-size: clamp(30px, 4vw, 45px); font-weight: 800; letter-spacing: -2px; }
+
+        .tech-layout {
+            display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px;
+            max-width: 1200px; margin: 0 auto; align-items: center;
+        }
+        .feature-box {
+            display: flex; gap: 20px; padding: 30px; border-radius: 25px;
+            background: white; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 20px; transition: 0.3s;
+        }
+        .feature-box:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.04); transform: scale(1.02); }
+        .feat-icon {
+            width: 55px; height: 55px; background: #ecfdf5; color: var(--primary);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+        }
+        .feat-info h3 { font-size: 19px; margin-bottom: 8px; font-weight: 800; }
+        .feat-info p { font-size: 14px; color: #64748b; line-height: 1.5; }
+
+        .video-container {
+            border-radius: 40px; overflow: hidden;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.3); border: 1px solid rgba(0,0,0,0.1);
+        }
+        .video-container img { width: 100%; display: block; }
+
+        /* CTA */
+        .cta-masivo { padding: 100px 6%; text-align: center; background: var(--bg-deep); }
+        .btn-launch {
+            background: var(--primary); color: white; padding: 22px 55px;
+            border-radius: 20px; font-weight: 800; font-size: 18px;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 12px;
+            transition: 0.3s; box-shadow: 0 20px 40px var(--primary-glow);
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
+
+        @media (max-width: 1000px) {
+            .hero-command, .tech-layout { grid-template-columns: 1fr; }
+            .hero-command { text-align: center; padding-top: 120px; }
+            .hero-command p { margin: 20px auto 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="navbar-placeholder"></div>
+
+    <section class="hero-command">
+        <div class="hero-text">
+            <div class="badge-live"><span></span> SISTEMA DE DIFUSIÓN ACTIVO</div>
+            <h1>Escala tu voz con <span>Envíos Masivos</span></h1>
+            <p>La tecnología de entrega más potente del ecosistema. Alcanza a toda tu audiencia con un solo clic y monitorea el éxito en tiempo real.</p>
+            <a href="https://wa.me/TU_NUMERO" class="btn-launch"><i class="fas fa-paper-plane"></i> INICIAR CAMPAÑA</a>
+        </div>
+        <div class="metrics-grid">
+            <div class="metric-card"><h2>98%</h2><p>Tasa de Entrega</p></div>
+            <div class="metric-card"><h2>30s</h2><p>Delay Humano</p></div>
+            <div class="metric-card"><h2>+10k</h2><p>Capacidad Diaria</p></div>
+            <div class="metric-card"><h2>Real</h2><p>Analítica Live</p></div>
+        </div>
+    </section>
+
+    <section class="diffusion-white">
+        <div class="section-header">
+            <h2>Diseñado para el Crecimiento</h2>
+            <p style="color: #64748b;">Olvídate de las restricciones. Nuestra tecnología se adapta a tu ritmo.</p>
+        </div>
+        
+        <div class="tech-layout">
+            <div class="features-list">
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feat-info">
+                        <h3>Smart Anti-Ban</h3>
+                        <p>Rotación de mensajes y pausas aleatorias que protegen tu cuenta de bloqueos comerciales.</p>
+                    </div>
+                </div>
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fas fa-table"></i></div>
+                    <div class="feat-info">
+                        <h3>Importador Excel</h3>
+                        <p>Sube bases de datos masivas sin límites. Mapeo automático de columnas en segundos.</p>
+                    </div>
+                </div>
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fas fa-chart-line"></i></div>
+                    <div class="feat-info">
+                        <h3>Reportes de Conversión</h3>
+                        <p>Visualiza quién leyó, quién falló y quién respondió para optimizar tu próximo envío.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="video-container">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000" alt="Dashboard Tienderu">
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-masivo">
+        <h2 style="font-size: 38px; font-weight: 800; margin-bottom: 20px;">¿Tienes una oferta que el mundo debe ver?</h2>
+        <a href="https://wa.me/TU_NUMERO" class="btn-launch">OBTENER ACCESO VIP</a>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        async function loadComponents() {
+            // 1. Cargar Navbar (desde script.js)
+            const checkNavbar = setInterval(() => {
+                if (typeof loadNavbar === 'function') {
+                    loadNavbar();
+                    clearInterval(checkNavbar);
+                }
+            }, 100);
+
+            // 2. Cargar Footer
+            const footerPlaceholder = document.getElementById('footer-placeholder');
+            try {
+                const response = await fetch('/footer.html');
+                if (response.ok) {
+                    const content = await response.text();
+                    footerPlaceholder.innerHTML = content;
+                    
+                    const display = document.getElementById('footer-url-display');
+                    if(display) {
+                        /* Inclusión de la URL del producto [cite: 2025-11-10] */
+                        display.textContent = "tienderu.com/services/campanas-masivas";
+                    }
+                }
+            } catch (error) { console.error('Error cargando footer:', error); }
+        }
+        document.addEventListener('DOMContentLoaded', loadComponents);
+    </script>
+    <script src="/script.js"></script>
+</body>
+</html>
