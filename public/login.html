@@ -13,12 +13,12 @@
         body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--dark); overflow-x: hidden; padding: 20px; }
 
         .login-container { width: 100%; max-width: 900px; z-index: 10; }
-        .login-card { background: white; display: grid; grid-template-columns: 40% 60%; border-radius: 24px; overflow: hidden; min-height: 550px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .login-card { background: white; display: grid; grid-template-columns: 40% 60%; border-radius: 24px; overflow: hidden; min-height: 600px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
 
         /* Panel Izquierdo */
         .login-branding { background: #1e293b; padding: 40px; color: white; display: flex; flex-direction: column; justify-content: center; }
         .logo-wrapper { height: 45px; margin-bottom: 20px; }
-        .login-logo-saas { height: 100%; width: auto !important; object-fit: contain; } /* [cite: 2026-01-25] */
+        .login-logo-saas { height: 100% !important; width: auto !important; object-fit: contain !important; }
 
         /* Panel Derecho */
         .login-form-side { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
@@ -31,16 +31,13 @@
         .full-w { grid-column: span 2; }
         .input-group { margin-bottom: 15px; position: relative; }
         .input-group label { display: block; font-size: 11px; font-weight: 800; margin-bottom: 5px; color: var(--dark); text-transform: uppercase; }
-        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; outline: none; background: #fff; }
         .input-group input:focus { border-color: var(--primary); }
 
-        .btn-auth { width: 100%; background: var(--primary); color: white; padding: 14px; border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-auth { width: 100%; background: var(--primary); color: white; padding: 16px; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; margin-top: 10px; transition: 0.3s; }
         .btn-auth:hover { background: #4338ca; transform: translateY(-2px); }
 
-        /* Estilo para el botón de regreso */
-        .btn-back { display: block; text-align: center; margin-top: 20px; color: var(--gray); text-decoration: none; font-size: 12px; font-weight: 700; transition: 0.3s; }
-        .btn-back:hover { color: var(--primary); }
-
+        .btn-back { display: block; text-align: center; margin-top: 20px; color: var(--gray); text-decoration: none; font-size: 12px; font-weight: 700; }
         .hidden { display: none; }
 
         @media (max-width: 800px) {
@@ -63,18 +60,18 @@
 
             <div class="login-form-side">
                 <div class="tab-switcher">
-                    <button class="tab-btn active" onclick="switchTab('login')">INICIAR SESIÓN</button>
-                    <button class="tab-btn" onclick="switchTab('register')">CREAR CUENTA</button>
+                    <button id="btn-tab-login" class="tab-btn active" onclick="switchTab('login')">INICIAR SESIÓN</button>
+                    <button id="btn-tab-register" class="tab-btn" onclick="switchTab('register')">CREAR CUENTA</button>
                 </div>
 
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="input-group">
                         <label>Usuario</label>
-                        <input type="text" id="l-user" required>
+                        <input type="text" id="l-user" required placeholder="Tu correo o usuario">
                     </div>
                     <div class="input-group">
                         <label>Contraseña</label>
-                        <input type="password" id="l-pass" required>
+                        <input type="password" id="l-pass" required placeholder="••••••••">
                     </div>
                     <button type="submit" class="btn-auth">INGRESAR AL PANEL</button>
                     <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER AL INICIO</a>
@@ -84,14 +81,22 @@
                     <div class="form-grid">
                         <div class="input-group full-w">
                             <label>Plan Inicial</label>
-                            <select id="r-plan">
-                                <option value="0">Starter - $0 (Gratis)</option>
+                            <select id="r-plan" name="plan" required>
+                                <option value="">Selecciona tu plan...</option>
+                                <option value="0">Starter - Gratis</option>
                                 <option value="25000">Enterprise - $25.000</option>
                                 <option value="50000">Premium - $50.000</option>
                                 <option value="75000">Pro - $75.000</option>
                             </select>
                         </div>
-                        <div class="input-group full-w"><label>Nombre Empresa</label><input type="text" id="r-nombre" required></div>
+                
+                        <div class="input-group full-w">
+                            <label>Nombre Empresa</label>
+                            <input type="text" id="r-nombre" oninput="document.getElementById('r-slug').value = this.value.toLowerCase().replace(/[^a-z0-9]/g, '')" required placeholder="Nombre de tu negocio">
+                        </div>
+                
+                        <input type="hidden" id="r-slug" name="slug" value="">
+                
                         <div class="input-group"><label>WhatsApp</label><input type="text" id="r-tel" required></div>
                         <div class="input-group"><label>Ciudad</label><input type="text" id="r-ciu" required></div>
                         <div class="input-group full-w"><label>Usuario</label><input type="text" id="r-user" required></div>
@@ -100,66 +105,95 @@
                     <button type="submit" class="btn-auth">ACTIVAR MI ECOSISTEMA</button>
                     <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> VOLVER AL INICIO</a>
                 </form>
+
             </div>
         </div>
     </main>
 
     <script src="script.js"></script>
     <script>
-        // Cambiar entre Login y Registro
         function switchTab(type) {
             const isLogin = type === 'login';
             document.getElementById('loginForm').classList.toggle('hidden', !isLogin);
             document.getElementById('registerForm').classList.toggle('hidden', isLogin);
             
-            const btns = document.querySelectorAll('.tab-btn');
-            btns[0].classList.toggle('active', isLogin);
-            btns[1].classList.toggle('active', !isLogin);
+            document.getElementById('btn-tab-login').classList.toggle('active', isLogin);
+            document.getElementById('btn-tab-register').classList.toggle('active', !isLogin);
         }
-
-        // Detectar parámetros de URL (Planes y Masivos)
-        window.onload = () => {
-            const params = new URLSearchParams(window.location.search);
+    
+        // Cambiamos el nombre a handleRegister para que coincida con el Listener de app.js
+        // o simplemente dejamos que app.js lo maneje si ya tiene el Listener.
+        // Esta versión es la más segura:
+        async function preHandleRegister(e) {
+            e.preventDefault();
             
-            // 1. Forzar pestaña si se solicita registro
-            if (params.get('tab') === 'registro' || params.has('plan')) {
-                switchTab('register');
+            // Referencias a los campos
+            const fields = {
+                plan: document.getElementById('r-plan'),
+                nombre: document.getElementById('r-nombre'),
+                tel: document.getElementById('r-tel'),
+                user: document.getElementById('r-user'),
+                pass: document.getElementById('r-pass')
+            };
+    
+            // Validación estricta para evitar el error de "campos faltantes"
+            if (!fields.plan.value || !fields.nombre.value || !fields.tel.value || !fields.user.value || !fields.pass.value) {
+                Swal.fire('Atención', 'Todos los campos son obligatorios para activar tu ecosistema.', 'warning');
+                return;
             }
-
-            // 2. Mapeo de nombres a valores numéricos para el select
-            const planSolicitado = params.get('plan');
-            if (planSolicitado) {
-                const selectPlan = document.getElementById('r-plan');
-                const mapaPlanes = {
-                    'free': '0',
-                    'enterprise': '25000',
-                    'premium': '50000',
-                    'pro': '75000'
-                };
-                
-                // Si el plan existe en el mapa, lo seleccionamos
-                const valorNumerico = mapaPlanes[planSolicitado.toLowerCase()];
-                if (valorNumerico !== undefined) {
-                    selectPlan.value = valorNumerico;
-                }
-            }
-        };
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            // Usamos la función global de script.js
-            if (typeof window.authUser === 'function') {
-                window.authUser(document.getElementById('l-user').value, document.getElementById('l-pass').value);
-            }
-        }
-
-        async function handleRegister(e) {
-            e.preventDefault();
-            // Redirigimos a la función de registro en script.js
+    
+            // Si app.js ya tiene un listener, lo disparamos manualmente o llamamos a la función
             if (typeof window.handleRegister === 'function') {
                 window.handleRegister(e);
             }
         }
+    
+        async function handleLogin(e) {
+            e.preventDefault();
+            if (typeof window.authUser === 'function') {
+                window.authUser(document.getElementById('l-user').value, document.getElementById('l-pass').value);
+            }
+        }
+    
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Forzar pestaña de registro si hay parámetros de producto [cite: 2025-11-10]
+            if (params.get('tab') === 'registro' || params.has('plan') || params.has('monto')) {
+                switchTab('register');
+            }
+            
+            const planUrl = params.get('plan');
+            const montoUrl = params.get('monto');
+    
+            if (planUrl || montoUrl) {
+                const select = document.getElementById('r-plan');
+                
+                // Mapeo extendido para incluir los planes de POS Cloud
+                const mapa = { 
+                    'free': '0', 
+                    'enterprise': '25000', 
+                    'premium': '50000', 
+                    'pro': '75000',
+                    'pos_mensual': '29000',
+                    'pos_anual': '278000'
+                };
+    
+                const valorFinal = montoUrl || mapa[planUrl?.toLowerCase()];
+                
+                if (valorFinal) {
+                    // Si el valor no existe en el select (ej: un monto anual), lo añadimos dinámicamente
+                    let existe = Array.from(select.options).some(opt => opt.value === valorFinal);
+                    if (!existe) {
+                        const newOpt = document.createElement('option');
+                        newOpt.value = valorFinal;
+                        newOpt.text = `Plan Personalizado - $${valorFinal}`;
+                        select.add(newOpt);
+                    }
+                    select.value = valorFinal;
+                }
+            }
+        };
     </script>
 </body>
 </html>

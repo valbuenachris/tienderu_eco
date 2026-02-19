@@ -91,23 +91,34 @@ async function authUser(u, p) {
     }
 }
 
-// --- 5. GESTIÓN DE REGISTRO (Llamado desde login.html) ---
+// --- 5. GESTIÓN DE REGISTRO (Versión Final Optimizada) ---
 async function handleRegister(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
+    
     const overlay = document.getElementById('loader-overlay');
     const loaderText = document.getElementById('loader-text');
     
+    // 1. Captura de elementos
+    const campoPlan = document.getElementById('r-plan');
+    const campoNombre = document.getElementById('r-nombre');
+    const campoUser = document.getElementById('r-user');
+    const campoPass = document.getElementById('r-pass');
+    const campoSlug = document.getElementById('r-slug');
+
     if (overlay) overlay.style.display = 'flex';
-    if (loaderText) loaderText.innerText = "CONFIGURANDO TU INSTANCIA...";
+    if (loaderText) loaderText.innerText = "CREANDO TU INSTANCIA...";
+
+    // 2. Generación de Slug de seguridad [cite: 2026-02-15]
+    let slugFinal = campoSlug?.value || campoNombre.value.toLowerCase().replace(/[^a-z0-9]/g, '');
 
     const payload = {
-        plan: document.getElementById('r-plan').value,
-        nombre: document.getElementById('r-nombre').value,
-        telefono: document.getElementById('r-tel').value,
-        slug: document.getElementById('r-slug') ? document.getElementById('r-slug').value : '',
-        username: document.getElementById('r-user').value,
-        password: document.getElementById('r-pass').value,
-        ciudad: document.getElementById('r-ciu') ? document.getElementById('r-ciu').value : ''
+        plan: campoPlan.value,
+        nombre: campoNombre.value,
+        telefono: document.getElementById('r-tel')?.value || "",
+        ciudad: document.getElementById('r-ciu')?.value || "",
+        username: campoUser.value,
+        password: campoPass.value,
+        slug: slugFinal
     };
 
     try {
@@ -116,26 +127,39 @@ async function handleRegister(e) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
+        
         const data = await res.json();
         
-        if(data.success) {
-            if (overlay) overlay.style.display = 'none';
+        // 3. LOGICA DE ALERTA REFORZADA
+        if (overlay) overlay.style.display = 'none';
+
+        if (data.success) {
+            // Esta es la parte que le confirma al usuario
             Swal.fire({
                 title: '¡Ecosistema Activado!',
-                text: 'Tu instancia ha sido creada. Ya puedes iniciar sesión.',
+                text: 'Tu cuenta ha sido creada con éxito. Ahora puedes iniciar sesión.',
                 icon: 'success',
-                confirmButtonText: 'IR AL LOGIN'
-            }).then(() => {
-                if(typeof switchTab === 'function') switchTab('login');
-                else window.location.href = 'login.html?tab=login';
+                confirmButtonText: 'IR AL LOGIN',
+                confirmButtonColor: '#4f46e5',
+                allowOutsideClick: false // Obliga al usuario a ver el mensaje
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Aseguramos que el logo mantenga su forma al volver [cite: 2026-01-25]
+                    window.location.href = 'login.html?tab=login';
+                }
             });
         } else {
-            if (overlay) overlay.style.display = 'none';
-            Swal.fire('Atención', data.message, 'warning');
+            Swal.fire({
+                title: 'Atención',
+                text: data.message || 'No se pudo completar el registro.',
+                icon: 'warning',
+                confirmButtonColor: '#4f46e5'
+            });
         }
     } catch (err) {
         if (overlay) overlay.style.display = 'none';
-        Swal.fire('Error', 'Error de conexión con el servidor.', 'error');
+        console.error("Error crítico:", err);
+        Swal.fire('Error', 'Hubo un fallo en la conexión con el servidor.', 'error');
     }
 }
 

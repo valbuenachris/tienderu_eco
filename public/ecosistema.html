@@ -261,6 +261,7 @@
                 <button class="btn-sub-tab active" id="btn-sub-envio" onclick="switchSubTab('envio')">Nueva Campaña</button>
                 <button class="btn-sub-tab" id="btn-sub-listas" onclick="switchSubTab('listas')">Gestión de Listas</button>
                 <button class="btn-sub-tab" id="btn-sub-hist" onclick="switchSubTab('hist')">Historial</button>
+                <button class="btn-sub-tab" id="btn-sub-img" onclick="switchSubTab('img')"><i class="fas fa-images"></i> Imágenes</button>
                 
             </div>
         
@@ -305,7 +306,7 @@
                             <div id="container-upload-doc" style="display:none;" class="form-group animate-in">
                                 <label class="form-label-saas">Archivo Adjunto</label>
                                 <div class="mini-dropzone">
-                                    <input type="file" id="camp-file-upload">
+                                    <input type="file" id="camp-file-upload" accept=".pdf, .doc, .docx, image/*">
                                     <p><i class="fas fa-cloud-upload-alt"></i> Clic para subir</p>
                                 </div>
                             </div>
@@ -431,6 +432,45 @@
                     </table>
                 </div>
             </div>
+
+            <div id="sub-img" class="sub-tab-content" style="display:none">
+                <div class="card image-manager-pro">
+                    <div class="list-header-pro">
+                        <div class="title-group">
+                            <i class="fas fa-cloud-arrow-up" style="color:var(--primary)"></i>
+                            <div>
+                                <h3>Galería de Medios Tienderu</h3>
+                                <p>Sube imágenes a tu servidor para usarlas en campañas sin errores de Drive.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="upload-zone-wrapper">
+                        <div class="advanced-dropzone" id="image-dropzone" onclick="document.getElementById('img-file-upload').click()">
+                            
+                            <input type="file" id="img-file-upload" accept="image/*, application/pdf" style="display: none;">
+                                   
+                            <div class="dz-content">
+                                <div class="dz-icon"><i class="fas fa-file-pdf"></i></div> 
+                                <h4>Subir imagen o PDF al servidor</h4>
+                                <p>Formatos: JPG, PNG, PDF (Máx 5MB)</p>
+                                <span class="dz-btn">Seleccionar Archivo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="image-repository" style="margin-top:30px;">
+                        <h4 class="form-label-saas"><i class="fas fa-th-large"></i> Mis Imágenes Alojas</h4>
+                        <div id="render-galeria-pro" class="gallery-grid-display">
+                            <div class="empty-state-msg" style="text-align:center; padding:40px; color:var(--gray);">
+                                <i class="fas fa-photo-film" style="font-size:30px; margin-bottom:10px; display:block;"></i>
+                                <p>Aún no has subido imágenes a tu servidor.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div id="tab-fact" class="tab-content">

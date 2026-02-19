@@ -30,6 +30,7 @@
            });
            const data = await res.json();
    
+           // Al verificar estado, también intentamos recuperar/asegurar la apikey de la instancia
            if (data.instance && data.instance.state === 'open') {
                UI_MarcarConectado();
            }
@@ -54,8 +55,8 @@
        qrBox.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:30px; color:#4f46e5"></i><p style="font-size:10px; margin-top:10px;">Configurando Instancia...</p>';
    
        try {
-           // PASO 1. CREAR INSTANCIA
-           await fetch(`${EVOLUTION_API_URL}/instance/create`, {
+           // PASO 1. CREAR INSTANCIA Y CAPTURAR APIKEY DE INSTANCIA
+           const resCreate = await fetch(`${EVOLUTION_API_URL}/instance/create`, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json', 'apikey': EVOLUTION_GLOBAL_KEY },
                body: JSON.stringify({ 
@@ -71,6 +72,15 @@
                    }
                })
            });
+   
+           const dataCreate = await resCreate.json();
+           
+           // GUARDAMOS LA APIKEY ESPECÍFICA DE LA INSTANCIA (HASH)
+           if (dataCreate.hash) {
+               localStorage.setItem(`apikey_${instanceName}`, dataCreate.hash);
+           } else if (dataCreate.instance && dataCreate.instance.hash) {
+               localStorage.setItem(`apikey_${instanceName}`, dataCreate.instance.hash);
+           }
    
            await new Promise(r => setTimeout(r, 1200));
    
@@ -90,6 +100,11 @@
    
            const qrData = await qrRes.json();
    
+           // Si la conexión devuelve datos de instancia, nos aseguramos de tener la apikey guardada
+           if (qrData.instance && qrData.instance.hash) {
+               localStorage.setItem(`apikey_${instanceName}`, qrData.instance.hash);
+           }
+   
            if (qrData.base64) {
                qrBox.innerHTML = `<img src="${qrData.base64}" style="width:200px; border-radius:10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border: 3px solid white;">`;
                statusText.innerHTML = '<i class="fas fa-qrcode"></i> ESCANEA EL QR EN TU WHATSAPP';
@@ -99,6 +114,7 @@
            }
    
        } catch (error) {
+           console.error("Error en conexión WA:", error);
            qrBox.innerHTML = '<p style="color:red; font-size:10px">Error de conexión</p>';
        }
    }
@@ -114,6 +130,12 @@
                    headers: { 'apikey': EVOLUTION_GLOBAL_KEY }
                });
                const data = await res.json();
+               
+               // Guardar hash si aparece durante el monitoreo
+               if (data.instance && data.instance.hash) {
+                   localStorage.setItem(`apikey_${instanceName}`, data.instance.hash);
+               }
+   
                if (data.instance && data.instance.state === 'open') {
                    clearInterval(interval);
                    UI_MarcarConectado();
@@ -123,92 +145,86 @@
    }
    
    /**
- * 6. UI: ACTUALIZACIÓN CUANDO ESTÁ CONECTADO
- * Se asegura de mostrar AMBOS botones (Regenerar y Desconectar) de forma vertical.
- */
-function UI_MarcarConectado() {
-    const qrBox = document.getElementById('wa-qr-box');
-    const statusText = document.getElementById('wa-status');
-    const instanceInput = document.getElementById('wa-instance-name');
-
-    // 1. Actualizamos el cuadro del QR con el check verde
-    if (qrBox) {
-        qrBox.innerHTML = '<i class="fas fa-check-circle" style="font-size:60px; color:#10b981"></i>';
-        qrBox.style.background = '#f0fdf4';
-        qrBox.style.border = '2px solid #bbf7d0';
-        qrBox.style.display = 'flex';
-        qrBox.style.alignItems = 'center';
-        qrBox.style.justifyContent = 'center';
-    }
-    
-    // 2. Actualizamos el texto de estado
-    if (statusText) {
-        statusText.innerHTML = 'BOT CONECTADO CORRECTAMENTE';
-        statusText.style.color = '#10b981';
-        statusText.style.fontWeight = '800';
-        statusText.style.marginBottom = '15px';
-    }
-
-    // 3. Localizamos el botón original para reemplazarlo por la nueva botonera
-    // Buscamos cualquier botón que tenga la función de conectar para sustituirlo
-    const existingBtn = document.querySelector('button[onclick*="saveAndConnectWA"]');
-    
-    if (existingBtn) {
-        // Creamos un contenedor para los nuevos botones si no existe
-        let actionsGroup = document.getElementById('wa-actions-group');
-        
-        if (!actionsGroup) {
-            actionsGroup = document.createElement('div');
-            actionsGroup.id = 'wa-actions-group';
-            actionsGroup.style.display = 'flex';
-            actionsGroup.style.flexDirection = 'column';
-            actionsGroup.style.gap = '10px';
-            actionsGroup.style.width = '100%';
-            
-            // Insertamos el nuevo grupo justo donde estaba el botón anterior
-            existingBtn.parentNode.replaceChild(actionsGroup, existingBtn);
-        }
-
-        // Inyectamos los dos botones con estilos que combinan con tu diseño Pro
-        actionsGroup.innerHTML = `
-            <button onclick="saveAndConnectWA()" class="btn-main" style="background:#059669; color:white; width:100%; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:bold;">
-                <i class="fas fa-sync-alt"></i> REGENERAR CONEXIÓN
-            </button>
-            <button onclick="logoutWA()" class="btn-main" style="background:#ef4444; color:white; width:100%; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:bold;">
-                <i class="fas fa-power-off"></i> DESCONECTAR BOT
-            </button>
-        `;
-    }
-}
-
-/**
- * 5. FUNCIÓN DE DESCONEXIÓN (LOGOUT)
- * Borra la instancia en la Evolution API y limpia la interfaz.
- */
-async function logoutWA() {
-    const instanceInput = document.getElementById('wa-instance-name');
-    if(!instanceInput || !instanceInput.value) return;
-    
-    const instanceName = instanceInput.value.trim().toLowerCase().replace(/\s+/g, '');
-
-    if(!confirm("⚠️ ¿Estás seguro? Se borrará la conexión y el bot dejará de responder.")) return;
-
-    try {
-        // Intentamos borrar la instancia de la API
-        const res = await fetch(`${EVOLUTION_API_URL}/instance/delete/${instanceName}`, {
-            method: 'DELETE',
-            headers: { 'apikey': EVOLUTION_GLOBAL_KEY }
-        });
-
-        if(res.ok) {
-            alert("Bot desconectado exitosamente.");
-            location.reload(); // Recargamos para volver al estado inicial
-        } else {
-            alert("La instancia ya estaba cerrada o no existe.");
-            location.reload();
-        }
-    } catch (error) {
-        console.error("Error al desconectar:", error);
-        alert("Error de red al intentar desconectar.");
-    }
-}
+    * 6. UI: ACTUALIZACIÓN CUANDO ESTÁ CONECTADO
+    */
+   function UI_MarcarConectado() {
+       const qrBox = document.getElementById('wa-qr-box');
+       const statusText = document.getElementById('wa-status');
+       const instanceInput = document.getElementById('wa-instance-name');
+   
+       if (qrBox) {
+           qrBox.innerHTML = '<i class="fas fa-check-circle" style="font-size:60px; color:#10b981"></i>';
+           qrBox.style.background = '#f0fdf4';
+           qrBox.style.border = '2px solid #bbf7d0';
+           qrBox.style.display = 'flex';
+           qrBox.style.alignItems = 'center';
+           qrBox.style.justifyContent = 'center';
+           qrBox.style.minHeight = '200px'; // Mantiene proporcionalidad del logo y UI
+       }
+       
+       if (statusText) {
+           statusText.innerHTML = 'BOT CONECTADO CORRECTAMENTE';
+           statusText.style.color = '#10b981';
+           statusText.style.fontWeight = '800';
+           statusText.style.marginBottom = '15px';
+       }
+   
+       const existingBtn = document.querySelector('button[onclick*="saveAndConnectWA"]');
+       
+       if (existingBtn) {
+           let actionsGroup = document.getElementById('wa-actions-group');
+           
+           if (!actionsGroup) {
+               actionsGroup = document.createElement('div');
+               actionsGroup.id = 'wa-actions-group';
+               actionsGroup.style.display = 'flex';
+               actionsGroup.style.flexDirection = 'column';
+               actionsGroup.style.gap = '10px';
+               actionsGroup.style.width = '100%';
+               
+               existingBtn.parentNode.replaceChild(actionsGroup, existingBtn);
+           }
+   
+           actionsGroup.innerHTML = `
+               <button onclick="saveAndConnectWA()" class="btn-main" style="background:#059669; color:white; width:100%; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:bold;">
+                   <i class="fas fa-sync-alt"></i> REGENERAR CONEXIÓN
+               </button>
+               <button onclick="logoutWA()" class="btn-main" style="background:#ef4444; color:white; width:100%; border:none; padding:12px; border-radius:10px; cursor:pointer; font-weight:bold;">
+                   <i class="fas fa-power-off"></i> DESCONECTAR BOT
+               </button>
+           `;
+       }
+   }
+   
+   /**
+    * 5. FUNCIÓN DE DESCONEXIÓN (LOGOUT)
+    */
+   async function logoutWA() {
+       const instanceInput = document.getElementById('wa-instance-name');
+       if(!instanceInput || !instanceInput.value) return;
+       
+       const instanceName = instanceInput.value.trim().toLowerCase().replace(/\s+/g, '');
+   
+       if(!confirm("⚠️ ¿Estás seguro? Se borrará la conexión y el bot dejará de responder.")) return;
+   
+       try {
+           const res = await fetch(`${EVOLUTION_API_URL}/instance/delete/${instanceName}`, {
+               method: 'DELETE',
+               headers: { 'apikey': EVOLUTION_GLOBAL_KEY }
+           });
+   
+           // Limpiamos la apikey guardada localmente al desconectar
+           localStorage.removeItem(`apikey_${instanceName}`);
+   
+           if(res.ok) {
+               alert("Bot desconectado exitosamente.");
+               location.reload();
+           } else {
+               alert("La instancia ya estaba cerrada o no existe.");
+               location.reload();
+           }
+       } catch (error) {
+           console.error("Error al desconectar:", error);
+           alert("Error de red al intentar desconectar.");
+       }
+   }

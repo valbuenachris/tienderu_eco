@@ -5,6 +5,8 @@ services:
     ports:
       - "3021:3000"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Permite que el panel cree otros contenedores
-      - /opt/pos:/opt/pos                         # Permite que el panel cree las carpetas de clientes
+      # Mapeo idéntico para que la ruta absoluta funcione en ambos lados
+      - /opt/manager:/opt/manager
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/pos:/opt/pos                       # Permite que el panel cree las carpetas de clientes
     restart: unless-stopped

@@ -1,6 +1,6 @@
 FROM node:18-bullseye
 
-# 1. Instalar dependencias base, agregar repositorio oficial de Docker e instalar CLI
+# 1. Instalar dependencias base, herramientas de PDF y Docker CLI
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
@@ -8,12 +8,18 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     jq \
     default-mysql-client \
+    # --- NUEVAS DEPENDENCIAS PARA PDF ---
+    graphicsmagick \
+    ghostscript \
+    # ------------------------------------
     && mkdir -p /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
     && echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
       $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
-    && apt-get update && apt-get install -y docker-ce-cli docker-compose-plugin
+    && apt-get update && apt-get install -y docker-ce-cli docker-compose-plugin \
+    # Limpieza para reducir el tamaño de la imagen
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

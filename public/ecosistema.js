@@ -57,9 +57,340 @@ function switchSubTab(target) {
     const btnEl = document.getElementById(`btn-sub-${target}`);
     if(btnEl) btnEl.classList.add('active');
     
+    // Validaciones de carga de datos
     if(target === 'hist') cargarHistorialCampanas();
     if(target === 'envio') obtenerCreditosActuales();
+    if(target === 'img') cargarGaleriaImagenes(); // <--- Nueva línea
 }
+
+// FUNCION ACTUALIZADA: SUBIR IMAGEN O PDF AL SERVIDOR
+async function subirImagenServidor(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Feedback visual en el botón de la zona de carga
+    const btnContent = document.querySelector('.dz-content');
+    const originalHTML = btnContent.innerHTML;
+    btnContent.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:30px;"></i><p>Procesando archivo y miniatura...</p>';
+
+    const formData = new FormData();
+    // IMPORTANTE: El backend ahora busca 'archivo' como nombre del campo
+    formData.append('archivo', file);
+
+    try {
+        const response = await fetch('/api/upload-campaign-doc', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // 1. Pegamos la URL original en el campo de la campaña [cite: 2025-11-10]
+            if(document.getElementById('camp-media-url')) {
+                document.getElementById('camp-media-url').value = data.url;
+            }
+
+            // 2. Agregamos a la galería visualmente sin recargar todo.
+            // data.thumb traerá la pizza/miniatura si es un PDF.
+            agregarALaGaleria(data.url, data.thumb); 
+
+            // 3. Feedback de éxito
+            alert('¡Archivo procesado y miniatura generada!');
+        } else {
+            alert('Error: ' + (data.message || 'No se pudo procesar el archivo'));
+        }
+    } catch (error) {
+        console.error('Error al subir:', error);
+        alert('Error crítico en la comunicación con el servidor');
+    } finally {
+        // Restauramos el diseño de la zona de carga y limpiamos el input
+        btnContent.innerHTML = originalHTML;
+        event.target.value = '';
+    }
+}
+
+// Usamos una variable de control para evitar procesos simultáneos
+/* ECOSISTEMA TIENDERU - LOGIC PRO 2026 */
+let estaSubiendo = false;
+
+const inputUpload = document.getElementById('img-file-upload');
+
+if (inputUpload) {
+    // Clonamos para limpiar eventos previos y evitar duplicidad de subidas
+    inputUpload.replaceWith(inputUpload.cloneNode(true));
+    const nuevoInput = document.getElementById('img-file-upload');
+
+    nuevoInput.addEventListener('change', async function(e) {
+        e.stopImmediatePropagation();
+        
+        const file = e.target.files[0];
+        // 1. Validaciones iniciales
+        if (!file || estaSubiendo) return;
+
+        // 2. CONTROL DE LÍMITE (Máximo 12) [cite: 2026-01-25]
+        const contenedorGaleria = document.getElementById('render-galeria-pro');
+        const cantidadActual = contenedorGaleria.getElementsByClassName('image-card-mini').length;
+
+        if (cantidadActual >= 12) {
+            alert("⚠️ Límite alcanzado: Solo puedes tener 12 archivos en la galería para mantener la proporcionalidad del panel.");
+            nuevoInput.value = ''; 
+            return; 
+        }
+
+        // 3. Inicio del proceso de subida
+        estaSubiendo = true;
+        const btnContent = document.querySelector('.dz-content');
+        const originalHTML = btnContent.innerHTML;
+        
+        // Feedback visual de carga
+        btnContent.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:30px;"></i><p>Subiendo archivo...</p>';
+
+        const formData = new FormData();
+        formData.append('archivo', file); // 'archivo' es el nombre que espera tu app.js
+
+        try {
+            const response = await fetch('/api/upload-campaign-doc', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                // Sincronizamos con el campo de URL para el Agente IA [cite: 2025-11-10]
+                if(document.getElementById('camp-media-url')) {
+                    document.getElementById('camp-media-url').value = data.url;
+                }
+
+                // Agregamos a la galería (la función que ya tienes con el botón X)
+                agregarALaGaleria(data.url, data.thumb);
+                
+                // Opcional: mostrar aviso de límite si acaba de llegar a 12
+                if (cantidadActual + 1 >= 12) {
+                    const aviso = document.getElementById('aviso-limite');
+                    if (aviso) aviso.style.display = 'block';
+                }
+            } else {
+                alert('Error en el servidor: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error en la comunicación:', error);
+            alert('No se pudo conectar con el servidor.');
+        } finally {
+            // Restauramos todo
+            btnContent.innerHTML = originalHTML;
+            nuevoInput.value = ''; 
+            estaSubiendo = false;
+        }
+    });
+}
+
+/**
+ * 1. AGREGA UN ELEMENTO INDIVIDUAL A LA GALERÍA
+ * Esta función se encarga de la parte visual y mantiene la proporcionalidad [cite: 2026-01-25]
+ */
+// Función para pintar CADA tarjeta en la galería
+// Revisa que el HTML generado dentro de tu bucle de galería incluya esto:
+function agregarALaGaleria(url, thumb = null) {
+    const contenedor = document.getElementById('render-galeria-pro');
+    if (!contenedor) return;
+
+    const fileName = url.split('/').pop();
+    const esPdf = fileName.toLowerCase().endsWith('.pdf');
+    const visualSource = (thumb && thumb !== 'null') ? thumb : url;
+
+    const card = document.createElement('div');
+    card.className = 'image-card-mini'; // Asegúrate de tener este estilo en tu CSS
+    
+    // IMPORTANTE: Aquí inyectamos el botón de eliminar (X)
+    card.innerHTML = `
+        <div style="position: relative; background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; height: 140px;">
+            
+            <button onclick="eliminarArchivo('${fileName}', this)" 
+                style="position:absolute; top:8px; left:8px; background:white; color:#ef4444; border:1px solid #fee2e2; border-radius:50%; width:28px; height:28px; cursor:pointer; z-index:30; display:flex; align-items:center; justify-content:center; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <img src="${visualSource}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            
+            ${esPdf ? `<span style="position:absolute; bottom:8px; right:8px; background:#ef4444; color:white; font-size:9px; padding:2px 6px; border-radius:4px; font-weight:bold;">PDF</span>` : ''}
+        </div>
+        
+        <p style="font-size:11px; margin:8px 0; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 5px;">
+            ${fileName}
+        </p>
+        
+        <button onclick="copiarUrl('${url}')" class="btn-copy-img" style="width: 100%; padding: 6px; font-size: 11px; border-radius: 8px;">
+            COPIAR LINK
+        </button>
+    `;
+    
+    contenedor.prepend(card);
+}
+
+// FUNCION PARA ELIMINAR IMAGENES
+async function eliminarArchivo(nombreArchivo, boton) {
+    if(!confirm(`¿Estás seguro de eliminar permanentemente ${nombreArchivo}?`)) return;
+
+    try {
+        // Llamada al servidor para el borrado físico
+        const response = await fetch(`/api/delete-campaign-file/${nombreArchivo}`, { 
+            method: 'DELETE' 
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // Si el servidor confirmó el borrado, quitamos la tarjeta
+            const card = boton.closest('.image-card-mini');
+            card.remove();
+
+            // Actualizamos el aviso de límite y la visualización
+            const contenedor = document.getElementById('render-galeria-pro');
+            const aviso = document.getElementById('aviso-limite');
+            
+            // Si después de borrar hay menos de 12, ocultamos el aviso
+            if (contenedor.getElementsByClassName('image-card-mini').length < 12) {
+                if (aviso) aviso.style.display = 'none';
+            }
+            
+            console.log('Archivo eliminado del servidor con éxito.');
+        } else {
+            alert('Error al eliminar el archivo del servidor.');
+        }
+    } catch (error) {
+        console.error('Error en la comunicación con el servidor:', error);
+        alert('No se pudo conectar con el servidor para eliminar el archivo.');
+    }
+}
+
+// Función que pide los archivos al servidor al iniciar sesión
+async function cargarGaleriaImagenes() {
+    try {
+        const response = await fetch('/api/list-campaign-images');
+        const data = await response.json();
+
+        // Verificamos que la respuesta sea exitosa y que 'files' sea un array
+        if (data.success && Array.isArray(data.files)) {
+            const contenedor = document.getElementById('render-galeria-pro');
+            
+            // Limpiamos el contenedor antes de re poblarlo
+            contenedor.innerHTML = ''; 
+
+            if (data.files.length === 0) {
+                contenedor.innerHTML = '<p style="text-align:center; color:#6b7280; grid-column: 1/-1; padding: 20px;">No hay archivos alojados.</p>';
+                return;
+            }
+            
+            // Iteramos sobre los archivos recibidos del backend
+            data.files.forEach(file => {
+                // Verificamos que al menos exista la URL del archivo
+                if (file.url) {
+                    // Enviamos la URL y el thumb (que puede ser la ruta al PNG o null)
+                    agregarALaGaleria(file.url, file.thumb);
+                }
+            });
+        } else {
+            console.error('El servidor no devolvió una lista de archivos válida:', data);
+        }
+    } catch (error) {
+        console.error('Error crítico cargando galería:', error);
+        const contenedor = document.getElementById('render-galeria-pro');
+        if (contenedor) {
+            contenedor.innerHTML = '<p style="text-align:center; color:#ef4444; grid-column: 1/-1;">Error de conexión con el servidor.</p>';
+        }
+    }
+}
+
+// LANZAR AUTOMÁTICAMENTE al entrar a la página
+document.addEventListener('DOMContentLoaded', cargarGaleriaImagenes);
+
+/**
+ * 3. COPIAR URL AL PORTAPAPELES
+ */
+function copiarUrl(url) {
+    if (!url) return;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('¡URL copiada! Lista para usar en tu campaña.');
+    }).catch(err => {
+        console.error('Error al copiar:', err);
+    });
+}
+
+// INICIALIZACIÓN: Cargar la galería automáticamente al abrir la página o reiniciar sesión
+document.addEventListener('DOMContentLoaded', cargarGaleriaImagenes);
+
+
+// CARGAR PDF
+async function subirDocumentoServidor(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('archivo', file);
+
+    try {
+        const response = await fetch('/api/upload-campaign-doc', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            // Si es PDF y hay thumb, esperamos 500ms para que el sistema de archivos respire
+            // Esto garantiza que la miniatura se vea sin errores de carga [cite: 2026-02-17]
+            const preview = data.thumb ? data.thumb : data.url;
+            
+            setTimeout(() => {
+                agregarALaGaleria(data.url, preview);
+                console.log("✅ Galería actualizada con:", data.url);
+            }, 500); 
+
+            alert('¡Archivo procesado con éxito!');
+        }
+    } catch (error) {
+        console.error('Error al subir:', error);
+    }
+}
+
+// Escuchar el input (Asegúrate que el ID coincida con tu HTML)
+document.getElementById('camp-file-upload').addEventListener('change', subirDocumentoServidor);
+
+
+function copiarUrl(url) {
+    navigator.clipboard.writeText(url);
+    alert('URL copiada al portapapeles');
+}
+
+// Escuchar el cambio en el input file
+document.getElementById('img-file-upload').addEventListener('change', subirImagenServidor);
+
+document.getElementById('camp-file-upload').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('archivo', file);
+
+    try {
+        const response = await fetch('/api/upload-campaign-doc', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Documento cargado con éxito');
+            // Si quieres que el link se pegue automáticamente para la campaña:
+            document.getElementById('camp-media-url').value = data.url;
+            
+            // Si es una imagen, la mostramos en la galería. Si es PDF, solo el link.
+            if (file.type.includes('image')) {
+                cargarGaleriaImagenes();
+            }
+        }
+    } catch (err) {
+        console.error("Error al subir archivo:", err);
+    }
+});
 
 // --- 2. INICIALIZACIÓN Y CARGA DE DATOS ---
 async function init() {
@@ -385,16 +716,24 @@ async function lanzarCampañaIA(event) {
         const resC = await fetch(`/api/campanas/contactos/${listaSelect.value}`);
         const contactos = await resC.json();
 
-        // B. Enviar al Bridge n8n (Cumpliendo regla 2025-11-10 de incluir URL)
+        // B. Enviar al Bridge n8n (Ajustado para enviar apikey e instancia real)
         if (loaderBar) loaderBar.style.width = "65%";
         if (loaderText) loaderText.innerText = "Transmitiendo datos al servidor de mensajería...";
         
-        const response = await fetch('https://n8.tienderu.com/webhook/34d04da7-0c36-429a-bb17-5b69554264db/whatsapp-bridge/instancia', {
+        
+        
+        // Intentamos recuperar la ApiKey única de esta instancia guardada por whatsapp.js
+        // 1. Recuperamos la ApiKey específica de la instancia (la que seteaste por consola)
+        const apikeyInstancia = localStorage.getItem(`apikey_${instanciaActual}`) || "";
+
+        // 2. Ejecutamos el envío al Bridge (REVISA LOS BACKTICKS ` EN LA URL)
+        const response = await fetch(`https://n8.tienderu.com/webhook/34d04da7-0c36-429a-bb17-5b69554264db/whatsapp-bridge/${instanciaActual}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: session.username,
                 instancia: instanciaActual,
+                apikey: apikeyInstancia, // <--- Enviará: "53FF3463-078F-4C5F-B207-3111EE99D577"
                 nombre_campana: nombreCampana,
                 tipo_mensaje: tipoMensaje,
                 media_url: mediaUrl,
@@ -402,7 +741,7 @@ async function lanzarCampañaIA(event) {
                 mensaje_original: mensajeCuerpo,
                 is_campaign: "true",
                 destinatarios: contactos,
-                // REGLA: Incluir URL del producto/tienda siempre
+                // CUMPLIMIENTO REGLA: URL de producto siempre [cite: 2025-11-10]
                 catalog_url: `https://${slugInstancia}.tienderu.com` 
             })
         });
