@@ -39,10 +39,50 @@ function switchTab(t) {
     const targetBtn = document.getElementById(`btn-${t}`);
     if (targetBtn) targetBtn.classList.add('active');
 
+    // DISPARADOR DE AGENDA
+    if (t === 'agenda') cargarAgenda();
+
     if (window.innerWidth <= 768) {
         document.querySelector('.sidebar').classList.remove('active');
     }
 }
+
+function verificarPermisosMenu() {
+    const badge = document.getElementById('user-plan-badge');
+    
+    // 1. Definimos la lógica de activación
+    const ejecutarActivacion = () => {
+        const textoPlan = badge.innerText.toLowerCase();
+        const planSesion = (typeof session !== 'undefined' && session.plan) ? session.plan.toLowerCase() : '';
+        
+        // Si el texto del badge o la sesión dicen "pro"
+        if (textoPlan.includes('pro') || planSesion.includes('pro')) {
+            console.log("Acceso PRO confirmado.");
+            document.querySelectorAll('.pro').forEach(item => {
+                item.style.setProperty('display', 'flex', 'important');
+            });
+        }
+    };
+
+    // 2. Si ya dice "Pro", ejecutar de inmediato
+    if (badge && badge.innerText.toLowerCase().includes('pro')) {
+        ejecutarActivacion();
+    } else {
+        // 3. Si todavía dice "Cargando...", usamos un Observer para detectar el cambio
+        const observer = new MutationObserver(() => {
+            if (badge.innerText.toLowerCase().includes('pro')) {
+                ejecutarActivacion();
+                observer.disconnect(); // Dejar de observar una vez activado
+            }
+        });
+
+        if (badge) {
+            observer.observe(badge, { childList: true, characterData: true, subtree: true });
+        }
+    }
+}
+
+// Ejecutar al cargar el documento
 
 function switchSubTab(target) {
     document.querySelectorAll('.sub-tab-content').forEach(c => c.style.display = 'none');
@@ -301,7 +341,10 @@ async function cargarGaleriaImagenes() {
 }
 
 // LANZAR AUTOMÁTICAMENTE al entrar a la página
+<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', cargarGaleriaImagenes);
+=======
+>>>>>>> 72e0d0b (Version: 2.3.3.6)
 
 /**
  * 3. COPIAR URL AL PORTAPAPELES
@@ -316,8 +359,11 @@ function copiarUrl(url) {
 }
 
 // INICIALIZACIÓN: Cargar la galería automáticamente al abrir la página o reiniciar sesión
+<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', cargarGaleriaImagenes);
 
+=======
+>>>>>>> 72e0d0b (Version: 2.3.3.6)
 
 // CARGAR PDF
 async function subirDocumentoServidor(event) {
@@ -448,14 +494,22 @@ async function obtenerCreditosActuales() {
 
 async function loadFacturas() {
     try {
+        if (!session || !session.username) return;
+
         const res = await fetch(`/api/user/facturacion/${session.username}`);
+        
+        // Si el servidor falla (404 o 500), salimos sin romper el resto del JS
+        if (!res.ok) return console.warn("Facturación no disponible");
+
         const facts = await res.json();
         const container = document.getElementById('render-facturas');
         if(!container) return;
+
         if (facts.length === 0) {
             container.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay facturas.</td></tr>';
             return;
         }
+
         container.innerHTML = facts.map(f => {
             let estadoClase = f.estado.toUpperCase() === 'PAGADO' ? 'badge-activo' : 'badge-mora';
             return `<tr>
@@ -465,7 +519,9 @@ async function loadFacturas() {
                 <td><button onclick="generarTirilla('${f.periodo}','${f.monto}','${f.estado}')" class="btn-tirilla"><i class="fas fa-file-pdf"></i> Ver PDF</button></td>
             </tr>`;
         }).join('');
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+        console.error("Error en facturas:", e); 
+    }
 }
 
 // --- 4. GESTIÓN DE LISTAS ---
@@ -984,6 +1040,324 @@ async function ejecutarPOS() {
     } catch (e) { console.error(e); }
 }
 
+let fechaActualAgenda = new Date();
+
+// 1. CARGAR DATOS (Corregida para llamar a la renderización Pro)
+async function cargarAgenda() {
+    const grid = document.getElementById('calendar-grid');
+    const displayMes = document.getElementById('mes-actual-display');
+    if (!grid) return;
+
+    const mes = fechaActualAgenda.getMonth() + 1;
+    const anio = fechaActualAgenda.getFullYear();
+    const userId = session.vendedor_id || session.id;
+
+    const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    displayMes.innerText = `${nombresMeses[mes - 1]} ${anio}`;
+
+    try {
+        const res = await fetch(`/api/agenda/${userId}/${mes}/${anio}`);
+        const citas = await res.json();
+        
+        // Llamamos a la función que SÍ usa el modal y NO el alert
+        renderizarCalendarioPro(citas);
+        
+    } catch (e) { 
+        console.error("Error agenda:", e); 
+    }
+}
+
+// 2. RENDERIZAR (Sin alerts, usando verDetalleCita)
+function renderizarCalendarioPro(citas) {
+    const grid = document.getElementById('calendar-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const mes = fechaActualAgenda.getMonth();
+    const anio = fechaActualAgenda.getFullYear();
+    const primerDia = new Date(anio, mes, 1).getDay();
+    const totalDias = new Date(anio, mes + 1, 0).getDate();
+
+    // Espacios vacíos
+    for (let i = 0; i < primerDia; i++) {
+        grid.innerHTML += `<div class="calendar-day empty"></div>`;
+    }
+
+    // Días del mes
+    for (let dia = 1; dia <= totalDias; dia++) {
+        const fechaStr = `${anio}-${String(mes + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        
+        const citasHoy = citas.filter(c => {
+            const f = c.fecha.includes('T') ? c.fecha.split('T')[0] : c.fecha;
+            return f === fechaStr;
+        });
+
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'calendar-day';
+        
+        const htmlCitas = citasHoy.map(c => {
+            const citaData = encodeURIComponent(JSON.stringify(c));
+            
+            // Determinamos el color según el estado: Verde (confirmada), Rojo (cancelada) o Naranja (otros/pendiente)
+            let colorIcono = '#f59e0b'; // Color por defecto (Naranja)
+            
+            if (c.estado === 'confirmada') {
+                colorIcono = '#10b981'; // Verde
+            } else if (c.estado === 'cancelada') {
+                colorIcono = '#ef4444'; // Rojo para canceladas
+            }
+        
+            return `
+                <div class="reserva-item" 
+                    onclick="verDetalleCita('${citaData}')" 
+                    style="cursor:pointer; background-color: ${colorIcono}; color: white;" 
+                    title="${c.cliente_nombre}">
+                    <b class="hora-texto">${c.hora.substring(0, 5)}</b> 
+                    <span class="nombre-texto">${c.cliente_nombre}</span>
+                </div>`;
+        }).join('');
+
+        dayDiv.innerHTML = `
+            <span class="day-number">${dia}</span>
+            <div class="lista-reservas">${htmlCitas}</div>
+        `;
+        grid.appendChild(dayDiv);
+    }
+}
+
+// 3. MOSTRAR MODAL
+function verDetalleCita(dataEncoded) {
+    try {
+        const cita = JSON.parse(decodeURIComponent(dataEncoded));
+        const status = (cita.estado || 'pendiente').toLowerCase();
+        
+        // 1. Referencias de Elementos
+        const modal = document.getElementById('modal-agenda');
+        const elEstado = document.getElementById('det-estado');
+        const btnWa = document.getElementById('btn-wa-directo');
+        const btnModificar = document.getElementById('btn-modificar-fecha');
+        const btnEstado = document.getElementById('btn-cambiar-estado');
+
+        // Guardar ID para acciones globales en el dataset
+        modal.dataset.citaId = cita.id;
+        
+        // 2. Inyectar Datos de Texto
+        document.getElementById('det-cliente').innerText = cita.cliente_nombre || "Sin nombre";
+        document.getElementById('det-whatsapp').innerText = cita.cliente_whatsapp || "No disponible";
+        document.getElementById('det-servicio').innerText = cita.servicio || "Consultoría IA";
+        
+        // Formateo de fecha para visualización (evita desfases de zona horaria)
+        const fechaLimpia = cita.fecha.split('T')[0];
+        document.getElementById('det-fechahora').innerText = `${fechaLimpia} a las ${cita.hora.substring(0, 5)} hs`;
+        
+        // 3. Estilo Dinámico del Badge de Estado
+        if (elEstado) {
+            elEstado.innerText = status.toUpperCase();
+            const colores = { confirmada: '#10b981', cancelada: '#ef4444', pendiente: '#f59e0b' };
+            elEstado.style.background = colores[status] || colores.pendiente;
+            elEstado.style.color = 'white';
+        }
+
+        // 4. Configuración del Botón de WhatsApp
+        if (btnWa) {
+            btnWa.className = "btn-principal-wa"; 
+            if (status === 'cancelada') {
+                btnWa.classList.add('btn-disabled');
+                btnWa.innerText = 'Cita Cancelada';
+                btnWa.onclick = null;
+                btnWa.style.opacity = "0.6";
+            } else {
+                btnWa.classList.remove('btn-disabled');
+                btnWa.style.opacity = "1";
+                btnWa.innerHTML = '<i class="fab fa-whatsapp"></i> Chatear con Cliente';
+                btnWa.onclick = () => {
+                    const tel = (cita.cliente_whatsapp || "").replace(/\D/g, '');
+                    window.open(`https://wa.me/${tel}?text=Hola%20${encodeURIComponent(cita.cliente_nombre)}`, '_blank');
+                };
+            }
+        }
+
+        // 5. Configuración de Botones de Gestión (CONEXIÓN CON BACKEND)
+        
+        // BOTÓN MODIFICAR (Reprogramar)
+        if (btnModificar) {
+            btnModificar.className = "btn-gestion btn-azul";
+            if (status === 'cancelada') {
+                btnModificar.style.display = 'none'; // No se reprograma lo cancelado
+            } else {
+                btnModificar.style.display = 'flex';
+                btnModificar.onclick = () => {
+                    const nuevaFecha = prompt("Nueva fecha (AAAA-MM-DD):", fechaLimpia);
+                    if (!nuevaFecha) return;
+                    const nuevaHora = prompt("Nueva hora (HH:MM):", cita.hora.substring(0, 5));
+                    
+                    if (nuevaFecha && nuevaHora) {
+                        // Llamada a la función de ecosistema.js que hace el FETCH
+                        ejecutarReprogramacion(cita.id, nuevaFecha, nuevaHora);
+                    }
+                };
+            }
+        }
+
+        // BOTÓN CAMBIAR ESTADO (Confirmar/Cancelar)
+        if (btnEstado) {
+            btnEstado.className = "btn-gestion btn-gris";
+            const esConfirmada = status === 'confirmada';
+            
+            btnEstado.innerHTML = esConfirmada ? '<i class="fas fa-times"></i> Cancelar' : '<i class="fas fa-check"></i> Confirmar';
+            
+            // Estética según el estado actual
+            if (esConfirmada) {
+                btnEstado.style.color = '#ef4444';
+                btnEstado.style.borderColor = '#ef4444';
+            } else {
+                btnEstado.style.color = '#475569';
+                btnEstado.style.borderColor = '#cbd5e1';
+            }
+
+            btnEstado.onclick = () => {
+                const nuevoEstado = esConfirmada ? 'cancelada' : 'confirmada';
+                if(confirm(`¿Deseas cambiar el estado a ${nuevoEstado.toUpperCase()}?`)) {
+                    // Llamada a la función de ecosistema.js que hace el FETCH a MySQL
+                    toggleEstadoCita(cita.id, nuevoEstado);
+                }
+            };
+        }
+
+        // 6. Mostrar el modal y asegurar proporcionalidad del logo [cite: 2026-01-25]
+        modal.style.display = 'flex';
+
+    } catch (e) {
+        console.error("Error al procesar la cita:", e);
+    }
+}
+
+// 1. FUNCIÓN PARA CAMBIAR ESTADO (Sincronizada con el ENUM de tu DB)
+// CAMBIAR ESTADO
+// 1. FUNCIÓN PARA CAMBIAR ESTADO
+async function toggleEstadoCita(id, nuevoEstado) {
+    if (!id) return alert("Error: ID de cita no encontrado.");
+
+    try {
+        const response = await fetch(`/api/citas/${id}/estado`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: nuevoEstado.toLowerCase() })
+        });
+
+        const res = await response.json();
+
+        if (res.success) {
+            // Guardamos la instrucción para el DOMContentLoaded
+            localStorage.setItem('volverAgenda', 'true');
+            
+            // Un pequeño retraso asegura que el navegador guarde el dato antes de recargar
+            setTimeout(() => {
+                location.reload();
+            }, 100);
+        } else {
+            alert("❌ Error: " + res.message);
+        }
+    } catch (e) {
+        console.error("Error en la petición de estado:", e);
+    }
+}
+
+// 2. FUNCIÓN PARA REPROGRAMAR
+async function ejecutarReprogramacion(id, fecha, hora) {
+    if (!id) return alert("Error: ID de cita no detectado.");
+
+    try {
+        const response = await fetch(`/api/citas/${id}/reprogramar`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ fecha, hora })
+        });
+
+        const resData = await response.json();
+
+        if (resData.success) {
+            // Usamos la misma clave 'volverAgenda'
+            localStorage.setItem('volverAgenda', 'true');
+            
+            setTimeout(() => {
+                location.reload();
+            }, 100);
+        } else {
+            alert("❌ Error al reprogramar: " + resData.message);
+        }
+    } catch (e) {
+        console.error("Error en la petición de reprogramación:", e);
+    }
+}
+
+// Esta función debe llamarse desde el botón de la interfaz
+function abrirReprogramar(id) {
+    if (!id) return alert("No se puede reprogramar sin un ID válido.");
+    
+    const nuevaFecha = prompt("Nueva fecha (Formato: AAAA-MM-DD):");
+    if (!nuevaFecha) return;
+
+    const nuevaHora = prompt("Nueva hora (Formato: HH:MM):");
+    if (!nuevaHora) return;
+
+    // Llamamos a la función que conecta con el backend
+    ejecutarReprogramacion(id, nuevaFecha, nuevaHora);
+}
+
+// 3. FUNCIONES DE CONTROL DE INTERFAZ
+function cambiarMes(offset) {
+    fechaActualAgenda.setMonth(fechaActualAgenda.getMonth() + offset);
+    cargarAgenda();
+}
+
+function cerrarModalAgenda() {
+    const modal = document.getElementById('modal-agenda');
+    modal.style.display = 'none';
+    // Mantenemos proporcionalidad visual al limpiar el estado [cite: 2026-01-25]
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('modal-agenda');
+    if (event.target == modal) cerrarModalAgenda();
+}
+
 function logout() { localStorage.clear(); window.location.replace('index.html'); }
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. CARGA DE DATOS Y CONEXIÓN (Prioridad Máxima)
+    // Ejecutamos init primero pero sin que bloquee el resto si tarda
+    try {
+        if (typeof init === 'function') {
+            await init(); 
+        }
+    } catch (e) {
+        console.error("Error en init:", e);
+    }
+
+    // 2. PROCESOS DE INTERFAZ
+    verificarPermisosMenu();
+    cargarGaleriaImagenes();
+
+    // 3. LÓGICA DE REDIRECCIÓN (Al final para no interrumpir Evolution API)
+    const debeIrAgenda = localStorage.getItem('volverAgenda');
+
+    if (debeIrAgenda === 'true') {
+        localStorage.removeItem('volverAgenda');
+        
+        // Cambiamos a agenda pero permitimos que los scripts de fondo sigan
+        switchTab('agenda');
+        
+        if (typeof cargarAgenda === 'function') {
+            cargarAgenda();
+        }
+        console.log("✅ Redirección a Agenda completada.");
+    } else {
+        // Si no hay marca, vamos a la pestaña por defecto
+        switchTab('eco');
+        console.log("🏠 Carga estándar en pestaña Eco.");
+    }
+
+    // 4. CARGAS SECUNDARIAS
+    if (typeof loadFacturas === 'function') loadFacturas();
+});

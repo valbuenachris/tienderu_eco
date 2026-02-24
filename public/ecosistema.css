@@ -44,19 +44,115 @@ body {
     margin: 0 auto;
 }
 
-/* 2. SIDEBAR (MENÚ LATERAL) */
+/* 2. SIDEBAR (MENÚ LATERAL) ACTUALIZADO */
 .sidebar { 
     width: var(--sidebar-width); 
-    background: #020617; /* Un tono más oscuro que el fondo para contraste */
+    background: #020617; 
     height: 100vh; 
     position: fixed; 
     color: white; 
-    padding: 30px 20px; 
+    padding: 20px; /* Reducido un poco para ganar espacio */
     display: flex; 
     flex-direction: column; 
     z-index: 1000;
     border-right: 1px solid rgba(255,255,255,0.05);
     transition: all 0.3s ease;
+    
+    /* Habilitar scroll general */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Contenedor superior para Logo y Plan (Fijos) */
+.sidebar-header {
+    flex-shrink: 0; /* Evita que esta sección se encoja */
+    margin-bottom: 30px;
+}
+
+/* Logo: Respetando proporcionalidad [2026-01-25] */
+.sidebar-logo {
+    width: 140px; /* Ajusta según tu diseño */
+    height: auto; 
+    object-fit: contain;
+    display: block;
+    margin-bottom: 20px;
+}
+
+/* Tarjeta de Usuario y Plan */
+.user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-card img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain; /* Mantiene el logo de la bolsa proporcional */
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.user-plan {
+    font-size: 11px;
+    color: #94a3b8; /* Gris claro */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Personalización del Scrollbar */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+}
+
+/* Ocultar por defecto para evitar parpadeos */
+.pro {
+    display: none; 
+}
+
+/* Estilo para los sub-items del ecosistema */
+.sub-item {
+    padding-left: 45px !important;
+    font-size: 13px;
+    height: 40px;
+    margin-bottom: 2px;
+    transition: background 0.2s;
+}
+
+.sub-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Ocultamos por defecto todos los items PRO */
+.nav-item.sub-item.pro {
+    display: none !important;
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%; /* Obliga a que el contenido llene el sidebar */
+}
+
+.menu-links {
+    flex-grow: 1; /* Hace que la lista de botones crezca y empuje lo demás */
 }
 
 .user-box { 
@@ -1200,3 +1296,249 @@ td { padding: 20px; border-bottom: 1px solid #f1f5f9; font-size: 14px; font-weig
 /* Animaciones */
 .sub-tab-content { animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.calendar-container { background: #fff; padding: 25px; border-radius: 20px; box-shadow: var(--shadow-premium); }
+.calendar-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.calendar-controls h2 { font-size: 1.5rem; color: var(--dark); font-weight: 800; }
+.calendar-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 800; color: var(--gray); font-size: 12px; padding-bottom: 15px; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #edf2f7; border: 1px solid #edf2f7; border-radius: 12px; overflow: hidden; }
+.calendar-day { background: white; min-height: 110px; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+.calendar-day.empty { background: #f7fafc; }
+.day-number { font-weight: 800; color: var(--dark); font-size: 14px; margin-bottom: 5px; }
+.reserva-item { background: var(--pro); color: white; font-size: 10px; padding: 4px 6px; border-radius: 6px; margin-bottom: 2px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    width: 90%; max-width: 450px; background: white; padding: 30px; border-radius: 24px;
+    animation: slideUp 0.3s ease-out;
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.btn-close-modal { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--gray); }
+.detail-group { margin-bottom: 15px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+.detail-group label { font-size: 11px; color: var(--gray); text-transform: uppercase; font-weight: 800; }
+.detail-group p { font-weight: 600; color: var(--dark); margin-top: 5px; }
+.btn-wa-modal {
+    width: 100%; background: #25d366; color: white; border: none; padding: 12px;
+    border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* --- ADAPTACIÓN MÓVIL PARA EL CALENDARIO --- */
+@media (max-width: 600px) {
+    .calendar-day {
+        min-height: 70px; /* Reducimos la altura para que quepa todo el mes en pantalla */
+        padding: 2px;
+    }
+
+    .modal-content {
+        width: 90% !important;
+        margin: 10px;
+        border-radius: 20px;
+    }
+    
+    #btn-wa-directo {
+        padding: 12px; /* Un poco más pequeño para que no ocupe toda la pantalla */
+        font-size: 14px;
+    }
+
+    .day-number {
+        font-size: 11px;
+    }
+
+    /* Ocultamos el texto y la hora en móviles */
+    .modal-actions-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    
+    .btn-action {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: 0.2s;
+    }
+    
+    .btn-wa-full { grid-column: span 2; background: #22c55e; color: white; }
+    .btn-wa-full:hover { background: #16a34a; }
+    
+    .btn-status { background: #f1f5f9; color: #334155; }
+    .btn-modify { background: #e0e7ff; color: #4338ca; }
+    
+    .btn-danger-text { color: #ef4444; background: #fee2e2; }
+    .btn-success-text { color: #10b981; background: #d1fae5; }
+    
+
+    /* Contenedor principal de botones */
+.modal-footer-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* Estilo base de botones */
+.btn-custom {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+/* Colores específicos */
+.btn-modify { background-color: #e0e7ff; color: #4338ca; }
+.btn-status { background-color: #f1f5f9; color: #475569; }
+.btn-wa-full { 
+    background-color: #00e676; 
+    color: white; 
+    width: 100%; 
+    font-size: 16px;
+}
+
+/* Efectos de Hover */
+.btn-custom:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Clases de estado dinámicas */
+.btn-danger-mode { background-color: #fee2e2; color: #ef4444; }
+.btn-success-mode { background-color: #d1fae5; color: #10b981; }
+
+    .reserva-item {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin: 2px auto;
+        padding: 0;
+        font-size: 0; /* Oculta el texto */
+        display: inline-block;
+        overflow: hidden;
+        border: 2px solid white;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .lista-reservas {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2px;
+        margin-top: 5px;
+    }
+}
+
+/* Contenedor de acciones en el modal */
+
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Botón Modificar (Azul) */
+.btn-modify {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+.btn-modify:hover { background: #c7d2fe; }
+
+/* Botón Estado (Gris/Slate) */
+.btn-status {
+    background: #f1f5f9;
+    color: #334155;
+}
+.btn-status:hover { background: #e2e8f0; }
+
+/* Botón WhatsApp Principal (El grande de abajo) */
+/* Botón de WhatsApp - Grande y Vibrante */
+.btn-principal-wa {
+    background: #25d366;
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+}
+
+.btn-principal-wa:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+}
+
+/* Botones de Gestión (Modificar/Estado) */
+.btn-gestion {
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+}
+
+.btn-azul { background: #e0e7ff; color: #4338ca; }
+.btn-azul:hover { background: #c7d2fe; }
+
+.btn-gris { background: #f1f5f9; color: #475569; }
+.btn-gris:hover { background: #e2e8f0; }
+
+/* Botón Cerrar */
+.btn-cerrar-modal {
+    background: transparent;
+    color: #94a3b8;
+    border: none;
+    padding: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+/* Estado Deshabilitado */
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    pointer-events: none;
+    filter: grayscale(1);
+}

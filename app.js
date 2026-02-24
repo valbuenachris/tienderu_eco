@@ -9,7 +9,13 @@ const { fromPath } = require("pdf2pic");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 72e0d0b (Version: 2.3.3.6)
 // --- CONFIGURACIÓN DE RUTAS ESTÁTICAS Y PERSISTENCIA DOCKER ---
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('/opt/manager/public/uploads'));
@@ -56,22 +62,61 @@ const uploadDoc = multer({ storage: storageDoc, limits: { fileSize: 10 * 1024 * 
 const registrarFactura = (username, diaCorte, estado) => {
     const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
     const hoy = new Date();
-    const periodoStr = `${meses[hoy.getMonth()]} ${diaCorte} - ${meses[(hoy.getMonth() + 1) % 12]} ${diaCorte}`;
     
+    // Calculamos el mes actual y el siguiente con lógica de año
+    const mesActual = hoy.getMonth();
+    const proximoMes = (mesActual + 1) % 12;
+    const anioActual = hoy.getFullYear();
+    const anioSiguiente = proximoMes === 0 ? anioActual + 1 : anioActual;
+
+    const periodoStr = `${meses[mesActual]} ${diaCorte} - ${meses[proximoMes]} ${diaCorte} ${anioActual}`;
+    
+    // Mapeo de estados más claro
     let est = 'PAGADO';
     if (estado === 'pago') est = 'EN MORA';
     if (estado === 'pop') est = 'SUSPENDIDO';
 
+    // Asegúrate de que en MySQL, 'username' y 'periodo' sean UNIQUE juntos para que esto funcione
     const queryFact = `
         INSERT INTO facturacion (username, periodo, monto, estado, fecha_registro) 
         VALUES (?, ?, 50000, ?, NOW()) 
-        ON DUPLICATE KEY UPDATE estado = VALUES(estado), fecha_registro = NOW()
+        ON DUPLICATE KEY UPDATE 
+            estado = VALUES(estado), 
+            fecha_registro = NOW()
     `;
     
+<<<<<<< HEAD
     db.query(queryFact, [username, periodoStr, est], (err) => {
         if (err) console.error("❌ Error al registrar factura:", err);
     });
 };
+
+// --- ENDPOINTS ADMINISTRADOR (GESTIÓN GLOBAL) ---
+=======
+    db.query(queryFact, [username, periodoStr, est], (err, result) => {
+        if (err) {
+            console.error("❌ Error al registrar factura en MySQL:", err);
+            return;
+        }
+        console.log(`✅ Factura procesada para ${username}: ${est} (${periodoStr})`);
+    });
+};
+
+// Este endpoint alimenta la tabla de facturación en el frontend
+app.get('/api/user/facturacion/:username', (req, res) => {
+    const { username } = req.params;
+    const query = "SELECT periodo, monto, estado FROM facturacion WHERE username = ? ORDER BY id DESC";
+    
+    db.query(query, [username], (err, results) => {
+        if (err) {
+            console.error('❌ Error en DB Facturación:', err);
+            return res.status(500).json({ success: false });
+        }
+        // Enviamos siempre un array (aunque esté vacío) para evitar el error de JSON.parse
+        res.json(results || []);
+    });
+});
+>>>>>>> 72e0d0b (Version: 2.3.3.6)
 
 // --- ENDPOINTS ADMINISTRADOR (GESTIÓN GLOBAL) ---
 
@@ -518,6 +563,7 @@ app.delete('/api/delete-campaign-file/:filename', (req, res) => {
         console.error('Error al borrar archivo:', err);
         res.status(500).json({ success: false, message: 'No se pudo eliminar el archivo del disco' });
     }
+<<<<<<< HEAD
 });
 
 // --- RUTAS DE NAVEGACIÓN Y CIERRE DEL SERVIDOR ---
@@ -526,6 +572,117 @@ app.get('/ecosistema', (req, res) => res.sendFile(path.join(__dirname, 'public/e
 app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html'))); // Alias
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+=======
+});
+
+// --- RUTAS DE NAVEGACIÓN Y CIERRE DEL SERVIDOR ---
+
+app.get('/ecosistema', (req, res) => res.sendFile(path.join(__dirname, 'public/ecosistema.html')));
+app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html'))); // Alias
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+
+
+// --- ENDPOINT DE AGENDA ACTUALIZADO Y CORREGIDO ---
+app.get('/api/agenda/:vendedor_id/:mes/:anio', (req, res) => {
+    const { vendedor_id, mes, anio } = req.params;
+
+    // Consulta explícita para asegurar que traemos WhatsApp, Servicio y Estado
+    const query = `
+        SELECT 
+            id, 
+            cliente_nombre, 
+            cliente_whatsapp, 
+            fecha, 
+            hora, 
+            servicio, 
+            estado 
+        FROM agenda_citas 
+        WHERE vendedor_id = ? 
+          AND MONTH(fecha) = ? 
+          AND YEAR(fecha) = ?
+        ORDER BY fecha ASC, hora ASC`;
+
+    db.query(query, [vendedor_id, mes, anio], (err, results) => {
+        if (err) {
+            console.error('❌ Error en DB (Agenda):', err);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Error al consultar la agenda' 
+            });
+        }
+
+        // Enviamos los resultados al frontend
+        // results será un array [] si no hay citas, lo cual es correcto
+        res.json(results);
+    });
+});
+
+// Guardar o actualizar cita (Usado por n8n y el Panel)
+app.post('/api/agenda/guardar', (req, res) => {
+    const { vendedor_id, cliente_nombre, cliente_whatsapp, fecha, hora, servicio } = req.body;
+    const query = "INSERT INTO agenda_citas (vendedor_id, cliente_nombre, cliente_whatsapp, fecha, hora, servicio) VALUES (?,?,?,?,?,?)";
+    
+    db.query(query, [vendedor_id, cliente_nombre, cliente_whatsapp, fecha, hora, servicio], (err) => {
+        if (err) return res.json({ success: false, message: err.message });
+        res.json({ success: true, message: "Cita agendada correctamente" });
+    });
+});
+
+
+// ==========================================
+// RUTAS DE GESTIÓN DE AGENDA (MySQL)
+// ==========================================
+
+// --- RUTAS DE ACTUALIZACIÓN CORREGIDAS ---
+
+// ACTUALIZAR ESTADO (Confirmar/Cancelar)
+app.patch('/api/citas/:id/estado', (req, res) => {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    // Forzamos el nombre de la tabla que confirmaste: agenda_citas
+    const query = 'UPDATE agenda_citas SET estado = ? WHERE id = ?';
+    
+    db.query(query, [estado, id], (err, result) => {
+        if (err) {
+            console.error("❌ Error MySQL:", err);
+            return res.status(500).json({ success: false, message: err.message });
+        }
+        
+        // Si affectedRows es 0, el ID enviado no existe en la tabla
+        if (result.affectedRows === 0) {
+            console.log(`⚠️ No se encontró la cita con ID: ${id}`);
+            return res.status(404).json({ success: false, message: "ID no encontrado en agenda_citas" });
+        }
+
+        console.log(`✅ Cita ${id} actualizada a ${estado}`);
+        res.json({ success: true, message: "Actualizado en MySQL" });
+    });
+});
+
+// REPROGRAMAR (Fecha/Hora)
+app.patch('/api/citas/:id/reprogramar', (req, res) => {
+    const { id } = req.params;
+    const { fecha, hora } = req.body;
+
+    const query = 'UPDATE agenda_citas SET fecha = ?, hora = ? WHERE id = ?';
+    
+    db.query(query, [fecha, hora, id], (err, result) => {
+        if (err) {
+            console.error("❌ Error MySQL:", err);
+            return res.status(500).json({ success: false, message: err.message });
+        }
+        
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: "No se pudo reprogramar: ID no existe" });
+        }
+
+        console.log(`📅 Cita ${id} reprogramada: ${fecha} ${hora}`);
+        res.json({ success: true, message: "Fecha/Hora guardada" });
+    });
+});
+>>>>>>> 72e0d0b (Version: 2.3.3.6)
 
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {
