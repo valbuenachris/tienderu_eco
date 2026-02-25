@@ -32,14 +32,20 @@
            const data = await res.json();
    
 <<<<<<< HEAD
+<<<<<<< HEAD
            // Al verificar estado, también intentamos recuperar/asegurar la apikey de la instancia
 =======
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
            // Guardar hash si está disponible en la respuesta
            if (data.instance?.hash) {
                localStorage.setItem(`apikey_${instanceName}`, data.instance.hash);
            }
    
+<<<<<<< HEAD
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
            if (data.instance && data.instance.state === 'open') {
                UI_MarcarConectado();
            }
@@ -67,10 +73,14 @@
    
        try {
 <<<<<<< HEAD
+<<<<<<< HEAD
            // PASO 1. CREAR INSTANCIA Y CAPTURAR APIKEY DE INSTANCIA
 =======
            // PASO 1. CREAR INSTANCIA + WEBHOOK EMbebido [AJUSTE CLAVE]
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+           // PASO 1. CREAR INSTANCIA + WEBHOOK EMbebido [AJUSTE CLAVE]
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
            const resCreate = await fetch(`${EVOLUTION_API_URL}/instance/create`, {
                method: 'POST',
                headers: { 'Content-Type': 'application/json', 'apikey': EVOLUTION_GLOBAL_KEY },
@@ -91,16 +101,22 @@
            const dataCreate = await resCreate.json();
            
 <<<<<<< HEAD
+<<<<<<< HEAD
            // GUARDAMOS LA APIKEY ESPECÍFICA DE LA INSTANCIA (HASH)
            if (dataCreate.hash) {
                localStorage.setItem(`apikey_${instanceName}`, dataCreate.hash);
            } else if (dataCreate.instance && dataCreate.instance.hash) {
 =======
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
            // GUARDAR APIKEY DE LA INSTANCIA (hash)
            if (dataCreate.hash) {
                localStorage.setItem(`apikey_${instanceName}`, dataCreate.hash);
            } else if (dataCreate.instance?.hash) {
+<<<<<<< HEAD
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
                localStorage.setItem(`apikey_${instanceName}`, dataCreate.instance.hash);
            }
    
@@ -128,12 +144,17 @@
            const qrData = await qrRes.json();
    
 <<<<<<< HEAD
+<<<<<<< HEAD
            // Si la conexión devuelve datos de instancia, nos aseguramos de tener la apikey guardada
            if (qrData.instance && qrData.instance.hash) {
 =======
            // Guardar hash si aparece en la respuesta de connect
            if (qrData.instance?.hash) {
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+           // Guardar hash si aparece en la respuesta de connect
+           if (qrData.instance?.hash) {
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
                localStorage.setItem(`apikey_${instanceName}`, qrData.instance.hash);
            }
    
@@ -166,10 +187,14 @@
                
                // Guardar hash si aparece durante el monitoreo
 <<<<<<< HEAD
+<<<<<<< HEAD
                if (data.instance && data.instance.hash) {
 =======
                if (data.instance?.hash) {
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+               if (data.instance?.hash) {
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
                    localStorage.setItem(`apikey_${instanceName}`, data.instance.hash);
                }
    
@@ -183,22 +208,30 @@
    
    /**
 <<<<<<< HEAD
+<<<<<<< HEAD
     * 6. UI: ACTUALIZACIÓN CUANDO ESTÁ CONECTADO
 =======
     * 5. UI: ACTUALIZACIÓN CUANDO ESTÁ CONECTADO
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+    * 5. UI: ACTUALIZACIÓN CUANDO ESTÁ CONECTADO
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
     */
    function UI_MarcarConectado() {
        const qrBox = document.getElementById('wa-qr-box');
        const statusText = document.getElementById('wa-status');
 <<<<<<< HEAD
+<<<<<<< HEAD
        const instanceInput = document.getElementById('wa-instance-name');
 =======
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
    
        if (qrBox) {
            qrBox.innerHTML = '<i class="fas fa-check-circle" style="font-size:60px; color:#10b981"></i>';
            qrBox.style.background = '#f0fdf4';
+<<<<<<< HEAD
 <<<<<<< HEAD
            qrBox.style.border = '2px solid #bbf7d0';
            qrBox.style.display = 'flex';
@@ -206,17 +239,23 @@
            qrBox.style.justifyContent = 'center';
            qrBox.style.minHeight = '200px'; // Mantiene proporcionalidad del logo y UI
 =======
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
            qrBox.style.minHeight = '210px';
            qrBox.style.display = 'flex';
            qrBox.style.alignItems = 'center';
            qrBox.style.justifyContent = 'center';
+<<<<<<< HEAD
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
        }
        
        if (statusText) {
            statusText.innerHTML = 'BOT CONECTADO CORRECTAMENTE';
            statusText.style.color = '#10b981';
            statusText.style.fontWeight = '800';
+<<<<<<< HEAD
 <<<<<<< HEAD
            statusText.style.marginBottom = '15px';
        }
@@ -246,6 +285,8 @@
                </button>
            `;
 =======
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
        }
    
        // Botones de acción dinámicos
@@ -265,11 +306,15 @@
                <button onclick="logoutWA()" class="btn-main" style="background:#ef4444; color:white; width:100%; border:none; padding:12px; border-radius:10px; font-weight:bold; cursor:pointer;">
                    <i class="fas fa-power-off"></i> DESCONECTAR BOT
                </button>`;
+<<<<<<< HEAD
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
        }
    }
    
    /**
+<<<<<<< HEAD
 <<<<<<< HEAD
     * 5. FUNCIÓN DE DESCONEXIÓN (LOGOUT)
     */
@@ -303,6 +348,8 @@
        }
    }
 =======
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
     * 6. FUNCIÓN DE DESCONEXIÓN (VINCULADA A WINDOW)
     */
    window.logoutWA = async function() {
@@ -325,5 +372,9 @@
            alert("Error de red al intentar desconectar.");
            location.reload();
        }
+<<<<<<< HEAD
    };
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+   };
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)

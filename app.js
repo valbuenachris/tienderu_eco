@@ -12,10 +12,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+
+
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
 // --- CONFIGURACIÓN DE RUTAS ESTÁTICAS Y PERSISTENCIA DOCKER ---
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static('/opt/manager/public/uploads'));
@@ -86,6 +91,7 @@ const registrarFactura = (username, diaCorte, estado) => {
     `;
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     db.query(queryFact, [username, periodoStr, est], (err) => {
         if (err) console.error("❌ Error al registrar factura:", err);
     });
@@ -102,6 +108,17 @@ const registrarFactura = (username, diaCorte, estado) => {
     });
 };
 
+=======
+    db.query(queryFact, [username, periodoStr, est], (err, result) => {
+        if (err) {
+            console.error("❌ Error al registrar factura en MySQL:", err);
+            return;
+        }
+        console.log(`✅ Factura procesada para ${username}: ${est} (${periodoStr})`);
+    });
+};
+
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
 // Este endpoint alimenta la tabla de facturación en el frontend
 app.get('/api/user/facturacion/:username', (req, res) => {
     const { username } = req.params;
@@ -117,6 +134,8 @@ app.get('/api/user/facturacion/:username', (req, res) => {
     });
 });
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+
+// --- ENDPOINTS ADMINISTRADOR (GESTIÓN GLOBAL) ---
 
 // --- ENDPOINTS ADMINISTRADOR (GESTIÓN GLOBAL) ---
 
@@ -564,6 +583,7 @@ app.delete('/api/delete-campaign-file/:filename', (req, res) => {
         res.status(500).json({ success: false, message: 'No se pudo eliminar el archivo del disco' });
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 });
 
 // --- RUTAS DE NAVEGACIÓN Y CIERRE DEL SERVIDOR ---
@@ -573,6 +593,8 @@ app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public/da
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public/dashboard.html'))); // Alias
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 =======
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
 });
 
 // --- RUTAS DE NAVEGACIÓN Y CIERRE DEL SERVIDOR ---
@@ -682,7 +704,10 @@ app.patch('/api/citas/:id/reprogramar', (req, res) => {
         res.json({ success: true, message: "Fecha/Hora guardada" });
     });
 });
+<<<<<<< HEAD
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
 
 const PORT = 3000;
 app.listen(PORT, '0.0.0.0', () => {

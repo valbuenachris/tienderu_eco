@@ -342,9 +342,12 @@ async function cargarGaleriaImagenes() {
 
 // LANZAR AUTOMÁTICAMENTE al entrar a la página
 <<<<<<< HEAD
+<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', cargarGaleriaImagenes);
 =======
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
 
 /**
  * 3. COPIAR URL AL PORTAPAPELES
@@ -360,10 +363,13 @@ function copiarUrl(url) {
 
 // INICIALIZACIÓN: Cargar la galería automáticamente al abrir la página o reiniciar sesión
 <<<<<<< HEAD
+<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', cargarGaleriaImagenes);
 
 =======
 >>>>>>> 72e0d0b (Version: 2.3.3.6)
+=======
+>>>>>>> ba0cd32 (Cerebro Bot Actualizado DB)
 
 // CARGAR PDF
 async function subirDocumentoServidor(event) {
